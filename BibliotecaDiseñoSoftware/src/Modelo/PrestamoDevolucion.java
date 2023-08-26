@@ -31,6 +31,14 @@ public class PrestamoDevolucion {
         fechaEntrega = null;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     public String getId() {
         return id;
     }
