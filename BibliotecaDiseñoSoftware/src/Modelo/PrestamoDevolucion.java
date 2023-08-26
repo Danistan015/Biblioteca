@@ -11,6 +11,11 @@ import java.time.LocalDate;
  * @author val
  */
 public class PrestamoDevolucion {
+    
+    public static final String PRESTADO = "Prestado";
+    public static final String DEVUELTO = "Devuelto";
+    
+    private String estado;
     private String id;
     private String detallesLibro;
     private LocalDate fechaPrestamo;
@@ -18,6 +23,7 @@ public class PrestamoDevolucion {
     private LocalDate fechaEntrega;
 
     public PrestamoDevolucion(String id, String detallesLibro, LocalDate fechaPrestamo, LocalDate fechaVencimiento) {
+        estado = PRESTADO;
         this.id = id;
         this.detallesLibro = detallesLibro;
         this.fechaPrestamo = fechaPrestamo;
