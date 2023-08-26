@@ -4,9 +4,15 @@
  */
 package Vista;
 
-
+import Controlador.ControladorUsuario;
+import Excepciones.UsuarioNoEncontradoException;
+import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,16 +20,19 @@ import java.awt.Color;
  */
 public class VistaLogin extends javax.swing.JFrame {
 
+    ControladorUsuario controlador;
+
     /**
      * Creates new form VistaLogin
      */
     public VistaLogin() {
-        
+
         initComponents();
         setLocationRelativeTo(this);
+        controlador = new ControladorUsuario();
         TextPrompt pHUsuario = new TextPrompt("Escribe el correo: ", txtCorreo);
         TextPrompt pHUsuarios = new TextPrompt("Escribe la contraseña: ", txtContrasena);
-        
+
     }
 
     /**
@@ -183,13 +192,30 @@ public class VistaLogin extends javax.swing.JFrame {
 
     private void btnSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSesionActionPerformed
         // TODO add your handling code here:
-        
+        String correo = txtCorreo.getText();
+        String contrasena = txtContrasena.getText();
+
+        try {
+            Usuario usuario = controlador.buscarCorreo(correo);
+
+            if (usuario == null) {
+                throw new UsuarioNoEncontradoException();
+            }
+            
+            if(usuario.getContrasenia().equals(contrasena)){
+                VistaMenu vista = new VistaMenu();
+                vista.setVisible(true);
+                this.dispose();
+            }
+        } catch (UsuarioNoEncontradoException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
     }//GEN-LAST:event_btnSesionActionPerformed
 
     private void btnSesionMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSesionMouseMoved
         // TODO add your handling code here:
-         btnSesion.setForeground(Color.WHITE);
-        
+        btnSesion.setForeground(Color.WHITE);
+
     }//GEN-LAST:event_btnSesionMouseMoved
 
     /**
@@ -206,16 +232,24 @@ public class VistaLogin extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLogin.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
