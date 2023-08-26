@@ -15,6 +15,7 @@ public class VistaPrestamoDevolucion extends javax.swing.JFrame {
      */
     public VistaPrestamoDevolucion() {
         initComponents();
+        setLocationRelativeTo(this);
     }
 
     /**
