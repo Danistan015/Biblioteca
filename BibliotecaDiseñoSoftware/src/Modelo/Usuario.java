@@ -4,12 +4,16 @@
  */
 package Modelo;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author val
  */
 public class Usuario {
-        private String nombre;
+    ArrayList<Historial> listaHistoriales;
+    
+    private String nombre;
     private String cedula;
     private int edad;
     private String telefono;
@@ -23,6 +27,7 @@ public class Usuario {
         this.telefono = telefono;
         this.correo = correo;
         this.contrasenia = contrasenia;
+        listaHistoriales = new ArrayList<>();
     }
 
     public String getNombre() {
@@ -72,4 +77,12 @@ public class Usuario {
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
+
+    public ArrayList<Historial> getListaHistoriales() {
+        return listaHistoriales;
+    }
+
+    public void setListaHistoriales(ArrayList<Historial> listaHistoriales) {
+        this.listaHistoriales = listaHistoriales;
+    }        
 }
