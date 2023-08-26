@@ -42,4 +42,9 @@ public class ControladorUsuario {
         rs = ps.executeQuery();
         return (Usuario) rs;
     }
+    
+    
+    public Usuario insertarUsuario(String cedula){
+        
+    }
 }
