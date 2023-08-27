@@ -60,6 +60,11 @@ public class VistaLogin extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(4, 13, 18));
+        jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jPanel1MouseMoved(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(24, 61, 61));
 
@@ -217,6 +222,12 @@ public class VistaLogin extends javax.swing.JFrame {
         btnSesion.setForeground(Color.WHITE);
 
     }//GEN-LAST:event_btnSesionMouseMoved
+
+    private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
+        // TODO add your handling code here:
+        btnSesion.setForeground(Color.lightGray);
+        
+    }//GEN-LAST:event_jPanel1MouseMoved
 
     /**
      * @param args the command line arguments

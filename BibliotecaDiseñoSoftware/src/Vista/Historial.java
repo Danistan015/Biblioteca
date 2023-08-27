@@ -39,7 +39,7 @@ public class Historial extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
-        btnSesion = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -48,6 +48,11 @@ public class Historial extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(4, 13, 18));
+        jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jPanel1MouseMoved(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(24, 61, 61));
 
@@ -93,19 +98,19 @@ public class Historial extends javax.swing.JFrame {
 
         jSeparator2.setBackground(new java.awt.Color(147, 177, 166));
 
-        btnSesion.setBackground(new java.awt.Color(24, 61, 61));
-        btnSesion.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnSesion.setForeground(new java.awt.Color(147, 177, 166));
-        btnSesion.setText("Buscar");
-        btnSesion.setActionCommand("Inicio");
-        btnSesion.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        btnBuscar.setBackground(new java.awt.Color(24, 61, 61));
+        btnBuscar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(147, 177, 166));
+        btnBuscar.setText("Buscar");
+        btnBuscar.setActionCommand("Inicio");
+        btnBuscar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnSesionMouseMoved(evt);
+                btnBuscarMouseMoved(evt);
             }
         });
-        btnSesion.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSesionActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -121,7 +126,7 @@ public class Historial extends javax.swing.JFrame {
                             .addComponent(jSeparator2)
                             .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(btnSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap(72, Short.MAX_VALUE)
@@ -148,7 +153,7 @@ public class Historial extends javax.swing.JFrame {
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(33, 33, 33)
-                        .addComponent(btnSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(28, 28, 28)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37))
@@ -204,16 +209,22 @@ public class Historial extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void btnSesionMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSesionMouseMoved
+    private void btnBuscarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseMoved
         // TODO add your handling code here:
-        btnSesion.setForeground(Color.WHITE);
+        btnBuscar.setForeground(Color.WHITE);
 
-    }//GEN-LAST:event_btnSesionMouseMoved
+    }//GEN-LAST:event_btnBuscarMouseMoved
 
-    private void btnSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSesionActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
 
-    }//GEN-LAST:event_btnSesionActionPerformed
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
+        // TODO add your handling code here:
+          btnBuscar.setForeground(Color.lightGray);
+        
+    }//GEN-LAST:event_jPanel1MouseMoved
 
     /**
      * @param args the command line arguments
@@ -251,7 +262,7 @@ public class Historial extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSesion;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;

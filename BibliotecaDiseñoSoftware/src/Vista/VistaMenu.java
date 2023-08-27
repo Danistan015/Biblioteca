@@ -33,10 +33,10 @@ public class VistaMenu extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        btnUsuario = new javax.swing.JButton();
-        btnLibro = new javax.swing.JButton();
+        btnUsuarios = new javax.swing.JButton();
+        btnIibro = new javax.swing.JButton();
         btnHistorial = new javax.swing.JButton();
-        btnPrestamoDevolucion = new javax.swing.JButton();
+        btnPrestamos = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -45,6 +45,11 @@ public class VistaMenu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(4, 13, 18));
+        jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jPanel1MouseMoved(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(24, 61, 61));
 
@@ -71,37 +76,35 @@ public class VistaMenu extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(147, 177, 166));
         jLabel1.setText("Menu");
 
-        btnUsuario.setBackground(new java.awt.Color(24, 61, 61));
-        btnUsuario.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnUsuario.setForeground(new java.awt.Color(147, 177, 166));
-        btnUsuario.setText("Gestionar usuarios");
-        btnUsuario.setActionCommand("Inicio");
-        btnUsuario.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnUsuario.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        btnUsuarios.setBackground(new java.awt.Color(24, 61, 61));
+        btnUsuarios.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnUsuarios.setForeground(new java.awt.Color(147, 177, 166));
+        btnUsuarios.setText("Gestionar usuario");
+        btnUsuarios.setActionCommand("Inicio");
+        btnUsuarios.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnUsuarioMouseMoved(evt);
+                btnUsuariosMouseMoved(evt);
             }
         });
-        btnUsuario.addActionListener(new java.awt.event.ActionListener() {
+        btnUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUsuarioActionPerformed(evt);
+                btnUsuariosActionPerformed(evt);
             }
         });
 
-        btnLibro.setBackground(new java.awt.Color(24, 61, 61));
-        btnLibro.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnLibro.setForeground(new java.awt.Color(147, 177, 166));
-        btnLibro.setText("Gestionar libros");
-        btnLibro.setActionCommand("Inicio");
-        btnLibro.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnLibro.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        btnIibro.setBackground(new java.awt.Color(24, 61, 61));
+        btnIibro.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnIibro.setForeground(new java.awt.Color(147, 177, 166));
+        btnIibro.setText("Gestionar libros");
+        btnIibro.setActionCommand("Inicio");
+        btnIibro.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnLibroMouseMoved(evt);
+                btnIibroMouseMoved(evt);
             }
         });
-        btnLibro.addActionListener(new java.awt.event.ActionListener() {
+        btnIibro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLibroActionPerformed(evt);
+                btnIibroActionPerformed(evt);
             }
         });
 
@@ -110,7 +113,6 @@ public class VistaMenu extends javax.swing.JFrame {
         btnHistorial.setForeground(new java.awt.Color(147, 177, 166));
         btnHistorial.setText("Ver historial");
         btnHistorial.setActionCommand("Inicio");
-        btnHistorial.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnHistorial.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 btnHistorialMouseMoved(evt);
@@ -122,20 +124,19 @@ public class VistaMenu extends javax.swing.JFrame {
             }
         });
 
-        btnPrestamoDevolucion.setBackground(new java.awt.Color(24, 61, 61));
-        btnPrestamoDevolucion.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnPrestamoDevolucion.setForeground(new java.awt.Color(147, 177, 166));
-        btnPrestamoDevolucion.setText("Hacer prestamo y devoluciones");
-        btnPrestamoDevolucion.setActionCommand("Inicio");
-        btnPrestamoDevolucion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnPrestamoDevolucion.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        btnPrestamos.setBackground(new java.awt.Color(24, 61, 61));
+        btnPrestamos.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnPrestamos.setForeground(new java.awt.Color(147, 177, 166));
+        btnPrestamos.setText("Gestionar prestamos y devoluciones");
+        btnPrestamos.setActionCommand("Inicio");
+        btnPrestamos.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnPrestamoDevolucionMouseMoved(evt);
+                btnPrestamosMouseMoved(evt);
             }
         });
-        btnPrestamoDevolucion.addActionListener(new java.awt.event.ActionListener() {
+        btnPrestamos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrestamoDevolucionActionPerformed(evt);
+                btnPrestamosActionPerformed(evt);
             }
         });
 
@@ -146,17 +147,17 @@ public class VistaMenu extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(131, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnLibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnHistorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnPrestamoDevolucion))
-                        .addGap(129, 129, 129))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(224, 224, 224)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(76, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnHistorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnIibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnPrestamos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(76, 76, 76)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -166,13 +167,13 @@ public class VistaMenu extends javax.swing.JFrame {
                 .addGap(63, 63, 63)
                 .addComponent(jLabel1)
                 .addGap(60, 60, 60)
-                .addComponent(btnUsuario)
-                .addGap(18, 18, 18)
-                .addComponent(btnLibro)
-                .addGap(27, 27, 27)
+                .addComponent(btnUsuarios)
+                .addGap(28, 28, 28)
+                .addComponent(btnIibro)
+                .addGap(26, 26, 26)
                 .addComponent(btnHistorial)
-                .addGap(18, 18, 18)
-                .addComponent(btnPrestamoDevolucion)
+                .addGap(27, 27, 27)
+                .addComponent(btnPrestamos)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -220,49 +221,69 @@ public class VistaMenu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void btnUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuarioActionPerformed
-        // TODO add your handling code here:
-        new VistaUsuario().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnUsuarioActionPerformed
-
-    private void btnLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnLibroActionPerformed
-
-    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHistorialActionPerformed
-
-    private void btnPrestamoDevolucionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamoDevolucionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPrestamoDevolucionActionPerformed
-
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         new VistaLogin().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void btnUsuarioMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuarioMouseMoved
+    private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
         // TODO add your handling code here:
-         btnUsuario.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnUsuarioMouseMoved
+         btnUsuarios.setForeground(Color.lightGray);
+         btnHistorial.setForeground(Color.lightGray);
+         btnIibro.setForeground(Color.lightGray);
+         btnPrestamos.setForeground(Color.lightGray);
+    }//GEN-LAST:event_jPanel1MouseMoved
 
-    private void btnLibroMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLibroMouseMoved
+    private void btnUsuariosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuariosMouseMoved
         // TODO add your handling code here:
-         btnLibro.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnLibroMouseMoved
+        btnUsuarios.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnUsuariosMouseMoved
+
+    private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
+        // TODO add your handling code here:
+        new VistaUsuario().setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_btnUsuariosActionPerformed
+
+    private void btnIibroMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIibroMouseMoved
+        // TODO add your handling code here:
+        
+         btnIibro.setForeground(Color.WHITE);
+         
+    }//GEN-LAST:event_btnIibroMouseMoved
+
+    private void btnIibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIibroActionPerformed
+        // TODO add your handling code here:
+        new VistaLibro().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnIibroActionPerformed
 
     private void btnHistorialMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHistorialMouseMoved
         // TODO add your handling code here:
+     
          btnHistorial.setForeground(Color.WHITE);
+       
     }//GEN-LAST:event_btnHistorialMouseMoved
 
-    private void btnPrestamoDevolucionMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrestamoDevolucionMouseMoved
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
         // TODO add your handling code here:
-         btnPrestamoDevolucion.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnPrestamoDevolucionMouseMoved
+        new Historial().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnHistorialActionPerformed
+
+    private void btnPrestamosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrestamosMouseMoved
+        // TODO add your handling code here:
+       
+         btnPrestamos.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnPrestamosMouseMoved
+
+    private void btnPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamosActionPerformed
+        // TODO add your handling code here:
+        new VistaPrestamoDevolucion().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnPrestamosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,9 +322,9 @@ public class VistaMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHistorial;
-    private javax.swing.JButton btnLibro;
-    private javax.swing.JButton btnPrestamoDevolucion;
-    private javax.swing.JButton btnUsuario;
+    private javax.swing.JButton btnIibro;
+    private javax.swing.JButton btnPrestamos;
+    private javax.swing.JButton btnUsuarios;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
