@@ -17,9 +17,9 @@ import org.mariadb.jdbc.Connection;
  *
  * @author val
  */
-public class ControladorUsuario {
+public class ControladorLogin {
 
-    public ControladorUsuario() {
+    public ControladorLogin() {
     }
 
     public Usuario buscarCorreo(String correo) {
@@ -53,7 +53,7 @@ public class ControladorUsuario {
                 usuarioEncontrado = new Usuario(nombre, cedula, edad, telefono, correo, contrasenia);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
         return usuarioEncontrado;
     }

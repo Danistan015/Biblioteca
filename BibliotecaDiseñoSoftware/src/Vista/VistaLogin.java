@@ -4,7 +4,7 @@
  */
 package Vista;
 
-import Controlador.ControladorUsuario;
+import Controlador.ControladorLogin;
 import Excepciones.UsuarioNoEncontradoException;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class VistaLogin extends javax.swing.JFrame {
 
-    ControladorUsuario controlador;
+    ControladorLogin controlador;
 
     /**
      * Creates new form VistaLogin
@@ -29,7 +29,7 @@ public class VistaLogin extends javax.swing.JFrame {
 
         initComponents();
         setLocationRelativeTo(this);
-        controlador = new ControladorUsuario();
+        controlador = new ControladorLogin();
         TextPrompt pHUsuario = new TextPrompt("Escribe el correo: ", txtCorreo);
         TextPrompt pHUsuarios = new TextPrompt("Escribe la contraseña: ", txtContrasena);
 
@@ -205,10 +205,10 @@ public class VistaLogin extends javax.swing.JFrame {
 
             if (usuario == null) {
                 throw new UsuarioNoEncontradoException();
-            }
+            } 
             
             if(usuario.getContrasenia().equals(contrasena)){
-                VistaMenu vista = new VistaMenu();
+                VistaMenu vista = new VistaMenu(usuario);
                 vista.setVisible(true);
                 this.dispose();
             }
