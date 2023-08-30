@@ -16,11 +16,11 @@ public class VistaMenu extends javax.swing.JFrame {
     /**
      * Creates new form VistaMenu
      */
-    public VistaMenu(Usuario usuario ) {
-        this.usuario = usuario;
-        jLabel1.setText(usuario.getNombre());
+    public VistaMenu(Usuario usuarios ) {
         initComponents();
         setLocationRelativeTo(this);
+        this.usuario = usuarios;
+        jLabel1.setText(usuario.getNombre());
     }
 
     /**
