@@ -4,6 +4,7 @@
  */
 package Vista;
 
+import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
 
@@ -12,17 +13,18 @@ import java.awt.Color;
  * @author sotog
  */
 public class VistaPrestamoDevolucion extends javax.swing.JFrame {
-
+Usuario usuario;
     /**
      * Creates new form VistaPrestamoDevolucion
      */
-    public VistaPrestamoDevolucion() {
+    public VistaPrestamoDevolucion( Usuario usuario) {
         initComponents();
         setLocationRelativeTo(this);
         TextPrompt pHUsuario = new TextPrompt("Ingrese detalle del prestamo: ", txtDetalle);
         TextPrompt pHUsuarioss = new TextPrompt("Ingrese fecha de prestamo : ", txtFechaPrestamo);
         TextPrompt pHUsuariosss = new TextPrompt("Ingrese fecha de vencimiento: ", txtFechaVencimiento);
         TextPrompt pHUsuariossss = new TextPrompt("Ingrese la cedula, quien se le presta: ", txtUsuario);
+        this.usuario=usuario;
     }
 
     /**
@@ -350,7 +352,7 @@ public class VistaPrestamoDevolucion extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        new VistaMenu().setVisible(true);
+        new VistaMenu(usuario).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -367,37 +369,7 @@ public class VistaPrestamoDevolucion extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaPrestamoDevolucion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaPrestamoDevolucion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaPrestamoDevolucion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaPrestamoDevolucion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new VistaPrestamoDevolucion().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

@@ -42,7 +42,6 @@ public class VistaMenu extends javax.swing.JFrame {
         btnPrestamos = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -182,14 +181,6 @@ public class VistaMenu extends javax.swing.JFrame {
 
         jMenu1.setText("Más");
 
-        jMenuItem1.setText("Volver");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem1);
-
         jMenuItem2.setText("Cerrar sesión");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -218,12 +209,6 @@ public class VistaMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-        new VistaMenu(usuario).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         new VistaLogin().setVisible(true);
@@ -245,7 +230,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
         // TODO add your handling code here:
-        new VistaUsuario().setVisible(true);
+        new VistaUsuario(usuario).setVisible(true);
         this.dispose();
 
     }//GEN-LAST:event_btnUsuariosActionPerformed
@@ -259,7 +244,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void btnIibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIibroActionPerformed
         // TODO add your handling code here:
-        new VistaLibro().setVisible(true);
+        new VistaLibro(usuario).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnIibroActionPerformed
 
@@ -272,7 +257,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
         // TODO add your handling code here:
-        new Historial().setVisible(true);
+        new Historial(usuario).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnHistorialActionPerformed
 
@@ -284,7 +269,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void btnPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamosActionPerformed
         // TODO add your handling code here:
-        new VistaPrestamoDevolucion().setVisible(true);
+        new VistaPrestamoDevolucion(usuario).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnPrestamosActionPerformed
 
@@ -298,7 +283,6 @@ public class VistaMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
