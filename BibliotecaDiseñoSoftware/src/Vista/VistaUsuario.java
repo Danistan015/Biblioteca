@@ -4,16 +4,27 @@
  */
 package Vista;
 
+import Conexion.Conexion_db;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author sotog
  */
 public class VistaUsuario extends javax.swing.JFrame {
-Usuario usuario;
+
+    Usuario usuarios;
+    DefaultTableModel modelo = new DefaultTableModel();
+
     /**
      * Creates new form VistaUsuario
      */
@@ -21,12 +32,67 @@ Usuario usuario;
         initComponents();
         TextPrompt pHUsuario = new TextPrompt("Ingrese la cedula: ", txtCedula);
         TextPrompt pHUsuarioss = new TextPrompt("Ingrese el correo : ", txtCorreo);
-        TextPrompt pHUsuariosss = new TextPrompt("Ingrese la contraseña: ", txtContrasena);
+        TextPrompt pHUsuariosss = new TextPrompt("Ingrese la contraseña: ", txtContrasenia);
         TextPrompt pHUsuariossss = new TextPrompt("Ingrese la edad: ", txtEdad);
         TextPrompt pHUsuariosssss = new TextPrompt("Ingrese el nombre: ", txtNombre);
         TextPrompt pHUsuariossssss = new TextPrompt("Ingrese el telefono: ", txtTelefono);
         setLocationRelativeTo(this);
-        this.usuario=usuario;
+        this.usuarios = usuario;
+        try {
+            //crea un modelo de tabla
+
+            //Establece el modelo recien creado a la tabla de usuarios
+            usuarioTabla.setModel(modelo);
+            // declara lass variables para preparar y ejecutar la consulta sql
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            //Crea un objeto de conexion a la base de datos usando la clase previamente definida; Conexion_db
+            Conexion_db conn = new Conexion_db();
+            //Obtiene una conexion activa  a la base de datos
+            Connection con = conn.getConexion();
+
+            //Define la consulta SQL a ser ejecutada
+            String sql = "SELECT * FROM usuario";
+            //Prepara la consulta SQL para su ejecucion, esto ayuda a prevenir la inyeccion SQL
+            ps = con.prepareStatement(sql);
+            //Ejecuta la consulta y guarda el resultadoen las variables rs
+            rs = ps.executeQuery();
+            //Obtiene metadatos del resultado, como numero de columnas, nombre de columnas, etc
+            ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
+            //Obtiene la cantidad de colomunas del resultado
+            int cantidadColumnas = rsMd.getColumnCount();
+            //Define las columnas
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Cedula");
+            modelo.addColumn("Edad");
+            modelo.addColumn("Telefono");
+            modelo.addColumn("Correo");
+            modelo.addColumn("Cotrasenio");
+
+            int[] anchos = {120, 300, 300, 300, 300, 400};
+            for (int i = 0; i < usuarioTabla.getColumnCount(); i++) {
+                //Establece el ancho preferido para cada columna
+                usuarioTabla.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+
+            }
+
+            //mientras haya registros en el resultado
+            while (rs.next()) {
+                //crea un array para guardar los valores de las colmunas de un registro
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    //Obtiene el objeto de la columna i+1(los indices en rs empiezan en 1, no en 0) y lo guarda 
+                    filas[i] = rs.getObject(i + 1);
+
+                }
+                modelo.addRow(filas);
+
+            }
+            //Si ocurre algun errorSQL durante la ejecucion del bloque try, entra en este bloque catch
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }
 
     /**
@@ -46,18 +112,20 @@ Usuario usuario;
         jSeparator2 = new javax.swing.JSeparator();
         txtCedula = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
-        txtCorreo = new javax.swing.JPasswordField();
-        txtNombre = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
-        txtContrasena = new javax.swing.JPasswordField();
         jSeparator5 = new javax.swing.JSeparator();
-        txtEdad = new javax.swing.JTextField();
         jSeparator6 = new javax.swing.JSeparator();
-        txtTelefono = new javax.swing.JPasswordField();
         jSeparator7 = new javax.swing.JSeparator();
         btnModificar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        usuarioTabla = new javax.swing.JTable();
+        txtNombre = new javax.swing.JTextField();
+        txtEdad = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JTextField();
+        txtContrasenia = new javax.swing.JPasswordField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -121,36 +189,11 @@ Usuario usuario;
 
         jSeparator3.setBackground(new java.awt.Color(147, 177, 166));
 
-        txtCorreo.setBackground(new java.awt.Color(4, 13, 18));
-        txtCorreo.setForeground(new java.awt.Color(255, 255, 255));
-        txtCorreo.setBorder(null);
-        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCorreoActionPerformed(evt);
-            }
-        });
-
-        txtNombre.setBackground(new java.awt.Color(4, 13, 18));
-        txtNombre.setForeground(new java.awt.Color(255, 255, 255));
-        txtNombre.setBorder(null);
-
         jSeparator4.setBackground(new java.awt.Color(147, 177, 166));
-
-        txtContrasena.setBackground(new java.awt.Color(4, 13, 18));
-        txtContrasena.setForeground(new java.awt.Color(255, 255, 255));
-        txtContrasena.setBorder(null);
 
         jSeparator5.setBackground(new java.awt.Color(147, 177, 166));
 
-        txtEdad.setBackground(new java.awt.Color(4, 13, 18));
-        txtEdad.setForeground(new java.awt.Color(255, 255, 255));
-        txtEdad.setBorder(null);
-
         jSeparator6.setBackground(new java.awt.Color(147, 177, 166));
-
-        txtTelefono.setBackground(new java.awt.Color(4, 13, 18));
-        txtTelefono.setForeground(new java.awt.Color(255, 255, 255));
-        txtTelefono.setBorder(null);
 
         jSeparator7.setBackground(new java.awt.Color(147, 177, 166));
 
@@ -202,6 +245,44 @@ Usuario usuario;
             }
         });
 
+        usuarioTabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        usuarioTabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                usuarioTablaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(usuarioTabla);
+
+        txtNombre.setBackground(new java.awt.Color(4, 13, 18));
+        txtNombre.setForeground(new java.awt.Color(255, 255, 255));
+        txtNombre.setBorder(null);
+
+        txtEdad.setBackground(new java.awt.Color(4, 13, 18));
+        txtEdad.setForeground(new java.awt.Color(255, 255, 255));
+        txtEdad.setBorder(null);
+
+        txtCorreo.setBackground(new java.awt.Color(4, 13, 18));
+        txtCorreo.setForeground(new java.awt.Color(255, 255, 255));
+        txtCorreo.setBorder(null);
+
+        txtTelefono.setBackground(new java.awt.Color(4, 13, 18));
+        txtTelefono.setForeground(new java.awt.Color(255, 255, 255));
+        txtTelefono.setBorder(null);
+
+        txtContrasenia.setBackground(new java.awt.Color(4, 13, 18));
+        txtContrasenia.setForeground(new java.awt.Color(255, 255, 255));
+        txtContrasenia.setBorder(null);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -217,34 +298,41 @@ Usuario usuario;
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(jSeparator2)
                                         .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jSeparator6)
-                                        .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addComponent(btnBuscar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jSeparator4)
-                                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jSeparator5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jSeparator7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtContrasenia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(68, 68, 68))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnInsertar)
-                        .addGap(51, 51, 51)
-                        .addComponent(btnModificar)
-                        .addGap(51, 51, 51)
-                        .addComponent(btnEliminar)
-                        .addGap(146, 146, 146)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(199, 199, 199)
+                                .addComponent(btnInsertar)
+                                .addGap(47, 47, 47)
+                                .addComponent(btnModificar)
+                                .addGap(47, 47, 47)
+                                .addComponent(btnEliminar))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -261,32 +349,34 @@ Usuario usuario;
                             .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtContrasenia))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(56, 56, 56)
+                .addGap(55, 55, 55)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsertar)
                     .addComponent(btnModificar)
                     .addComponent(btnEliminar))
-                .addGap(60, 60, 60))
+                .addGap(42, 42, 42)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jMenu1.setText("Más");
@@ -319,53 +409,25 @@ Usuario usuario;
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnInsertarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertarMouseMoved
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        btnInsertar.setForeground(Color.WHITE);
+        new VistaMenu(usuarios).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    }//GEN-LAST:event_btnInsertarMouseMoved
-
-    private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-
-    }//GEN-LAST:event_btnInsertarActionPerformed
-
-    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCorreoActionPerformed
-
-    private void btnModificarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseMoved
-        // TODO add your handling code here:
-        btnModificar.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnModificarMouseMoved
-
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnModificarActionPerformed
-
-    private void btnEliminarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseMoved
-        // TODO add your handling code here:
-        btnEliminar.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnEliminarMouseMoved
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void btnBuscarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseMoved
-        // TODO add your handling code here:
-        btnBuscar.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnBuscarMouseMoved
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuscarActionPerformed
+        new VistaLogin().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
         // TODO add your handling code here:
@@ -376,22 +438,222 @@ Usuario usuario;
         btnModificar.setForeground(Color.lightGray);
     }//GEN-LAST:event_jPanel1MouseMoved
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void usuarioTablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usuarioTablaMouseClicked
         // TODO add your handling code here:
-        new VistaMenu(usuario).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+        int fila = usuarioTabla.getSelectedRow();
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        txtNombre.setText(usuarioTabla.getValueAt(fila, 0).toString());
+        txtCedula.setText(usuarioTabla.getValueAt(fila, 1).toString());
+        txtEdad.setText(usuarioTabla.getValueAt(fila, 2).toString());
+        txtTelefono.setText(usuarioTabla.getValueAt(fila, 3).toString());
+        txtCorreo.setText(usuarioTabla.getValueAt(fila, 4).toString());
+        txtContrasenia.setText(usuarioTabla.getValueAt(fila, 5).toString());
+    }//GEN-LAST:event_usuarioTablaMouseClicked
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-        new VistaLogin().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+        String campo = txtCedula.getText();
+        String where = "";
+        if (!"".equals(campo)) {
+            where = " WHERE cedula = '" + campo + "'";
+        }
+        if (txtCedula.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "LLene los campos");
 
+        } else if (!validarNumero(txtCedula.getText().trim())) {
+            JOptionPane.showMessageDialog(rootPane, "Solo los numeros son validos");
+        } else {
+            try {
+
+                usuarioTabla.setModel(modelo);
+                PreparedStatement ps = null;
+                ResultSet rs = null;
+                Conexion_db conn = new Conexion_db();
+                Connection con = conn.getConexion();
+
+                String sql = "SELECT * FROM usuario" + where;
+                ps = con.prepareStatement(sql);//consulta de la base de datos
+                rs = ps.executeQuery();// resultado de la consulta
+                ResultSetMetaData rsMd = rs.getMetaData();
+                int cantidadColumnas = rsMd.getColumnCount();
+
+                modelo.addColumn("Nombre");
+                modelo.addColumn("Cedula");
+                modelo.addColumn("Edad");
+                modelo.addColumn("Telefono");
+                modelo.addColumn("Correo");
+                modelo.addColumn("Cotrasenio");
+                int[] anchos = {120, 170, 170, 170, 150, 170};
+                for (int i = 0; i < modelo.getColumnCount(); i++) {
+                    usuarioTabla.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+                }
+
+                while (rs.next()) {
+                    Object[] filas = new Object[cantidadColumnas];
+                    for (int i = 0; i < cantidadColumnas; i++) {
+                        filas[i] = rs.getObject(i + 1);
+                    }
+                    modelo.addRow(filas);
+
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnBuscarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseMoved
+        // TODO add your handling code here:
+        btnBuscar.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnBuscarMouseMoved
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        PreparedStatement ps = null;
+
+        try {
+
+            Conexion_db objCon = new Conexion_db();
+            Connection conn = objCon.getConexion();
+
+            int fila = usuarioTabla.getSelectedRow();
+            String codigo = usuarioTabla.getValueAt(fila, 1).toString();
+
+            ps = conn.prepareStatement("DELETE FROM usuario WHERE cedula=?");
+            ps.setString(1, codigo);
+            ps.execute();
+
+            modelo.removeRow(fila);
+            JOptionPane.showMessageDialog(null, "Usuario Eliminado");
+            limpiarCampos();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al Eliminar");
+            System.out.println(ex.toString());
+        }
+
+
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEliminarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseMoved
+        // TODO add your handling code here:
+        btnEliminar.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnEliminarMouseMoved
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+        int fila = usuarioTabla.getSelectedRow();
+        PreparedStatement ps = null;
+
+        if (!validarletras(txtNombre.getText().trim())) {
+            JOptionPane.showMessageDialog(rootPane, "Solo las letras son validas");
+        } else if (!validarNumero(txtCedula.getText().trim()) || !validarNumero(txtEdad.getText().trim()) || !validarNumero(txtTelefono.getText().trim())) {
+            JOptionPane.showMessageDialog(rootPane, "Solo los numeros son validos");
+        } else if (txtCedula.getText().isEmpty() || txtContrasenia.getText().isEmpty() || txtCorreo.getText().isEmpty() || txtEdad.getText().isEmpty() || txtTelefono.getText().isEmpty() && txtNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor llene los campos");
+        }else{
+            try {
+
+                Conexion_db obConexion_db = new Conexion_db();
+                Connection conn = obConexion_db.getConexion();
+                ps = conn.prepareStatement("UPDATE  usuario SET nombre=?,edad=?,telefono=?,correo=?,contrasenia=? WHERE cedula=?");
+
+                ps.setString(1, txtNombre.getText());
+                ps.setString(2, txtEdad.getText());
+                ps.setString(3, txtTelefono.getText());
+                ps.setString(4, txtCorreo.getText());
+                ps.setString(5, txtContrasenia.getText());
+                ps.setString(6, txtCedula.getText());
+
+                ps.execute();
+
+                JOptionPane.showMessageDialog(null, "usuario modificado");
+                usuarioTabla.setValueAt(txtCedula.getText(), fila, 1);
+                usuarioTabla.setValueAt(txtNombre.getText(), fila, 0);
+                usuarioTabla.setValueAt(txtEdad.getText(), fila, 2);
+                usuarioTabla.setValueAt(txtTelefono.getText(), fila, 3);
+                usuarioTabla.setValueAt(txtCorreo.getText(), fila, 4);
+                usuarioTabla.setValueAt(txtContrasenia.getText(), fila, 5);
+                limpiarCampos();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al modificar");
+
+            }
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnModificarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseMoved
+        // TODO add your handling code here:
+        btnModificar.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnModificarMouseMoved
+
+    private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
+        // TODO add your handling code here:
+        PreparedStatement ps = null;
+
+        if (!validarletras(txtNombre.getText().trim())) {
+            JOptionPane.showMessageDialog(rootPane, "Solo las letras son validas");
+        } else if (!validarNumero(txtCedula.getText().trim()) || !validarNumero(txtEdad.getText().trim()) || !validarNumero(txtTelefono.getText().trim())) {
+            JOptionPane.showMessageDialog(rootPane, "Solo los numeros son validos");
+        } else if (txtCedula.getText().isEmpty() || txtContrasenia.getText().isEmpty() || txtCorreo.getText().isEmpty() || txtEdad.getText().isEmpty() || txtTelefono.getText().isEmpty() && txtNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor llene los campos");
+        } else {
+            try {
+
+                Conexion_db obConexion_db = new Conexion_db();
+                Connection conn = obConexion_db.getConexion();
+                ps = conn.prepareStatement("INSERT INTO usuario (cedula,nombre,edad,telefono,correo,contrasenia) VALUES (?,?,?,?,?,?)");
+                ps.setString(1, txtCedula.getText());
+                ps.setString(2, txtNombre.getText());
+                ps.setString(3, txtEdad.getText());
+                ps.setString(4, txtTelefono.getText());
+                ps.setString(5, txtCorreo.getText());
+                ps.setString(6, txtContrasenia.getText());
+
+                ps.execute();
+
+                JOptionPane.showMessageDialog(null, "Usuario guardado");
+
+                Object[] fila = new Object[6];
+                fila[0] = txtCedula.getText();
+                fila[1] = txtNombre.getText();
+                fila[2] = txtEdad.getText();
+                fila[3] = txtTelefono.getText();
+                fila[4] = txtCorreo.getText();
+                fila[5] = txtContrasenia.getText();
+                modelo.addRow(fila);
+
+                limpiarCampos();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al guardar");
+            }
+        }
+    }//GEN-LAST:event_btnInsertarActionPerformed
+
+    private void btnInsertarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertarMouseMoved
+        // TODO add your handling code here:
+        btnInsertar.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnInsertarMouseMoved
+    private void limpiarCampos() {
+        txtCedula.setText("");
+        txtNombre.setText("");
+        txtContrasenia.setText("");
+        txtEdad.setText("");
+        txtCorreo.setText("");
+        txtTelefono.setText("");
+
+    }
+
+    public static boolean validarNumero(String datos) {
+        return datos.matches("[0-9]*");
+    }
+
+    private boolean validarletras(String texto) {
+        return texto.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$");
+    }
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
@@ -406,6 +668,7 @@ Usuario usuario;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
@@ -413,10 +676,11 @@ Usuario usuario;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JTextField txtCedula;
-    private javax.swing.JPasswordField txtContrasena;
-    private javax.swing.JPasswordField txtCorreo;
+    private javax.swing.JPasswordField txtContrasenia;
+    private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JPasswordField txtTelefono;
+    private javax.swing.JTextField txtTelefono;
+    private javax.swing.JTable usuarioTabla;
     // End of variables declaration//GEN-END:variables
 }
