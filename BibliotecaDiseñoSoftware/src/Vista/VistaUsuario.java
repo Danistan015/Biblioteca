@@ -615,8 +615,8 @@ public class VistaUsuario extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Usuario guardado");
 
                 Object[] fila = new Object[6];
-                fila[0] = txtCedula.getText();
-                fila[1] = txtNombre.getText();
+                fila[0] = txtNombre.getText();
+                fila[1] = txtCedula.getText();
                 fila[2] = txtEdad.getText();
                 fila[3] = txtTelefono.getText();
                 fila[4] = txtCorreo.getText();
