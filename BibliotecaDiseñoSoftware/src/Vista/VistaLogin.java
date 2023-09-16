@@ -4,14 +4,12 @@
  */
 package Vista;
 
-import Controlador.ControladorLogin;
+import Controlador.ControladorUsuario;
 import Excepciones.UsuarioNoEncontradoException;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,7 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class VistaLogin extends javax.swing.JFrame {
 
-    ControladorLogin controlador;
+    ControladorUsuario controlador;
 
     /**
      * Creates new form VistaLogin
@@ -29,7 +27,7 @@ public class VistaLogin extends javax.swing.JFrame {
 
         initComponents();
         setLocationRelativeTo(this);
-        controlador = new ControladorLogin();
+        controlador = new ControladorUsuario();
         TextPrompt pHUsuario = new TextPrompt("Escribe el correo: ", txtCorreo);
         TextPrompt pHUsuarios = new TextPrompt("Escribe la contraseña: ", txtContrasena);
 
@@ -201,7 +199,7 @@ public class VistaLogin extends javax.swing.JFrame {
         String contrasena = txtContrasena.getText();
 
         try {
-            Usuario usuario = controlador.buscarCorreo(correo);
+            Usuario usuario = controlador.buscarUsuarioCorreo(correo);
 
             if (usuario == null) {
                 throw new UsuarioNoEncontradoException();
@@ -212,7 +210,7 @@ public class VistaLogin extends javax.swing.JFrame {
                 vista.setVisible(true);
                 this.dispose();
             }
-        } catch (UsuarioNoEncontradoException ex) {
+        } catch (UsuarioNoEncontradoException | SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }//GEN-LAST:event_btnSesionActionPerformed

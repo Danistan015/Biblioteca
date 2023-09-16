@@ -14,13 +14,13 @@ public class Usuario {
     ArrayList<Historial> listaHistoriales;
     
     private String nombre;
-    private String cedula;
+    private int cedula;
     private int edad;
     private String telefono;
     private String correo;
     private String contrasenia;
 
-    public Usuario(String nombre, String cedula, int edad, String telefono, String correo, String contrasenia) {
+    public Usuario(String nombre, int cedula, int edad, String telefono, String correo, String contrasenia) {
         this.nombre = nombre;
         this.cedula = cedula;
         this.edad = edad;
@@ -38,11 +38,11 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getCedula() {
+    public int getCedula() {
         return cedula;
     }
 
-    public void setCedula(String cedula) {
+    public void setCedula(int cedula) {
         this.cedula = cedula;
     }
 

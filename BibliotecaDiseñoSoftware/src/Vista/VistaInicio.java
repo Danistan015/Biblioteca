@@ -15,7 +15,7 @@ public class VistaInicio extends javax.swing.JFrame {
     /**
      * Creates new form VistaInicio
      */
-    public VistaInicio() {
+    public VistaInicio() { 
         initComponents();
         setLocationRelativeTo(this);
     }

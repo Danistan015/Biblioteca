@@ -5,6 +5,8 @@
 package Vista;
 
 import Conexion.Conexion_db;
+import Controlador.ControladorUsuario;
+import Excepciones.UsuarioNoEncontradoException;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
@@ -13,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,7 +25,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class VistaUsuario extends javax.swing.JFrame {
 
-    Usuario usuarios;
+    Usuario usuario;
+    ControladorUsuario controlador;
     DefaultTableModel modelo = new DefaultTableModel();
 
     /**
@@ -37,62 +41,9 @@ public class VistaUsuario extends javax.swing.JFrame {
         TextPrompt pHUsuariosssss = new TextPrompt("Ingrese el nombre: ", txtNombre);
         TextPrompt pHUsuariossssss = new TextPrompt("Ingrese el telefono: ", txtTelefono);
         setLocationRelativeTo(this);
-        this.usuarios = usuario;
-        try {
-            //crea un modelo de tabla
-
-            //Establece el modelo recien creado a la tabla de usuarios
-            usuarioTabla.setModel(modelo);
-            // declara lass variables para preparar y ejecutar la consulta sql
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            //Crea un objeto de conexion a la base de datos usando la clase previamente definida; Conexion_db
-            Conexion_db conn = new Conexion_db();
-            //Obtiene una conexion activa  a la base de datos
-            Connection con = conn.getConexion();
-
-            //Define la consulta SQL a ser ejecutada
-            String sql = "SELECT * FROM usuario";
-            //Prepara la consulta SQL para su ejecucion, esto ayuda a prevenir la inyeccion SQL
-            ps = con.prepareStatement(sql);
-            //Ejecuta la consulta y guarda el resultadoen las variables rs
-            rs = ps.executeQuery();
-            //Obtiene metadatos del resultado, como numero de columnas, nombre de columnas, etc
-            ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
-            //Obtiene la cantidad de colomunas del resultado
-            int cantidadColumnas = rsMd.getColumnCount();
-            //Define las columnas
-            modelo.addColumn("Nombre");
-            modelo.addColumn("Cedula");
-            modelo.addColumn("Edad");
-            modelo.addColumn("Telefono");
-            modelo.addColumn("Correo");
-            modelo.addColumn("Cotrasenio");
-
-            int[] anchos = {120, 300, 300, 300, 300, 400};
-            for (int i = 0; i < usuarioTabla.getColumnCount(); i++) {
-                //Establece el ancho preferido para cada columna
-                usuarioTabla.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-
-            }
-
-            //mientras haya registros en el resultado
-            while (rs.next()) {
-                //crea un array para guardar los valores de las colmunas de un registro
-                Object[] filas = new Object[cantidadColumnas];
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    //Obtiene el objeto de la columna i+1(los indices en rs empiezan en 1, no en 0) y lo guarda 
-                    filas[i] = rs.getObject(i + 1);
-
-                }
-                modelo.addRow(filas);
-
-            }
-            //Si ocurre algun errorSQL durante la ejecucion del bloque try, entra en este bloque catch
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
-        }
+        controlador = new ControladorUsuario();
+        this.usuario = usuario;
+        llenarTabla();
     }
 
     /**
@@ -120,7 +71,7 @@ public class VistaUsuario extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        usuarioTabla = new javax.swing.JTable();
+        tabla = new javax.swing.JTable();
         txtNombre = new javax.swing.JTextField();
         txtEdad = new javax.swing.JTextField();
         txtCorreo = new javax.swing.JTextField();
@@ -186,6 +137,11 @@ public class VistaUsuario extends javax.swing.JFrame {
         txtCedula.setBackground(new java.awt.Color(4, 13, 18));
         txtCedula.setForeground(new java.awt.Color(255, 255, 255));
         txtCedula.setBorder(null);
+        txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaKeyTyped(evt);
+            }
+        });
 
         jSeparator3.setBackground(new java.awt.Color(147, 177, 166));
 
@@ -245,7 +201,7 @@ public class VistaUsuario extends javax.swing.JFrame {
             }
         });
 
-        usuarioTabla.setModel(new javax.swing.table.DefaultTableModel(
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -256,20 +212,30 @@ public class VistaUsuario extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        usuarioTabla.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                usuarioTablaMouseClicked(evt);
+                tablaMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(usuarioTabla);
+        jScrollPane1.setViewportView(tabla);
 
         txtNombre.setBackground(new java.awt.Color(4, 13, 18));
         txtNombre.setForeground(new java.awt.Color(255, 255, 255));
         txtNombre.setBorder(null);
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
 
         txtEdad.setBackground(new java.awt.Color(4, 13, 18));
         txtEdad.setForeground(new java.awt.Color(255, 255, 255));
         txtEdad.setBorder(null);
+        txtEdad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadKeyTyped(evt);
+            }
+        });
 
         txtCorreo.setBackground(new java.awt.Color(4, 13, 18));
         txtCorreo.setForeground(new java.awt.Color(255, 255, 255));
@@ -278,6 +244,11 @@ public class VistaUsuario extends javax.swing.JFrame {
         txtTelefono.setBackground(new java.awt.Color(4, 13, 18));
         txtTelefono.setForeground(new java.awt.Color(255, 255, 255));
         txtTelefono.setBorder(null);
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
 
         txtContrasenia.setBackground(new java.awt.Color(4, 13, 18));
         txtContrasenia.setForeground(new java.awt.Color(255, 255, 255));
@@ -419,7 +390,7 @@ public class VistaUsuario extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        new VistaMenu(usuarios).setVisible(true);
+        new VistaMenu(usuario).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -438,66 +409,40 @@ public class VistaUsuario extends javax.swing.JFrame {
         btnModificar.setForeground(Color.lightGray);
     }//GEN-LAST:event_jPanel1MouseMoved
 
-    private void usuarioTablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usuarioTablaMouseClicked
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
         // TODO add your handling code here:
-        int fila = usuarioTabla.getSelectedRow();
+        int fila = tabla.getSelectedRow();
 
-        txtNombre.setText(usuarioTabla.getValueAt(fila, 0).toString());
-        txtCedula.setText(usuarioTabla.getValueAt(fila, 1).toString());
-        txtEdad.setText(usuarioTabla.getValueAt(fila, 2).toString());
-        txtTelefono.setText(usuarioTabla.getValueAt(fila, 3).toString());
-        txtCorreo.setText(usuarioTabla.getValueAt(fila, 4).toString());
-        txtContrasenia.setText(usuarioTabla.getValueAt(fila, 5).toString());
-    }//GEN-LAST:event_usuarioTablaMouseClicked
+        txtNombre.setText(tabla.getValueAt(fila, 0).toString());
+        txtCedula.setText(tabla.getValueAt(fila, 1).toString());
+        txtEdad.setText(tabla.getValueAt(fila, 2).toString());
+        txtTelefono.setText(tabla.getValueAt(fila, 3).toString());
+        txtCorreo.setText(tabla.getValueAt(fila, 4).toString());
+        txtContrasenia.setText(tabla.getValueAt(fila, 5).toString());
+    }//GEN-LAST:event_tablaMouseClicked
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-        String campo = txtCedula.getText();
-        String where = "";
-        if (!"".equals(campo)) {
-            where = " WHERE cedula = '" + campo + "'";
-        }
         if (txtCedula.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "LLene los campos");
 
-        } else if (!validarNumero(txtCedula.getText().trim())) {
-            JOptionPane.showMessageDialog(rootPane, "Solo los numeros son validos");
         } else {
+            int cedula = Integer.parseInt(txtCedula.getText());
             try {
+                Usuario usuarioEncontrado = controlador.buscarUsuarioCedula(cedula);
 
-                usuarioTabla.setModel(modelo);
-                PreparedStatement ps = null;
-                ResultSet rs = null;
-                Conexion_db conn = new Conexion_db();
-                Connection con = conn.getConexion();
-
-                String sql = "SELECT * FROM usuario" + where;
-                ps = con.prepareStatement(sql);//consulta de la base de datos
-                rs = ps.executeQuery();// resultado de la consulta
-                ResultSetMetaData rsMd = rs.getMetaData();
-                int cantidadColumnas = rsMd.getColumnCount();
-
-                modelo.addColumn("Nombre");
-                modelo.addColumn("Cedula");
-                modelo.addColumn("Edad");
-                modelo.addColumn("Telefono");
-                modelo.addColumn("Correo");
-                modelo.addColumn("Cotrasenio");
-                int[] anchos = {120, 170, 170, 170, 150, 170};
-                for (int i = 0; i < modelo.getColumnCount(); i++) {
-                    usuarioTabla.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+                if (usuarioEncontrado == null) {
+                    throw new UsuarioNoEncontradoException();
                 }
 
-                while (rs.next()) {
-                    Object[] filas = new Object[cantidadColumnas];
-                    for (int i = 0; i < cantidadColumnas; i++) {
-                        filas[i] = rs.getObject(i + 1);
-                    }
-                    modelo.addRow(filas);
+                txtNombre.setText(usuarioEncontrado.getNombre());
+                txtEdad.setText(String.valueOf(usuarioEncontrado.getEdad()));
+                txtTelefono.setText(usuarioEncontrado.getTelefono());
+                txtCorreo.setText(usuarioEncontrado.getCorreo());
+                txtContrasenia.setText(usuarioEncontrado.getContrasenia());
 
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex);
+            } catch (SQLException | UsuarioNoEncontradoException ex) {
+                JOptionPane.showMessageDialog(null, "Error al buscar");
             }
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -509,24 +454,18 @@ public class VistaUsuario extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        PreparedStatement ps = null;
-
+        if (txtCedula.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ingrese la cedula del usuario que quiere eliminar");
+        }
         try {
-
-            Conexion_db objCon = new Conexion_db();
-            Connection conn = objCon.getConexion();
-
-            int fila = usuarioTabla.getSelectedRow();
-            String codigo = usuarioTabla.getValueAt(fila, 1).toString();
-
-            ps = conn.prepareStatement("DELETE FROM usuario WHERE cedula=?");
-            ps.setString(1, codigo);
-            ps.execute();
-
-            modelo.removeRow(fila);
+            int cedula = Integer.parseInt(txtCedula.getText());
+            controlador.eliminarUsuario(cedula);
             JOptionPane.showMessageDialog(null, "Usuario Eliminado");
+            if (cedula == usuario.getCedula()) {
+                this.dispose();
+            }
+            llenarTabla();
             limpiarCampos();
-
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al Eliminar");
             System.out.println(ex.toString());
@@ -542,42 +481,24 @@ public class VistaUsuario extends javax.swing.JFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
-        int fila = usuarioTabla.getSelectedRow();
-        PreparedStatement ps = null;
-
-        if (!validarletras(txtNombre.getText().trim())) {
-            JOptionPane.showMessageDialog(rootPane, "Solo las letras son validas");
-        } else if (!validarNumero(txtCedula.getText().trim()) || !validarNumero(txtEdad.getText().trim()) || !validarNumero(txtTelefono.getText().trim())) {
-            JOptionPane.showMessageDialog(rootPane, "Solo los numeros son validos");
-        } else if (txtCedula.getText().isEmpty() || txtContrasenia.getText().isEmpty() || txtCorreo.getText().isEmpty() || txtEdad.getText().isEmpty() || txtTelefono.getText().isEmpty() && txtNombre.getText().isEmpty()) {
+        if (txtCedula.getText().isEmpty() || txtContrasenia.getText().isEmpty() || txtCorreo.getText().isEmpty() || txtEdad.getText().isEmpty() || txtTelefono.getText().isEmpty() || txtNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Por favor llene los campos");
-        }else{
+        } else {
+
+            int cedula = Integer.parseInt(txtCedula.getText());
+            String nombre = txtNombre.getText();
+            int edad = Integer.parseInt(txtEdad.getText());
+            String telefono = txtTelefono.getText();
+            String correo = txtCorreo.getText();
+            String contrasenia = txtContrasenia.getText();
+
             try {
-
-                Conexion_db obConexion_db = new Conexion_db();
-                Connection conn = obConexion_db.getConexion();
-                ps = conn.prepareStatement("UPDATE  usuario SET nombre=?,edad=?,telefono=?,correo=?,contrasenia=? WHERE cedula=?");
-
-                ps.setString(1, txtNombre.getText());
-                ps.setString(2, txtEdad.getText());
-                ps.setString(3, txtTelefono.getText());
-                ps.setString(4, txtCorreo.getText());
-                ps.setString(5, txtContrasenia.getText());
-                ps.setString(6, txtCedula.getText());
-
-                ps.execute();
-
+                controlador.editarUsuario(nombre, cedula, edad, telefono, correo, contrasenia);
                 JOptionPane.showMessageDialog(null, "usuario modificado");
-                usuarioTabla.setValueAt(txtCedula.getText(), fila, 1);
-                usuarioTabla.setValueAt(txtNombre.getText(), fila, 0);
-                usuarioTabla.setValueAt(txtEdad.getText(), fila, 2);
-                usuarioTabla.setValueAt(txtTelefono.getText(), fila, 3);
-                usuarioTabla.setValueAt(txtCorreo.getText(), fila, 4);
-                usuarioTabla.setValueAt(txtContrasenia.getText(), fila, 5);
+                llenarTabla();
                 limpiarCampos();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al modificar");
-
             }
         }
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -589,40 +510,21 @@ public class VistaUsuario extends javax.swing.JFrame {
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
         // TODO add your handling code here:
-        PreparedStatement ps = null;
-
-        if (!validarletras(txtNombre.getText().trim())) {
-            JOptionPane.showMessageDialog(rootPane, "Solo las letras son validas");
-        } else if (!validarNumero(txtCedula.getText().trim()) || !validarNumero(txtEdad.getText().trim()) || !validarNumero(txtTelefono.getText().trim())) {
-            JOptionPane.showMessageDialog(rootPane, "Solo los numeros son validos");
-        } else if (txtCedula.getText().isEmpty() || txtContrasenia.getText().isEmpty() || txtCorreo.getText().isEmpty() || txtEdad.getText().isEmpty() || txtTelefono.getText().isEmpty() && txtNombre.getText().isEmpty()) {
+        if (txtCedula.getText().isEmpty() || txtContrasenia.getText().isEmpty() || txtCorreo.getText().isEmpty() || txtEdad.getText().isEmpty() || txtTelefono.getText().isEmpty() || txtNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Por favor llene los campos");
         } else {
+            int cedula = Integer.parseInt(txtCedula.getText());
+            String nombre = txtNombre.getText();
+            int edad = Integer.parseInt(txtEdad.getText());
+            String telefono = txtTelefono.getText();
+            String correo = txtCorreo.getText();
+            String contrasenia = txtContrasenia.getText();
+
+            Usuario usuario = new Usuario(nombre, cedula, edad, telefono, correo, contrasenia);
             try {
-
-                Conexion_db obConexion_db = new Conexion_db();
-                Connection conn = obConexion_db.getConexion();
-                ps = conn.prepareStatement("INSERT INTO usuario (cedula,nombre,edad,telefono,correo,contrasenia) VALUES (?,?,?,?,?,?)");
-                ps.setString(1, txtCedula.getText());
-                ps.setString(2, txtNombre.getText());
-                ps.setString(3, txtEdad.getText());
-                ps.setString(4, txtTelefono.getText());
-                ps.setString(5, txtCorreo.getText());
-                ps.setString(6, txtContrasenia.getText());
-
-                ps.execute();
-
+                controlador.agregarUsuario(usuario);
                 JOptionPane.showMessageDialog(null, "Usuario guardado");
-
-                Object[] fila = new Object[6];
-                fila[0] = txtNombre.getText();
-                fila[1] = txtCedula.getText();
-                fila[2] = txtEdad.getText();
-                fila[3] = txtTelefono.getText();
-                fila[4] = txtCorreo.getText();
-                fila[5] = txtContrasenia.getText();
-                modelo.addRow(fila);
-
+                llenarTabla();
                 limpiarCampos();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al guardar");
@@ -634,6 +536,71 @@ public class VistaUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
         btnInsertar.setForeground(Color.WHITE);
     }//GEN-LAST:event_btnInsertarMouseMoved
+
+    private void txtCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtCedulaKeyTyped
+
+    private void txtEdadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtEdadKeyTyped
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Ingresar solo numeros");
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        if (Character.isDigit(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Ingresar solo letras");
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void llenarTabla(){
+        DefaultTableModel modelo = new DefaultTableModel();
+        try {
+            ArrayList<Usuario> listaUsuarios = controlador.listaUsuarios();
+
+            modelo.setColumnIdentifiers(new Object[]{"cedula", "nombre", "edad", "telefono", "correo", "contraseña"});
+            tabla.setModel(modelo);
+
+            for (int i = 0; i < listaUsuarios.size(); i++) {
+                Usuario usuarioEncontrado = listaUsuarios.get(i);
+                modelo.addRow(new Object[]{
+                    usuarioEncontrado.getCedula(),
+                    usuarioEncontrado.getNombre(),
+                    usuarioEncontrado.getEdad(),
+                    usuarioEncontrado.getTelefono(),
+                    usuarioEncontrado.getCorreo(),
+                    usuarioEncontrado.getContrasenia()
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+
     private void limpiarCampos() {
         txtCedula.setText("");
         txtNombre.setText("");
@@ -641,16 +608,8 @@ public class VistaUsuario extends javax.swing.JFrame {
         txtEdad.setText("");
         txtCorreo.setText("");
         txtTelefono.setText("");
-
     }
 
-    public static boolean validarNumero(String datos) {
-        return datos.matches("[0-9]*");
-    }
-
-    private boolean validarletras(String texto) {
-        return texto.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$");
-    }
     /**
      * @param args the command line arguments
      */
@@ -675,12 +634,12 @@ public class VistaUsuario extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JTable tabla;
     private javax.swing.JTextField txtCedula;
     private javax.swing.JPasswordField txtContrasenia;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtTelefono;
-    private javax.swing.JTable usuarioTabla;
     // End of variables declaration//GEN-END:variables
 }
