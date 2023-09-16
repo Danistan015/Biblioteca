@@ -413,8 +413,8 @@ public class VistaUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
         int fila = tabla.getSelectedRow();
 
-        txtNombre.setText(tabla.getValueAt(fila, 0).toString());
-        txtCedula.setText(tabla.getValueAt(fila, 1).toString());
+        txtCedula.setText(tabla.getValueAt(fila, 0).toString());
+        txtNombre.setText(tabla.getValueAt(fila, 1).toString());
         txtEdad.setText(tabla.getValueAt(fila, 2).toString());
         txtTelefono.setText(tabla.getValueAt(fila, 3).toString());
         txtCorreo.setText(tabla.getValueAt(fila, 4).toString());
@@ -441,8 +441,10 @@ public class VistaUsuario extends javax.swing.JFrame {
                 txtCorreo.setText(usuarioEncontrado.getCorreo());
                 txtContrasenia.setText(usuarioEncontrado.getContrasenia());
 
-            } catch (SQLException | UsuarioNoEncontradoException ex) {
-                JOptionPane.showMessageDialog(null, "Error al buscar");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            } catch (UsuarioNoEncontradoException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -580,13 +582,13 @@ public class VistaUsuario extends javax.swing.JFrame {
     private void llenarTabla(){
         DefaultTableModel modelo = new DefaultTableModel();
         try {
-            ArrayList<Usuario> listaUsuarios = controlador.listaUsuarios();
+            ArrayList<Usuario> lista = controlador.listaUsuarios();
 
             modelo.setColumnIdentifiers(new Object[]{"cedula", "nombre", "edad", "telefono", "correo", "contraseña"});
             tabla.setModel(modelo);
 
-            for (int i = 0; i < listaUsuarios.size(); i++) {
-                Usuario usuarioEncontrado = listaUsuarios.get(i);
+            for (int i = 0; i < lista.size(); i++) {
+                Usuario usuarioEncontrado = lista.get(i);
                 modelo.addRow(new Object[]{
                     usuarioEncontrado.getCedula(),
                     usuarioEncontrado.getNombre(),

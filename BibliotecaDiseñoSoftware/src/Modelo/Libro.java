@@ -11,14 +11,14 @@ package Modelo;
 public class Libro {
     private String id;
     private String nombre;
-    private String genero;
+    private int idGenero;
     private int anioPublicacion;
     private int cantidadCopias;
 
-    public Libro(String id, String nombre, String genero, int anioPublicacion, int cantidadCopias) {
+    public Libro(String id, String nombre, int idGenero, int anioPublicacion, int cantidadCopias) {
         this.id = id;
         this.nombre = nombre;
-        this.genero = genero;
+        this.idGenero = idGenero;
         this.anioPublicacion = anioPublicacion;
         this.cantidadCopias = cantidadCopias;
     }
@@ -39,12 +39,12 @@ public class Libro {
         this.nombre = nombre;
     }
 
-    public String getGenero() {
-        return genero;
+    public int getIdGenero() {
+        return idGenero;
     }
 
-    public void setGenero(String genero) {
-        this.genero = genero;
+    public void setGenero(int idGenero) {
+        this.idGenero = idGenero;
     }
 
     public int getAnioPublicacion() {

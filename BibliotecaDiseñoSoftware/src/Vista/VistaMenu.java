@@ -40,6 +40,7 @@ public class VistaMenu extends javax.swing.JFrame {
         btnIibro = new javax.swing.JButton();
         btnHistorial = new javax.swing.JButton();
         btnPrestamos = new javax.swing.JButton();
+        btnGeneros = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -142,6 +143,22 @@ public class VistaMenu extends javax.swing.JFrame {
             }
         });
 
+        btnGeneros.setBackground(new java.awt.Color(24, 61, 61));
+        btnGeneros.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnGeneros.setForeground(new java.awt.Color(147, 177, 166));
+        btnGeneros.setText("Gestionar generos");
+        btnGeneros.setActionCommand("Inicio");
+        btnGeneros.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnGenerosMouseMoved(evt);
+            }
+        });
+        btnGeneros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -158,7 +175,8 @@ public class VistaMenu extends javax.swing.JFrame {
                             .addComponent(btnUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnHistorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnIibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnPrestamos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnPrestamos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnGeneros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(76, 76, 76)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -170,13 +188,15 @@ public class VistaMenu extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(60, 60, 60)
                 .addComponent(btnUsuarios)
-                .addGap(28, 28, 28)
+                .addGap(18, 18, 18)
+                .addComponent(btnGeneros)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnIibro)
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addComponent(btnHistorial)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addComponent(btnPrestamos)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(64, 64, 64))
         );
 
         jMenu1.setText("Más");
@@ -273,8 +293,20 @@ public class VistaMenu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnPrestamosActionPerformed
 
+    private void btnGenerosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGenerosMouseMoved
+        // TODO add your handling code here:
+        btnGeneros.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnGenerosMouseMoved
+
+    private void btnGenerosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerosActionPerformed
+        // TODO add your handling code here:
+        new VistaGeneroLibros(usuario).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnGenerosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGeneros;
     private javax.swing.JButton btnHistorial;
     private javax.swing.JButton btnIibro;
     private javax.swing.JButton btnPrestamos;
