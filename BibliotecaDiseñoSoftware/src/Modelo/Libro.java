@@ -9,25 +9,27 @@ package Modelo;
  * @author val
  */
 public class Libro {
-    private String id;
+    private int id;
     private String nombre;
-    private int idGenero;
+    private String autor;
     private int anioPublicacion;
     private int cantidadCopias;
+    private int idGenero;
 
-    public Libro(String id, String nombre, int idGenero, int anioPublicacion, int cantidadCopias) {
+    public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias,  int idGenero) {
         this.id = id;
         this.nombre = nombre;
-        this.idGenero = idGenero;
+        this.autor = autor;
         this.anioPublicacion = anioPublicacion;
         this.cantidadCopias = cantidadCopias;
+        this.idGenero = idGenero;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -37,6 +39,14 @@ public class Libro {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 
     public int getIdGenero() {
