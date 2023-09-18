@@ -70,7 +70,7 @@ public class DaoLibros {
 
     }
 
-    public void editarLibro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, int ID_Genero) throws SQLException {
+    public void editarLibro(int id, String nombre, String autor, String anioPublicacion, int cantidadCopias, int ID_Genero) throws SQLException {
         PreparedStatement ps = null;
         Conexion_db obConexion_db = new Conexion_db();
         Connection conn = obConexion_db.getConexion();
@@ -80,7 +80,7 @@ public class DaoLibros {
             ps.setInt(1, id);
             ps.setString(2, nombre);
             ps.setString(3, autor);
-            ps.setInt(4, anioPublicacion);
+            ps.setString(4, anioPublicacion);
             ps.setInt(5, cantidadCopias);
             ps.setInt(6, ID_Genero);
 
@@ -114,27 +114,29 @@ public class DaoLibros {
             ResultSet rs = null;
             Conexion_db conn = new Conexion_db();
             Connection con = conn.getConexion();
-            String sql = "SELECT * FROM libros";
+            String sql = "SELECT l.ID, l.nombre, l.autor, l.anioPublicacion, l.cantidadCopias, g.ID AS ID_Genero "
+                    + "FROM libros l "
+                    + "INNER JOIN generos g ON l.ID_Genero = g.ID";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 int id = rs.getInt("ID");
                 String nombre = rs.getString("nombre");
                 String autor = rs.getString("autor");
                 int anioPublicacion = rs.getInt("anioPublicacion");
                 int cantidadCopias = rs.getInt("cantidadCopias");
-                int ID_Genero = rs.getInt("ID_Genero");
+                int idGenero = rs.getInt("ID_Genero"); // Cambiar a idGenero
 
-                Libro libro = new Libro(id, nombre, autor, anioPublicacion, cantidadCopias, ID_Genero);
+                Libro libro = new Libro(id, nombre, autor, anioPublicacion, cantidadCopias, idGenero); // Cambiar a idGenero
                 libros.add(libro);
             }
-            
-            
+
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
             throw new SQLException();
         }
         return libros;
     }
+
 }
