@@ -264,7 +264,8 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void btnIibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIibroActionPerformed
         // TODO add your handling code here:
-        new VistaLibro(usuario).setVisible(true);
+        VistaLibro ventana = new VistaLibro(usuario);
+        ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnIibroActionPerformed
 
