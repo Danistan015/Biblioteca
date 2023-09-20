@@ -28,7 +28,7 @@ public class ControladorLibro {
         dao.agregarLibro(libro);
     }
     
-    public void editarLibro(int id, String nombre, String autor, String anioPublicacion, int cantidadCopias, int ID_Genero) throws SQLException {
+    public void editarLibro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, int ID_Genero) throws SQLException {
         dao.editarLibro(id, nombre, autor, anioPublicacion, cantidadCopias, ID_Genero);
     }
     

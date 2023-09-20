@@ -15,6 +15,7 @@ public class Libro {
     private int anioPublicacion;
     private int cantidadCopias;
     private int idGenero;
+    private String nombreGenero;
 
     public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias,  int idGenero) {
         this.id = id;
@@ -24,6 +25,25 @@ public class Libro {
         this.cantidadCopias = cantidadCopias;
         this.idGenero = idGenero;
     }
+
+    public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, String nombreGenero) {
+        this.id = id;
+        this.nombre = nombre;
+        this.autor = autor;
+        this.anioPublicacion = anioPublicacion;
+        this.cantidadCopias = cantidadCopias;
+        this.nombreGenero = nombreGenero;
+    }
+
+    public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias) {
+        this.id = id;
+        this.nombre = nombre;
+        this.autor = autor;
+        this.anioPublicacion = anioPublicacion;
+        this.cantidadCopias = cantidadCopias;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -72,4 +92,14 @@ public class Libro {
     public void setCantidadCopias(int cantidadCopias) {
         this.cantidadCopias = cantidadCopias;
     }
+
+    public String getNombreGenero() {
+        return nombreGenero;
+    }
+
+    public void setNombreGenero(String nombreGenero) {
+        this.nombreGenero = nombreGenero;
+    }
+    
+    
 }

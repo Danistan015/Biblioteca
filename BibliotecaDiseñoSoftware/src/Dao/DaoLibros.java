@@ -34,7 +34,6 @@ public class DaoLibros {
             ps.setInt(6, libro.getIdGenero());
             ps.execute();
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
             throw new SQLException();
         }
     }
@@ -57,35 +56,33 @@ public class DaoLibros {
                 String autor = rs.getString("autor");
                 int anioPublicacion = rs.getInt("anioPublicacion");
                 int cantidadCopias = rs.getInt("cantidadCopias");
-                int ID_Genero = rs.getInt("ID_Genero");
+                int ID_Genero = rs.getInt("ID_Generos");
 
                 libroEncontrado = new Libro(ID, nombre, autor, anioPublicacion, cantidadCopias, ID_Genero);
             }
 
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
             throw new SQLException();
         }
         return libroEncontrado;
 
     }
 
-    public void editarLibro(int id, String nombre, String autor, String anioPublicacion, int cantidadCopias, int ID_Genero) throws SQLException {
+    public void editarLibro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, int ID_Genero) throws SQLException {
         PreparedStatement ps = null;
         Conexion_db obConexion_db = new Conexion_db();
         Connection conn = obConexion_db.getConexion();
         try {
-            String sql = "UPDATE libros SET ID=?, nombre=?, autor=?, anioPublicacion=?, cantidadCopias=?, ID_Generos=?";
+            String sql = "UPDATE libros SET ID=? , nombre=?, autor=?, anioPublicacion=?, cantidadCopias=?, ID_Generos=?";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             ps.setString(2, nombre);
             ps.setString(3, autor);
-            ps.setString(4, anioPublicacion);
+            ps.setInt(4, anioPublicacion);
             ps.setInt(5, cantidadCopias);
             ps.setInt(6, ID_Genero);
-
+            ps.execute();
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
             throw new SQLException();
         }
     }
@@ -101,12 +98,14 @@ public class DaoLibros {
             ps.setInt(1, id);
             ps.execute();
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
             throw new SQLException();
         }
     }
 
+
+
     public ArrayList<Libro> listaLibros() throws SQLException {
+        
         ArrayList<Libro> libros = new ArrayList<>();
 
         try {
@@ -114,29 +113,28 @@ public class DaoLibros {
             ResultSet rs = null;
             Conexion_db conn = new Conexion_db();
             Connection con = conn.getConexion();
-            String sql = "SELECT l.ID, l.nombre, l.autor, l.anioPublicacion, l.cantidadCopias, g.ID AS ID_Genero "
-                    + "FROM libros l "
-                    + "INNER JOIN generos g ON l.ID_Genero = g.ID";
+            String sql = "SELECT l.ID, l.nombre, l.autor, l.anioPublicacion, l.cantidadCopias, g.nombre as Nombre_generos " +
+                     "FROM libros l " +
+                     "INNER JOIN generos as g ON l.ID_Generos = g.ID";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
-
             while (rs.next()) {
                 int id = rs.getInt("ID");
                 String nombre = rs.getString("nombre");
                 String autor = rs.getString("autor");
                 int anioPublicacion = rs.getInt("anioPublicacion");
                 int cantidadCopias = rs.getInt("cantidadCopias");
-                int idGenero = rs.getInt("ID_Genero"); // Cambiar a idGenero
+                String nombreGenero = rs.getString("Nombre_generos");
 
-                Libro libro = new Libro(id, nombre, autor, anioPublicacion, cantidadCopias, idGenero); // Cambiar a idGenero
+                Libro libro = new Libro(id, nombre, autor, anioPublicacion, cantidadCopias, nombreGenero);
                 libros.add(libro);
             }
-
+            
+            
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
             throw new SQLException();
         }
+        System.out.println(libros);
         return libros;
     }
-
 }
