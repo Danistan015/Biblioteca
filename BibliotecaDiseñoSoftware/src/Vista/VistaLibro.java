@@ -41,7 +41,7 @@ public class VistaLibro extends javax.swing.JFrame {
         TextPrompt pHUsuario = new TextPrompt("Ingrese la cantidad de copias: ", txtCantidadCopias);
         TextPrompt pHUsuarioss = new TextPrompt("Ingrese el año de publicacion : ", txtAnioPublicacion);
         TextPrompt pHUsuariosss = new TextPrompt("Ingrese el nombre del autor: ", txtAutor);
-        TextPrompt pHUsuariossss = new TextPrompt("Ingrese el genero: ", txtId);
+        TextPrompt pHUsuariossss = new TextPrompt("Ingrese el id: ", txtId);
         TextPrompt pHUsuariosssss = new TextPrompt("Ingrese el nombre: ", txtNombre);
 
         this.usuario = usuario;
@@ -95,6 +95,7 @@ public class VistaLibro extends javax.swing.JFrame {
         txtNombre = new javax.swing.JTextField();
         txtCantidadCopias = new javax.swing.JTextField();
         btnLimpiar = new javax.swing.JButton();
+        btnEliminarCantidad = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -127,7 +128,7 @@ public class VistaLibro extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(114, 114, 114)
                 .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(233, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
@@ -320,6 +321,22 @@ public class VistaLibro extends javax.swing.JFrame {
             }
         });
 
+        btnEliminarCantidad.setBackground(new java.awt.Color(24, 61, 61));
+        btnEliminarCantidad.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnEliminarCantidad.setForeground(new java.awt.Color(147, 177, 166));
+        btnEliminarCantidad.setText("Eliminar por cantidad");
+        btnEliminarCantidad.setActionCommand("Inicio");
+        btnEliminarCantidad.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnEliminarCantidadMouseMoved(evt);
+            }
+        });
+        btnEliminarCantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarCantidadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -327,7 +344,7 @@ public class VistaLibro extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
+                        .addGap(96, 96, 96)
                         .addComponent(btnBuscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -342,7 +359,7 @@ public class VistaLibro extends javax.swing.JFrame {
                             .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -357,20 +374,22 @@ public class VistaLibro extends javax.swing.JFrame {
                                     .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(68, 68, 68))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addComponent(btnLimpiar)
-                                .addGap(39, 39, 39)
-                                .addComponent(btnInsertar)
-                                .addGap(30, 30, 30)
-                                .addComponent(btnModificar)
-                                .addGap(51, 51, 51)
-                                .addComponent(btnEliminar))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)))
+                                .addComponent(btnLimpiar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnInsertar)
+                                .addGap(33, 33, 33)
+                                .addComponent(btnModificar)
+                                .addGap(31, 31, 31)
+                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnEliminarCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -430,10 +449,11 @@ public class VistaLibro extends javax.swing.JFrame {
                     .addComponent(btnInsertar)
                     .addComponent(btnModificar)
                     .addComponent(btnEliminar)
-                    .addComponent(btnLimpiar))
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                    .addComponent(btnLimpiar)
+                    .addComponent(btnEliminarCantidad))
+                .addGap(42, 42, 42)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Más");
@@ -531,6 +551,7 @@ public class VistaLibro extends javax.swing.JFrame {
                 lbNombre.setVisible(false);
                 lblCantidad.setVisible(false);
                 lblId.setVisible(false);
+                txtId.setEditable(true);
                 llenarTabla();
                 limpiarCampo();
             } catch (SQLException ex) {
@@ -553,7 +574,7 @@ public class VistaLibro extends javax.swing.JFrame {
             int id = Integer.parseInt(txtId.getText());
             controladorLibro.eliminarLibro(id);
             JOptionPane.showMessageDialog(null, "Libro Eliminado");
-
+            txtId.setEditable(true);
             lblAnioPublicacion.setVisible(false);
             lblAutor.setVisible(false);
             lbNombre.setVisible(false);
@@ -591,7 +612,7 @@ public class VistaLibro extends javax.swing.JFrame {
                 lblAutor.setVisible(true);
                 lbNombre.setVisible(true);
                 lblCantidad.setVisible(true);
-                txtId.setEditable(true);
+                txtId.setEditable(false);
                 lblId.setVisible(true);
                 txtNombre.setText(libroEncontrado.getNombre());
                 txtAnioPublicacion.setText(String.valueOf(libroEncontrado.getAnioPublicacion()));
@@ -615,6 +636,8 @@ public class VistaLibro extends javax.swing.JFrame {
         btnEliminar.setForeground(Color.lightGray);
         btnModificar.setForeground(Color.lightGray);
         btnLimpiar.setForeground(Color.lightGray);
+        btnEliminarCantidad.setForeground(Color.lightGray);
+
     }//GEN-LAST:event_jPanel1MouseMoved
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -722,6 +745,15 @@ public class VistaLibro extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnEliminarCantidadMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarCantidadMouseMoved
+        // TODO add your handling code here:
+        btnEliminarCantidad.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnEliminarCantidadMouseMoved
+
+    private void btnEliminarCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCantidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarCantidadActionPerformed
     public void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();
         try {
@@ -785,6 +817,7 @@ public class VistaLibro extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnEliminarCantidad;
     private javax.swing.JButton btnInsertar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnModificar;
