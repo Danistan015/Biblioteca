@@ -36,6 +36,10 @@ public class ControladorLibro {
         dao.eliminarLibro(id);
     }
     
+    public void eliminarLibroCantidad(int id, int cantidadIngresada, int cantidadTotal) throws SQLException {
+        dao.eliminarLibroCantidad(id, cantidadIngresada, cantidadTotal);
+    }
+    
     public ArrayList<Libro> listaLibros () throws SQLException {
         return dao.listaLibros();
     }
