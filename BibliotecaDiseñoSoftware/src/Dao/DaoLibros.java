@@ -104,20 +104,33 @@ public class DaoLibros {
     }
 
     public void eliminarLibroCantidad(int id, int cantidadIngresada, int cantidadTotal) throws SQLException {
-        PreparedStatement ps = null;
-        Conexion_db obConexion_db = new Conexion_db();
-        Connection conn = obConexion_db.getConexion();
-        try {
-            String sql = "UPDATE libros SET cantidadCopias=? WHERE ID=?";
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, cantidadTotal - cantidadIngresada);
+    PreparedStatement ps = null;
+    Conexion_db obConexion_db = new Conexion_db();
+    Connection conn = obConexion_db.getConexion();
+    try {
+        String sql = "UPDATE libros SET cantidadCopias=? WHERE ID=?";
+        ps = conn.prepareStatement(sql);
+
+        int nuevaCantidad = cantidadTotal - cantidadIngresada;
+
+        if (nuevaCantidad <= 0) {
+            // Si la nueva cantidad es menor o igual a cero, elimina el libro completamente
+            String eliminarSql = "DELETE FROM libros WHERE ID=?";
+            PreparedStatement eliminarPs = conn.prepareStatement(eliminarSql);
+            eliminarPs.setInt(1, id);
+            eliminarPs.executeUpdate();
+        } else {
+            // Actualiza la cantidad de copias
+            ps.setInt(1, nuevaCantidad);
             ps.setInt(2, id);
             ps.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace(); // 
-            throw new SQLException();
         }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        throw new SQLException();
     }
+}
+
 
     public ArrayList<Libro> listaLibros() throws SQLException {
 

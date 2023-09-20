@@ -54,6 +54,7 @@ public class VistaLibro extends javax.swing.JFrame {
         lblCantidad.setVisible(false);
         lblId.setVisible(false);
         llenarTabla();
+        cargarComboFiltro();
         cargarCombo();
 
     }
@@ -96,6 +97,8 @@ public class VistaLibro extends javax.swing.JFrame {
         txtCantidadCopias = new javax.swing.JTextField();
         btnLimpiar = new javax.swing.JButton();
         btnEliminarCantidad = new javax.swing.JButton();
+        comboFiltro = new javax.swing.JComboBox<>();
+        btnFiltrar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -337,6 +340,26 @@ public class VistaLibro extends javax.swing.JFrame {
             }
         });
 
+        comboFiltro.setBackground(new java.awt.Color(4, 13, 18));
+        comboFiltro.setForeground(new java.awt.Color(255, 255, 255));
+        comboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnFiltrar.setBackground(new java.awt.Color(24, 61, 61));
+        btnFiltrar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnFiltrar.setForeground(new java.awt.Color(147, 177, 166));
+        btnFiltrar.setText("Filtrar");
+        btnFiltrar.setActionCommand("Inicio");
+        btnFiltrar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnFiltrarMouseMoved(evt);
+            }
+        });
+        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -374,19 +397,26 @@ public class VistaLibro extends javax.swing.JFrame {
                                     .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(68, 68, 68))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnLimpiar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnInsertar)
-                                .addGap(33, 33, 33)
-                                .addComponent(btnModificar)
-                                .addGap(31, 31, 31)
-                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnEliminarCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(49, 49, 49)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnLimpiar)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnInsertar)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(btnModificar)
+                                        .addGap(31, 31, 31)
+                                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnEliminarCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(196, 196, 196)
+                                .addComponent(comboFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(btnFiltrar)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -424,33 +454,35 @@ public class VistaLibro extends javax.swing.JFrame {
                     .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblGenero)
-                                .addGap(2, 2, 2)
-                                .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(39, 39, 39))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblCantidad)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCantidadCopias, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(34, 34, 34))))
+                        .addGap(12, 12, 12)
+                        .addComponent(lblCantidad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCantidadCopias, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(117, 117, 117)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblGenero)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsertar)
                     .addComponent(btnModificar)
                     .addComponent(btnEliminar)
                     .addComponent(btnLimpiar)
                     .addComponent(btnEliminarCantidad))
-                .addGap(42, 42, 42)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFiltrar))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -635,6 +667,7 @@ public class VistaLibro extends javax.swing.JFrame {
         btnModificar.setForeground(Color.lightGray);
         btnLimpiar.setForeground(Color.lightGray);
         btnEliminarCantidad.setForeground(Color.lightGray);
+        btnFiltrar.setForeground(Color.lightGray);
 
     }//GEN-LAST:event_jPanel1MouseMoved
 
@@ -754,16 +787,32 @@ public class VistaLibro extends javax.swing.JFrame {
         int id = Integer.parseInt(txtId.getText());
         int cantidadTotal = Integer.parseInt(txtCantidadCopias.getText());
         int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad que desea eliminar"));
-        try{
-        controladorLibro.eliminarLibroCantidad(id, cantidad, cantidadTotal);
-        JOptionPane.showMessageDialog(null, "cantidad modificada");
-        llenarTabla();
-        limpiarCampo();
+        try {
+            controladorLibro.eliminarLibroCantidad(id, cantidad, cantidadTotal);
+            JOptionPane.showMessageDialog(null, "cantidad modificada");
+            txtId.setEditable(true);
+            llenarTabla();
+            limpiarCampo();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al Eliminar");
             System.out.println(ex.toString());
         }
     }//GEN-LAST:event_btnEliminarCantidadActionPerformed
+
+    private void btnFiltrarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFiltrarMouseMoved
+        // TODO add your handling code here:
+        btnFiltrar.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnFiltrarMouseMoved
+
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        // TODO add your handling code here:
+        if (comboFiltro.getSelectedIndex() == 0) {
+            llenarTabla();
+        } else {
+            String genero = comboFiltro.getSelectedItem().toString();
+            llenarTablaFiltro(genero);
+        }
+    }//GEN-LAST:event_btnFiltrarActionPerformed
     public void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();
         try {
@@ -789,7 +838,61 @@ public class VistaLibro extends javax.swing.JFrame {
         }
     }
 
-    public void cargarCombo() {
+    public void llenarTablaFiltro(String generoSeleccionado) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        try {
+            ArrayList<Libro> lista = controladorLibro.listaLibros();
+
+            modelo.setColumnIdentifiers(new Object[]{"ID", "nombre", "autor", "anipPublicacion", "cantidadCopias", "generos"});
+            tabla.setModel(modelo);
+
+            for (int i = 0; i < lista.size(); i++) {
+                Libro libro = lista.get(i);
+
+                // Verifica si el libro coincide con el género seleccionado
+                if (libro.getNombreGenero().equals(generoSeleccionado)) {
+                    modelo.addRow(new Object[]{
+                        libro.getId(),
+                        libro.getNombre(),
+                        libro.getAutor(),
+                        libro.getAnioPublicacion(),
+                        libro.getCantidadCopias(),
+                        libro.getNombreGenero()
+                    });
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+
+    public void cargarComboFiltro() {
+        try {
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+            comboFiltro.setModel(model);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            Conexion_db conn = new Conexion_db();
+            Connection con = (Connection) conn.getConexion();
+
+            String sql = "SELECT * FROM generos";
+
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            model.addElement("Seleccione un genero"); // Agrega la opción predeterminada
+
+            while (rs.next()) {
+                String categoryName = rs.getString("Nombre");
+                model.addElement(categoryName);
+            }
+
+        } catch (SQLException ex) {
+            System.err.print(ex.toString());
+        }
+    }
+     public void cargarCombo() {
         try {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
             comboGenero.setModel(model);
@@ -828,9 +931,11 @@ public class VistaLibro extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarCantidad;
+    private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnInsertar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnModificar;
+    private javax.swing.JComboBox<String> comboFiltro;
     private javax.swing.JComboBox<String> comboGenero;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
