@@ -4,7 +4,6 @@
  */
 package Vista;
 
-
 import Controlador.ControladorUsuario;
 import Excepciones.UsuarioNoEncontradoException;
 import Modelo.Usuario;
@@ -47,7 +46,7 @@ public class VistaUsuario extends javax.swing.JFrame {
         lblNombre.setVisible(false);
         lblTelefono.setVisible(false);
         txtCedula.setEditable(true);
-        
+
     }
 
     /**
@@ -87,7 +86,7 @@ public class VistaUsuario extends javax.swing.JFrame {
         lblCorreo = new javax.swing.JLabel();
         lblTelefono = new javax.swing.JLabel();
         lblContrasenia = new javax.swing.JLabel();
-        btnInsertar1 = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -117,10 +116,10 @@ public class VistaUsuario extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(176, 176, 176)
                 .addComponent(jLabel2)
-                .addGap(128, 128, 128))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
@@ -294,19 +293,19 @@ public class VistaUsuario extends javax.swing.JFrame {
         lblContrasenia.setForeground(new java.awt.Color(147, 177, 166));
         lblContrasenia.setText("Contraseñia:");
 
-        btnInsertar1.setBackground(new java.awt.Color(24, 61, 61));
-        btnInsertar1.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnInsertar1.setForeground(new java.awt.Color(147, 177, 166));
-        btnInsertar1.setText("Limpiar Campos");
-        btnInsertar1.setActionCommand("Inicio");
-        btnInsertar1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        btnLimpiar.setBackground(new java.awt.Color(24, 61, 61));
+        btnLimpiar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(147, 177, 166));
+        btnLimpiar.setText("Limpiar Campos");
+        btnLimpiar.setActionCommand("Inicio");
+        btnLimpiar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnInsertar1MouseMoved(evt);
+                btnLimpiarMouseMoved(evt);
             }
         });
-        btnInsertar1.addActionListener(new java.awt.event.ActionListener() {
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInsertar1ActionPerformed(evt);
+                btnLimpiarActionPerformed(evt);
             }
         });
 
@@ -360,7 +359,7 @@ public class VistaUsuario extends javax.swing.JFrame {
                                                 .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGap(94, 94, 94))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnInsertar1)
+                                .addComponent(btnLimpiar)
                                 .addGap(42, 42, 42)
                                 .addComponent(btnInsertar)
                                 .addGap(47, 47, 47)
@@ -379,7 +378,7 @@ public class VistaUsuario extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(51, 51, 51)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNombre, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblId))
@@ -399,7 +398,7 @@ public class VistaUsuario extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEdad)
                     .addComponent(lblCorreo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -409,7 +408,7 @@ public class VistaUsuario extends javax.swing.JFrame {
                         .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 7, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(25, 25, 25)
+                .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTelefono)
                     .addComponent(lblContrasenia))
@@ -421,15 +420,15 @@ public class VistaUsuario extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(68, 68, 68)
+                .addGap(86, 86, 86)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsertar)
                     .addComponent(btnModificar)
                     .addComponent(btnEliminar)
-                    .addComponent(btnInsertar1))
+                    .addComponent(btnLimpiar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Más");
@@ -489,6 +488,7 @@ public class VistaUsuario extends javax.swing.JFrame {
         btnBuscar.setForeground(Color.lightGray);
         btnEliminar.setForeground(Color.lightGray);
         btnModificar.setForeground(Color.lightGray);
+         btnLimpiar.setForeground(Color.lightGray);
     }//GEN-LAST:event_jPanel1MouseMoved
 
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
@@ -702,13 +702,20 @@ public class VistaUsuario extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtCedulaMouseClicked
 
-    private void btnInsertar1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertar1MouseMoved
+    private void btnLimpiarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseMoved
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnInsertar1MouseMoved
+         btnLimpiar.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnLimpiarMouseMoved
 
-    private void btnInsertar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertar1ActionPerformed
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
-
+        lblContrasenia.setVisible(false);
+        lblCorreo.setVisible(false);
+        lblEdad.setVisible(false);
+        lblId.setVisible(false);
+        lblNombre.setVisible(false);
+        lblTelefono.setVisible(false);
+        txtCedula.setEditable(true);
         txtCedula.setText("");
         txtNombre.setText("");
         txtContrasenia.setText("");
@@ -717,7 +724,7 @@ public class VistaUsuario extends javax.swing.JFrame {
         txtTelefono.setText("");
 
 
-    }//GEN-LAST:event_btnInsertar1ActionPerformed
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();
@@ -760,7 +767,7 @@ public class VistaUsuario extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnInsertar;
-    private javax.swing.JButton btnInsertar1;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

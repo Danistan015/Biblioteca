@@ -7,12 +7,14 @@ package Vista;
 import Conexion.Conexion_db;
 import Controlador.ControladorGenero;
 import Controlador.ControladorLibro;
+import Excepciones.LibroNoEncontradoException;
 import Modelo.Libro;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
@@ -41,16 +43,19 @@ public class VistaLibro extends javax.swing.JFrame {
         TextPrompt pHUsuariosss = new TextPrompt("Ingrese el nombre del autor: ", txtAutor);
         TextPrompt pHUsuariossss = new TextPrompt("Ingrese el genero: ", txtId);
         TextPrompt pHUsuariosssss = new TextPrompt("Ingrese el nombre: ", txtNombre);
-        llenarTabla();
+
         this.usuario = usuario;
+
+        controladorLibro = new ControladorLibro();
+        controGenero = new ControladorGenero();
         lblAnioPublicacion.setVisible(false);
         lblAutor.setVisible(false);
         lbNombre.setVisible(false);
         lblCantidad.setVisible(false);
         lblId.setVisible(false);
+        llenarTabla();
         cargarCombo();
-        controladorLibro = new ControladorLibro();
-        controGenero = new ControladorGenero();
+
     }
 
     /**
@@ -85,10 +90,11 @@ public class VistaLibro extends javax.swing.JFrame {
         comboGenero = new javax.swing.JComboBox<>();
         lblGenero = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Libro = new javax.swing.JTable();
+        tabla = new javax.swing.JTable();
         txtAnioPublicacion = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         txtCantidadCopias = new javax.swing.JTextField();
+        btnLimpiar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -149,6 +155,11 @@ public class VistaLibro extends javax.swing.JFrame {
         txtId.setBackground(new java.awt.Color(4, 13, 18));
         txtId.setForeground(new java.awt.Color(255, 255, 255));
         txtId.setBorder(null);
+        txtId.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtIdMouseClicked(evt);
+            }
+        });
         txtId.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtIdKeyTyped(evt);
@@ -248,7 +259,7 @@ public class VistaLibro extends javax.swing.JFrame {
         lblGenero.setForeground(new java.awt.Color(147, 177, 166));
         lblGenero.setText("Genero:");
 
-        Libro.setModel(new javax.swing.table.DefaultTableModel(
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -259,12 +270,12 @@ public class VistaLibro extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        Libro.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                LibroMouseClicked(evt);
+                tablaMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(Libro);
+        jScrollPane1.setViewportView(tabla);
 
         txtAnioPublicacion.setBackground(new java.awt.Color(4, 13, 18));
         txtAnioPublicacion.setForeground(new java.awt.Color(255, 255, 255));
@@ -290,6 +301,22 @@ public class VistaLibro extends javax.swing.JFrame {
         txtCantidadCopias.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCantidadCopiasKeyTyped(evt);
+            }
+        });
+
+        btnLimpiar.setBackground(new java.awt.Color(24, 61, 61));
+        btnLimpiar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(147, 177, 166));
+        btnLimpiar.setText("Limpiar Campos");
+        btnLimpiar.setActionCommand("Inicio");
+        btnLimpiar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnLimpiarMouseMoved(evt);
+            }
+        });
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
             }
         });
 
@@ -332,16 +359,18 @@ public class VistaLibro extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(94, 94, 94)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(150, 150, 150)
+                                .addGap(49, 49, 49)
+                                .addComponent(btnLimpiar)
+                                .addGap(39, 39, 39)
                                 .addComponent(btnInsertar)
-                                .addGap(51, 51, 51)
+                                .addGap(30, 30, 30)
                                 .addComponent(btnModificar)
                                 .addGap(51, 51, 51)
-                                .addComponent(btnEliminar)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)))
+                                .addComponent(btnEliminar))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -400,10 +429,11 @@ public class VistaLibro extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsertar)
                     .addComponent(btnModificar)
-                    .addComponent(btnEliminar))
+                    .addComponent(btnEliminar)
+                    .addComponent(btnLimpiar))
                 .addGap(12, 12, 12)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Más");
@@ -434,14 +464,11 @@ public class VistaLibro extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 39, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -468,7 +495,7 @@ public class VistaLibro extends javax.swing.JFrame {
                 Libro libro = new Libro(id, nombre, Autor, anioPublicacion, cantidadCopias, id_genero);
 
                 controladorLibro.agregarLibro(libro);
-                JOptionPane.showMessageDialog(null, "Usuario guardado");
+                JOptionPane.showMessageDialog(null, "Libro guardado");
                 llenarTabla();
                 limpiarCampo();
             } catch (SQLException ex) {
@@ -485,6 +512,31 @@ public class VistaLibro extends javax.swing.JFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
+        if (txtAnioPublicacion.getText().isEmpty() || txtAutor.getText().isEmpty() || txtCantidadCopias.getText().isEmpty() || txtNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor llene los campos");
+        } else {
+            int id = Integer.parseInt(txtId.getText());
+            String nombre = txtNombre.getText();
+            int cantidadCopias = Integer.parseInt(txtCantidadCopias.getText());
+            int anioPublicacion = Integer.parseInt(txtAnioPublicacion.getText());
+            String Autor = txtAutor.getText();
+            String genero = (String) comboGenero.getSelectedItem();
+            try {
+                int id_genero = controGenero.buscarIDGenero(genero);
+
+                controladorLibro.editarLibro(id, nombre, Autor, anioPublicacion, cantidadCopias, id_genero);
+                JOptionPane.showMessageDialog(null, "Libro modificado");
+                lblAnioPublicacion.setVisible(false);
+                lblAutor.setVisible(false);
+                lbNombre.setVisible(false);
+                lblCantidad.setVisible(false);
+                lblId.setVisible(false);
+                llenarTabla();
+                limpiarCampo();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al modificar");
+            }
+        }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseMoved
@@ -494,6 +546,26 @@ public class VistaLibro extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
+        if (txtId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ingrese el id que quiere eliminar");
+        }
+        try {
+            int id = Integer.parseInt(txtId.getText());
+            controladorLibro.eliminarLibro(id);
+            JOptionPane.showMessageDialog(null, "Libro Eliminado");
+
+            lblAnioPublicacion.setVisible(false);
+            lblAutor.setVisible(false);
+            lbNombre.setVisible(false);
+            lblCantidad.setVisible(false);
+            lblId.setVisible(false);
+            llenarTabla();
+            limpiarCampo();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al Eliminar");
+            System.out.println(ex.toString());
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnBuscarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseMoved
@@ -503,6 +575,37 @@ public class VistaLibro extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
+        if (txtId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ingrese el ID del libro");
+        } else {
+            int id = Integer.parseInt(txtId.getText());
+
+            try {
+                Libro libroEncontrado = controladorLibro.buscarLibro(id);
+
+                if (libroEncontrado == null) {
+                    throw new LibroNoEncontradoException();
+                }
+                txtId.setEditable(false);
+                lblAnioPublicacion.setVisible(true);
+                lblAutor.setVisible(true);
+                lbNombre.setVisible(true);
+                lblCantidad.setVisible(true);
+                txtId.setEditable(true);
+                lblId.setVisible(true);
+                txtNombre.setText(libroEncontrado.getNombre());
+                txtAnioPublicacion.setText(String.valueOf(libroEncontrado.getAnioPublicacion()));
+                txtAutor.setText(libroEncontrado.getAutor());
+                txtCantidadCopias.setText(String.valueOf(libroEncontrado.getCantidadCopias()));
+                txtId.setText(String.valueOf(libroEncontrado.getId()));
+                comboGenero.setSelectedItem(libroEncontrado.getIdGenero());
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al buscar");
+            } catch (LibroNoEncontradoException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
@@ -511,6 +614,7 @@ public class VistaLibro extends javax.swing.JFrame {
         btnBuscar.setForeground(Color.lightGray);
         btnEliminar.setForeground(Color.lightGray);
         btnModificar.setForeground(Color.lightGray);
+        btnLimpiar.setForeground(Color.lightGray);
     }//GEN-LAST:event_jPanel1MouseMoved
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -559,25 +663,24 @@ public class VistaLibro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCantidadCopiasKeyTyped
 
-    private void LibroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LibroMouseClicked
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
         // TODO add your handling code here:
-        int seleccionado = Libro.getSelectedRow();
+        int seleccionado = tabla.getSelectedRow();
         lblAnioPublicacion.setVisible(true);
         lblAutor.setVisible(true);
         lbNombre.setVisible(true);
         lblCantidad.setVisible(true);
         lblId.setVisible(true);
-        
-        lblId.setText(Libro.getValueAt(seleccionado, 0).toString());
-        txtNombre.setText(Libro.getValueAt(seleccionado, 1).toString());
-         txtAutor.setText(Libro.getValueAt(seleccionado, 3).toString());
-         txtAnioPublicacion.setText(Libro.getValueAt(seleccionado, 4).toString());
-         txtCantidadCopias.setText(Libro.getValueAt(seleccionado, 5).toString());
-        comboGenero.setSelectedItem(Libro.getValueAt(seleccionado, 6).toString());
-       
-        
-        
-    }//GEN-LAST:event_LibroMouseClicked
+        txtId.setEditable(false);
+        txtId.setText(tabla.getValueAt(seleccionado, 0).toString());
+        txtNombre.setText(tabla.getValueAt(seleccionado, 1).toString());
+        txtAutor.setText(tabla.getValueAt(seleccionado, 2).toString());
+        txtAnioPublicacion.setText(tabla.getValueAt(seleccionado, 3).toString());
+        txtCantidadCopias.setText(tabla.getValueAt(seleccionado, 4).toString());
+        comboGenero.setSelectedItem(tabla.getValueAt(seleccionado, 5).toString());
+
+
+    }//GEN-LAST:event_tablaMouseClicked
 
     private void txtAutorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutorKeyTyped
         // TODO add your handling code here:
@@ -588,23 +691,55 @@ public class VistaLibro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ingresar solo letras");
         }
     }//GEN-LAST:event_txtAutorKeyTyped
-    private void llenarTabla() {
+
+    private void txtIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtIdMouseClicked
+        // TODO add your handling code here:
+        if (!txtId.isEditable()) {
+            JOptionPane.showMessageDialog(null, "Este campo no se puede editar.", "Campo no editable", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtIdMouseClicked
+
+    private void btnLimpiarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseMoved
+        // TODO add your handling code here:
+        btnLimpiar.setForeground(Color.WHITE);
+
+    }//GEN-LAST:event_btnLimpiarMouseMoved
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        // TODO add your handling code here:
+        lblAnioPublicacion.setVisible(false);
+        lblAutor.setVisible(false);
+        lbNombre.setVisible(false);
+        lblCantidad.setVisible(false);
+        lblId.setVisible(false);
+        txtId.setEditable(true);
+        txtAnioPublicacion.setText("");
+        txtAutor.setText("");
+        txtCantidadCopias.setText("");
+        txtId.setText("");
+        txtNombre.setText("");
+        comboGenero.setSelectedIndex(0);
+
+
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+    public void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();
         try {
             ArrayList<Libro> lista = controladorLibro.listaLibros();
 
-            modelo.setColumnIdentifiers(new Object[]{"Id", "nombre", "Autor", "Añio publicación", "cantidad copias", "ID_Genero"});
-            Libro.setModel(modelo);
+            modelo.setColumnIdentifiers(new Object[]{"ID", "nombre", "autor", "anipPublicacion", "cantidadCopias", "generos"});
+            tabla.setModel(modelo);
 
             for (int i = 0; i < lista.size(); i++) {
-                Libro libroEncontrado = lista.get(i);
+                Libro libro = lista.get(i);
                 modelo.addRow(new Object[]{
-                    libroEncontrado.getId(),
-                    libroEncontrado.getNombre(),
-                    libroEncontrado.getAutor(),
-                    libroEncontrado.getAnioPublicacion(),
-                    libroEncontrado.getCantidadCopias(),
-                    libroEncontrado.getIdGenero() // Cambiar a idGenero
+                    libro.getId(),
+                    libro.getNombre(),
+                    libro.getAutor(),
+                    libro.getAnioPublicacion(),
+                    libro.getCantidadCopias(),
+                    libro.getNombreGenero()
+
                 });
             }
         } catch (SQLException ex) {
@@ -612,9 +747,6 @@ public class VistaLibro extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public void cargarCombo() {
         try {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
@@ -648,13 +780,13 @@ public class VistaLibro extends javax.swing.JFrame {
         txtCantidadCopias.setText("");
         txtId.setText("");
         txtNombre.setText("");
-        comboGenero.setSelectedItem(0);
+        comboGenero.setSelectedIndex(0);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable Libro;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnInsertar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JComboBox<String> comboGenero;
     private javax.swing.JLabel jLabel1;
@@ -677,6 +809,7 @@ public class VistaLibro extends javax.swing.JFrame {
     private javax.swing.JLabel lblCantidad;
     private javax.swing.JLabel lblGenero;
     private javax.swing.JLabel lblId;
+    private javax.swing.JTable tabla;
     private javax.swing.JTextField txtAnioPublicacion;
     private javax.swing.JTextField txtAutor;
     private javax.swing.JTextField txtCantidadCopias;
