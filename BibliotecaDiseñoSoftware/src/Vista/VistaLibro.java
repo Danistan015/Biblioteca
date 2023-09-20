@@ -376,9 +376,7 @@ public class VistaLibro extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnLimpiar)
                                 .addGap(18, 18, 18)
@@ -387,9 +385,9 @@ public class VistaLibro extends javax.swing.JFrame {
                                 .addComponent(btnModificar)
                                 .addGap(31, 31, 31)
                                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
                                 .addComponent(btnEliminarCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -619,7 +617,7 @@ public class VistaLibro extends javax.swing.JFrame {
                 txtAutor.setText(libroEncontrado.getAutor());
                 txtCantidadCopias.setText(String.valueOf(libroEncontrado.getCantidadCopias()));
                 txtId.setText(String.valueOf(libroEncontrado.getId()));
-                comboGenero.setSelectedItem(libroEncontrado.getIdGenero());
+                comboGenero.setSelectedIndex(libroEncontrado.getIdGenero());
 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al buscar");
@@ -753,6 +751,18 @@ public class VistaLibro extends javax.swing.JFrame {
 
     private void btnEliminarCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCantidadActionPerformed
         // TODO add your handling code here:
+        int id = Integer.parseInt(txtId.getText());
+        int cantidadTotal = Integer.parseInt(txtCantidadCopias.getText());
+        int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad que desea eliminar"));
+        try{
+        controladorLibro.eliminarLibroCantidad(id, cantidad, cantidadTotal);
+        JOptionPane.showMessageDialog(null, "cantidad modificada");
+        llenarTabla();
+        limpiarCampo();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al Eliminar");
+            System.out.println(ex.toString());
+        }
     }//GEN-LAST:event_btnEliminarCantidadActionPerformed
     public void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();

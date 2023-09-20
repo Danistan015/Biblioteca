@@ -69,25 +69,24 @@ public class DaoLibros {
     }
 
     public void editarLibro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, int ID_Genero) throws SQLException {
-    PreparedStatement ps = null;
-    Conexion_db obConexion_db = new Conexion_db();
-    Connection conn = obConexion_db.getConexion();
-    try {
-        String sql = "UPDATE libros SET nombre=?, autor=?, anioPublicacion=?, cantidadCopias=?, ID_Generos=? WHERE ID=?";
-        ps = conn.prepareStatement(sql);
-        ps.setString(1, nombre);
-        ps.setString(2, autor);
-        ps.setInt(3, anioPublicacion);
-        ps.setInt(4, cantidadCopias);
-        ps.setInt(5, ID_Genero);
-        ps.setInt(6, id);
-        ps.executeUpdate(); 
-    } catch (SQLException ex) {
-        ex.printStackTrace(); // 
-        throw new SQLException();
+        PreparedStatement ps = null;
+        Conexion_db obConexion_db = new Conexion_db();
+        Connection conn = obConexion_db.getConexion();
+        try {
+            String sql = "UPDATE libros SET nombre=?, autor=?, anioPublicacion=?, cantidadCopias=?, ID_Generos=? WHERE ID=?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, nombre);
+            ps.setString(2, autor);
+            ps.setInt(3, anioPublicacion);
+            ps.setInt(4, cantidadCopias);
+            ps.setInt(5, ID_Genero);
+            ps.setInt(6, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // 
+            throw new SQLException();
+        }
     }
-}
-
 
     public void eliminarLibro(int id) throws SQLException {
         PreparedStatement ps = null;
@@ -104,10 +103,24 @@ public class DaoLibros {
         }
     }
 
-
+    public void eliminarLibroCantidad(int id, int cantidadIngresada, int cantidadTotal) throws SQLException {
+        PreparedStatement ps = null;
+        Conexion_db obConexion_db = new Conexion_db();
+        Connection conn = obConexion_db.getConexion();
+        try {
+            String sql = "UPDATE libros SET cantidadCopias=? WHERE ID=?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, cantidadTotal - cantidadIngresada);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // 
+            throw new SQLException();
+        }
+    }
 
     public ArrayList<Libro> listaLibros() throws SQLException {
-        
+
         ArrayList<Libro> libros = new ArrayList<>();
 
         try {
@@ -115,9 +128,9 @@ public class DaoLibros {
             ResultSet rs = null;
             Conexion_db conn = new Conexion_db();
             Connection con = conn.getConexion();
-            String sql = "SELECT l.ID, l.nombre, l.autor, l.anioPublicacion, l.cantidadCopias, g.nombre as Nombre_generos " +
-                     "FROM libros l " +
-                     "INNER JOIN generos as g ON l.ID_Generos = g.ID";
+            String sql = "SELECT l.ID, l.nombre, l.autor, l.anioPublicacion, l.cantidadCopias, g.nombre as Nombre_generos "
+                    + "FROM libros l "
+                    + "INNER JOIN generos as g ON l.ID_Generos = g.ID";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -131,8 +144,7 @@ public class DaoLibros {
                 Libro libro = new Libro(id, nombre, autor, anioPublicacion, cantidadCopias, nombreGenero);
                 libros.add(libro);
             }
-            
-            
+
         } catch (SQLException ex) {
             throw new SQLException();
         }
