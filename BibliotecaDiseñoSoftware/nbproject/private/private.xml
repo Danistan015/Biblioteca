@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/MI%20PC/Documents/TrabajoBiblioteca/BibliotecaDiseñoSoftware/src/Controlador/ControladorLibro.java</file>
-            <file>file:/C:/Users/MI%20PC/Documents/TrabajoBiblioteca/BibliotecaDiseñoSoftware/src/Vista/VistaLibro.java</file>
-            <file>file:/C:/Users/MI%20PC/Documents/TrabajoBiblioteca/BibliotecaDiseñoSoftware/src/Vista/VistaMenu.java</file>
-            <file>file:/C:/Users/MI%20PC/Documents/TrabajoBiblioteca/BibliotecaDiseñoSoftware/src/Vista/VistaLogin.java</file>
-            <file>file:/C:/Users/MI%20PC/Documents/TrabajoBiblioteca/BibliotecaDiseñoSoftware/src/Vista/VistaGeneroLibros.java</file>
+            <file>file:/C:/Users/sotog/Documents/GitHub/Bibliopteca/BibliotecaDiseñoSoftware/src/Dao/DaoGeneros.java</file>
+            <file>file:/C:/Users/sotog/Documents/GitHub/Bibliopteca/BibliotecaDiseñoSoftware/src/Dao/DaoLibros.java</file>
+            <file>file:/C:/Users/sotog/Documents/GitHub/Bibliopteca/BibliotecaDiseñoSoftware/src/Controlador/ControladorGenero.java</file>
+            <file>file:/C:/Users/sotog/Documents/GitHub/Bibliopteca/BibliotecaDiseñoSoftware/src/Vista/VistaGeneroLibros.java</file>
+            <file>file:/C:/Users/sotog/Documents/GitHub/Bibliopteca/BibliotecaDiseñoSoftware/src/Vista/VistaLogin.java</file>
+            <file>file:/C:/Users/sotog/Documents/GitHub/Bibliopteca/BibliotecaDiseñoSoftware/src/Vista/VistaLibro.java</file>
+            <file>file:/C:/Users/sotog/Documents/GitHub/Bibliopteca/BibliotecaDiseñoSoftware/src/Controlador/ControladorLibro.java</file>
         </group>
     </open-files>
 </project-private>
