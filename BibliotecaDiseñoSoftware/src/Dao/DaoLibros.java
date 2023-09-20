@@ -69,23 +69,25 @@ public class DaoLibros {
     }
 
     public void editarLibro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, int ID_Genero) throws SQLException {
-        PreparedStatement ps = null;
-        Conexion_db obConexion_db = new Conexion_db();
-        Connection conn = obConexion_db.getConexion();
-        try {
-            String sql = "UPDATE libros SET ID=? , nombre=?, autor=?, anioPublicacion=?, cantidadCopias=?, ID_Generos=?";
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, id);
-            ps.setString(2, nombre);
-            ps.setString(3, autor);
-            ps.setInt(4, anioPublicacion);
-            ps.setInt(5, cantidadCopias);
-            ps.setInt(6, ID_Genero);
-            ps.execute();
-        } catch (SQLException ex) {
-            throw new SQLException();
-        }
+    PreparedStatement ps = null;
+    Conexion_db obConexion_db = new Conexion_db();
+    Connection conn = obConexion_db.getConexion();
+    try {
+        String sql = "UPDATE libros SET nombre=?, autor=?, anioPublicacion=?, cantidadCopias=?, ID_Generos=? WHERE ID=?";
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, nombre);
+        ps.setString(2, autor);
+        ps.setInt(3, anioPublicacion);
+        ps.setInt(4, cantidadCopias);
+        ps.setInt(5, ID_Genero);
+        ps.setInt(6, id);
+        ps.executeUpdate(); 
+    } catch (SQLException ex) {
+        ex.printStackTrace(); // 
+        throw new SQLException();
     }
+}
+
 
     public void eliminarLibro(int id) throws SQLException {
         PreparedStatement ps = null;
