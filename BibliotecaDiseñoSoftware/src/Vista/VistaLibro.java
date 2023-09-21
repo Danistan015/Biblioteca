@@ -7,6 +7,8 @@ package Vista;
 import Conexion.Conexion_db;
 import Controlador.ControladorGenero;
 import Controlador.ControladorLibro;
+import Excepciones.AnioSobrepasadoException;
+import Excepciones.CantidadSobrepasadaException;
 import Excepciones.LibroNoEncontradoException;
 import Modelo.Libro;
 import Modelo.Usuario;
@@ -550,6 +552,8 @@ public class VistaLibro extends javax.swing.JFrame {
                 limpiarCampo();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al guardar");
+            } catch (AnioSobrepasadoException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
 
@@ -586,6 +590,8 @@ public class VistaLibro extends javax.swing.JFrame {
                 limpiarCampo();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al modificar");
+            } catch (AnioSobrepasadoException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -784,18 +790,26 @@ public class VistaLibro extends javax.swing.JFrame {
 
     private void btnEliminarCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCantidadActionPerformed
         // TODO add your handling code here:
-        int id = Integer.parseInt(txtId.getText());
-        int cantidadTotal = Integer.parseInt(txtCantidadCopias.getText());
-        int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad que desea eliminar"));
-        try {
-            controladorLibro.eliminarLibroCantidad(id, cantidad, cantidadTotal);
-            JOptionPane.showMessageDialog(null, "cantidad modificada");
-            txtId.setEditable(true);
-            llenarTabla();
-            limpiarCampo();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al Eliminar");
-            System.out.println(ex.toString());
+        if (txtId.getText().isEmpty() || txtCantidadCopias.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "busque el libro que desea eliminar");
+        } else {
+            int id = Integer.parseInt(txtId.getText());
+            int cantidadTotal = Integer.parseInt(txtCantidadCopias.getText());
+            int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad que desea eliminar"));
+            
+            try {
+                controladorLibro.eliminarLibroCantidad(id, cantidad, cantidadTotal);
+                JOptionPane.showMessageDialog(null, "cantidad modificada");
+                txtId.setEditable(true);
+                llenarTabla();
+                limpiarCampo();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al Eliminar");
+                System.out.println(ex.toString());
+            }
+            catch(CantidadSobrepasadaException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
         }
     }//GEN-LAST:event_btnEliminarCantidadActionPerformed
 
@@ -892,7 +906,8 @@ public class VistaLibro extends javax.swing.JFrame {
             System.err.print(ex.toString());
         }
     }
-     public void cargarCombo() {
+
+    public void cargarCombo() {
         try {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
             comboGenero.setModel(model);
