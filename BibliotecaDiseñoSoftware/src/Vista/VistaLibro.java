@@ -552,7 +552,7 @@ public class VistaLibro extends javax.swing.JFrame {
                 limpiarCampo();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al guardar");
-            } catch (AnioSobrepasadoException ex){
+            } catch (AnioSobrepasadoException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
@@ -590,7 +590,7 @@ public class VistaLibro extends javax.swing.JFrame {
                 limpiarCampo();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al modificar");
-            } catch (AnioSobrepasadoException ex){
+            } catch (AnioSobrepasadoException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
@@ -795,19 +795,19 @@ public class VistaLibro extends javax.swing.JFrame {
         } else {
             int id = Integer.parseInt(txtId.getText());
             int cantidadTotal = Integer.parseInt(txtCantidadCopias.getText());
-            int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad que desea eliminar"));
-            
             try {
+                int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad que desea eliminar"));
                 controladorLibro.eliminarLibroCantidad(id, cantidad, cantidadTotal);
                 JOptionPane.showMessageDialog(null, "cantidad modificada");
                 txtId.setEditable(true);
                 llenarTabla();
                 limpiarCampo();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Ingrese un número válido");
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al Eliminar");
                 System.out.println(ex.toString());
-            }
-            catch(CantidadSobrepasadaException ex){
+            } catch (CantidadSobrepasadaException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
