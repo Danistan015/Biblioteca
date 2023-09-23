@@ -4,6 +4,7 @@
  */
 package Modelo;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 /**
@@ -11,24 +12,26 @@ import java.time.LocalDate;
  * @author val
  */
 public class PrestamoDevolucion {
-    
+
     public static final String PRESTADO = "Prestado";
     public static final String DEVUELTO = "Devuelto";
-    
-    private String estado;
-    private String id;
-    private String detallesLibro;
-    private LocalDate fechaPrestamo;
-    private LocalDate fechaVencimiento;
-    private LocalDate fechaEntrega;
 
-    public PrestamoDevolucion(String id, String detallesLibro, LocalDate fechaPrestamo, LocalDate fechaVencimiento) {
+    private String estado;
+    private int id;
+    private int detallesLibro;
+    private Date fechaPrestamo;
+    private Date fechaVencimiento;
+    private Date fechaEntrega;
+    private int cedulaUsuario;
+
+    public PrestamoDevolucion(int id, int detallesLibro, Date fechaPrestamo, Date fechaVencimiento, int idLibro, int cedulaUsuario) {
         estado = PRESTADO;
         this.id = id;
         this.detallesLibro = detallesLibro;
         this.fechaPrestamo = fechaPrestamo;
         this.fechaVencimiento = fechaVencimiento;
         fechaEntrega = null;
+        this.cedulaUsuario = cedulaUsuario;
     }
 
     public String getEstado() {
@@ -39,44 +42,51 @@ public class PrestamoDevolucion {
         this.estado = estado;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getDetallesLibro() {
+    public int getDetallesLibro() {
         return detallesLibro;
     }
 
-    public void setDetallesLibro(String detallesLibro) {
+    public void setDetallesLibro(int detallesLibro) {
         this.detallesLibro = detallesLibro;
     }
 
-    public LocalDate getFechaPrestamo() {
+    public Date getFechaPrestamo() {
         return fechaPrestamo;
     }
 
-    public void setFechaPrestamo(LocalDate fechaPrestamo) {
+    public void setFechaPrestamo(Date fechaPrestamo) {
         this.fechaPrestamo = fechaPrestamo;
     }
 
-    public LocalDate getFechaVencimiento() {
+    public Date getFechaVencimiento() {
         return fechaVencimiento;
     }
 
-    public void setFechaVencimiento(LocalDate fechaVencimiento) {
+    public void setFechaVencimiento(Date fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
-    }    
+    }
 
-    public LocalDate getFechaEntrega() {
+    public Date getFechaEntrega() {
         return fechaEntrega;
     }
 
-    public void setFechaEntrega(LocalDate fechaEntrega) {
+    public void setFechaEntrega(Date fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
     }
-    
+
+    public int getCedulaUsuario() {
+        return cedulaUsuario;
+    }
+
+    public void setCedulaUsuario(int cedulaUsuario) {
+        this.cedulaUsuario = cedulaUsuario;
+    }
 }
