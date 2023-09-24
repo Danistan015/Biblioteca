@@ -6,7 +6,6 @@ package Dao;
 
 import Conexion.Conexion_db;
 import Controlador.ControladorLibro;
-import Excepciones.PrestamoActivoException;
 import Modelo.Libro;
 import Modelo.PrestamoDevolucion;
 import static Modelo.PrestamoDevolucion.DEVUELTO;
@@ -31,18 +30,11 @@ public class DaoPrestamosDevoluciones {
     }
 
     public void generarPrestamo(PrestamoDevolucion prestamo) throws SQLException {
-        if(buscarUsuarioPrestamo(prestamo.getCedulaUsuario())){
-            throw new PrestamoActivoException();
-        }
-        
         try {
             PreparedStatement ps = null;
             Conexion_db conn = new Conexion_db();
             Connection con = conn.getConexion();
             prestamo.setEstado(PRESTADO);
-            Libro libroPrestado = controlador.buscarLibro(prestamo.getDetallesLibro());
-            libroPrestado.setCantidadDisponible(libroPrestado.getCantidadDisponible() - 1);
-            libroPrestado.setCantidadPrestadas(libroPrestado.getCantidadPrestadas() + 1);
             String sql = "INSERT INTO pestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, prestamo.getEstado());
@@ -63,9 +55,6 @@ public class DaoPrestamosDevoluciones {
             Conexion_db conn = new Conexion_db();
             Connection con = conn.getConexion();
             prestamo.setEstado(DEVUELTO);
-            Libro libroPrestado = controlador.buscarLibro(prestamo.getDetallesLibro());
-            libroPrestado.setCantidadDisponible(libroPrestado.getCantidadDisponible() + 1);
-            libroPrestado.setCantidadPrestadas(libroPrestado.getCantidadPrestadas() - 1);
             String sql = "UPDATE pestamosDevoluciones SET estado=?, fechaEntregado=? WHERE ID=?";
             ps = con.prepareStatement(sql);
             ps.setString(1, prestamo.getEstado());
@@ -74,17 +63,6 @@ public class DaoPrestamosDevoluciones {
         } catch (SQLException ex) {
             throw new SQLException();
         }
-    }
-    
-    public boolean buscarUsuarioPrestamo(int cedula) throws SQLException{
-        ArrayList<PrestamoDevolucion> lista = listaPrestamosDevoluciones();
-        for (int i = 0; i < lista.size(); i++) {
-            if(lista.get(i).getCedulaUsuario() == cedula){
-                return true;
-            }
-        }
-        
-        return false;
     }
 
     public ArrayList<PrestamoDevolucion> listaPrestamosDevoluciones() throws SQLException {

@@ -41,6 +41,7 @@ public class VistaMenu extends javax.swing.JFrame {
         btnHistorial = new javax.swing.JButton();
         btnPrestamos = new javax.swing.JButton();
         btnGeneros = new javax.swing.JButton();
+        btnDevoluciones = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -130,7 +131,7 @@ public class VistaMenu extends javax.swing.JFrame {
         btnPrestamos.setBackground(new java.awt.Color(24, 61, 61));
         btnPrestamos.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
         btnPrestamos.setForeground(new java.awt.Color(147, 177, 166));
-        btnPrestamos.setText("Gestionar prestamos y devoluciones");
+        btnPrestamos.setText("Gestionar prestamos");
         btnPrestamos.setActionCommand("Inicio");
         btnPrestamos.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
@@ -159,6 +160,22 @@ public class VistaMenu extends javax.swing.JFrame {
             }
         });
 
+        btnDevoluciones.setBackground(new java.awt.Color(24, 61, 61));
+        btnDevoluciones.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnDevoluciones.setForeground(new java.awt.Color(147, 177, 166));
+        btnDevoluciones.setText("Gestionar devovluciones");
+        btnDevoluciones.setActionCommand("Inicio");
+        btnDevoluciones.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnDevolucionesMouseMoved(evt);
+            }
+        });
+        btnDevoluciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDevolucionesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -168,16 +185,17 @@ public class VistaMenu extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(224, 224, 224)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(76, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnHistorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnIibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnPrestamos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnGeneros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(76, 76, 76)))
+                            .addComponent(btnGeneros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDevoluciones, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(105, 105, 105)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -186,7 +204,7 @@ public class VistaMenu extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(63, 63, 63)
                 .addComponent(jLabel1)
-                .addGap(60, 60, 60)
+                .addGap(35, 35, 35)
                 .addComponent(btnUsuarios)
                 .addGap(18, 18, 18)
                 .addComponent(btnGeneros)
@@ -194,9 +212,11 @@ public class VistaMenu extends javax.swing.JFrame {
                 .addComponent(btnIibro)
                 .addGap(18, 18, 18)
                 .addComponent(btnHistorial)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPrestamos)
-                .addGap(64, 64, 64))
+                .addGap(12, 12, 12)
+                .addComponent(btnDevoluciones)
+                .addGap(48, 48, 48))
         );
 
         jMenu1.setText("Más");
@@ -290,7 +310,7 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void btnPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamosActionPerformed
         // TODO add your handling code here:
-        new VistaPrestamoDevolucion(usuario).setVisible(true);
+        new VistaPrestramo(usuario).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnPrestamosActionPerformed
 
@@ -305,8 +325,17 @@ public class VistaMenu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnGenerosActionPerformed
 
+    private void btnDevolucionesMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDevolucionesMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDevolucionesMouseMoved
+
+    private void btnDevolucionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolucionesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDevolucionesActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDevoluciones;
     private javax.swing.JButton btnGeneros;
     private javax.swing.JButton btnHistorial;
     private javax.swing.JButton btnIibro;

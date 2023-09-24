@@ -4,25 +4,41 @@
  */
 package Vista;
 
+import Controlador.ControladorLibro;
+import Controlador.ControladorPrestamoDevolucion;
+import Modelo.Libro;
+import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author sotog
  */
-public class VistaPrestamoDevolucion extends javax.swing.JFrame {
-Usuario usuario;
+public class VistaPrestramo extends javax.swing.JFrame {
+    ControladorLibro controladorLibro;
+    ControladorPrestamoDevolucion controladorPrestamo;
+    Usuario usuario;
+
     /**
      * Creates new form VistaPrestamoDevolucion
      */
-    public VistaPrestamoDevolucion( Usuario usuario) {
+    public VistaPrestramo(Usuario usuario) {
         initComponents();
         setLocationRelativeTo(this);
         TextPrompt pHUsuario = new TextPrompt("ID del libro: ", txtIdLibro);
-        TextPrompt pHUsuariossss = new TextPrompt("Id del préstamo: ", txtId);
-        this.usuario=usuario;
+        this.usuario = usuario;
+        controladorLibro = new ControladorLibro();
+        controladorPrestamo = new ControladorPrestamoDevolucion();
+        txtCedula.setText(String.valueOf(usuario.getCedula()));
+        llenarTabla();
     }
 
     /**
@@ -40,13 +56,12 @@ Usuario usuario;
         jLabel1 = new javax.swing.JLabel();
         btnInsertar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
-        txtId = new javax.swing.JTextField();
+        txtCedula = new javax.swing.JTextField();
         txtIdLibro = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
-        btnModificar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
-        btnBuscar = new javax.swing.JButton();
         fechaVencimiento = new com.toedter.calendar.JDateChooser();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -84,12 +99,12 @@ Usuario usuario;
 
         jLabel1.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(147, 177, 166));
-        jLabel1.setText("Ingresa la informacion del prestamos y devoluciones:");
+        jLabel1.setText("Ingresa la informacion del prestamo:");
 
         btnInsertar.setBackground(new java.awt.Color(24, 61, 61));
         btnInsertar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
         btnInsertar.setForeground(new java.awt.Color(147, 177, 166));
-        btnInsertar.setText("Insertar");
+        btnInsertar.setText("GENERAR PRESTAMO");
         btnInsertar.setActionCommand("Inicio");
         btnInsertar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
@@ -104,9 +119,10 @@ Usuario usuario;
 
         jSeparator2.setBackground(new java.awt.Color(147, 177, 166));
 
-        txtId.setBackground(new java.awt.Color(4, 13, 18));
-        txtId.setForeground(new java.awt.Color(255, 255, 255));
-        txtId.setBorder(null);
+        txtCedula.setBackground(new java.awt.Color(4, 13, 18));
+        txtCedula.setForeground(new java.awt.Color(255, 255, 255));
+        txtCedula.setBorder(null);
+        txtCedula.setFocusable(false);
 
         txtIdLibro.setBackground(new java.awt.Color(4, 13, 18));
         txtIdLibro.setForeground(new java.awt.Color(255, 255, 255));
@@ -114,53 +130,23 @@ Usuario usuario;
 
         jSeparator4.setBackground(new java.awt.Color(147, 177, 166));
 
-        btnModificar.setBackground(new java.awt.Color(24, 61, 61));
-        btnModificar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnModificar.setForeground(new java.awt.Color(147, 177, 166));
-        btnModificar.setText("Modificar");
-        btnModificar.setActionCommand("Inicio");
-        btnModificar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnModificarMouseMoved(evt);
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMouseClicked(evt);
             }
         });
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarActionPerformed(evt);
-            }
-        });
-
-        btnEliminar.setBackground(new java.awt.Color(24, 61, 61));
-        btnEliminar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(147, 177, 166));
-        btnEliminar.setText("Eliminar");
-        btnEliminar.setActionCommand("Inicio");
-        btnEliminar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnEliminarMouseMoved(evt);
-            }
-        });
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
-
-        btnBuscar.setBackground(new java.awt.Color(24, 61, 61));
-        btnBuscar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnBuscar.setForeground(new java.awt.Color(147, 177, 166));
-        btnBuscar.setText("Q");
-        btnBuscar.setActionCommand("Inicio");
-        btnBuscar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnBuscarMouseMoved(evt);
-            }
-        });
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
+        jScrollPane1.setViewportView(tabla);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -169,60 +155,57 @@ Usuario usuario;
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(88, 88, 88)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jSeparator2)
-                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar)
+                                .addGap(22, 22, 22)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(231, 231, 231)
+                                .addComponent(btnInsertar)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jSeparator2)
+                                        .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jSeparator4)
-                                    .addComponent(txtIdLibro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))
+                                    .addComponent(txtIdLibro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(83, 83, 83))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(68, 68, 68))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
-                        .addComponent(btnInsertar)
-                        .addGap(51, 51, 51)
-                        .addComponent(btnModificar)
-                        .addGap(51, 51, 51)
-                        .addComponent(btnEliminar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)))
+                                .addGap(22, 22, 22)
+                                .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 414, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
+                .addGap(54, 54, 54)
                 .addComponent(jLabel1)
-                .addGap(40, 40, 40)
+                .addGap(39, 39, 39)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(txtIdLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addGap(19, 19, 19)
                 .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnInsertar)
-                    .addComponent(btnModificar)
-                    .addComponent(btnEliminar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(btnInsertar)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Más");
@@ -270,42 +253,15 @@ Usuario usuario;
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
         // TODO add your handling code here:
-
+        
+            //Date fechaSeleccionada = fechaVencimiento.getDate();
+            Date fechaActual = new Date();
+            JOptionPane.showMessageDialog(null, fechaActual);
     }//GEN-LAST:event_btnInsertarActionPerformed
-
-    private void btnModificarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseMoved
-        // TODO add your handling code here:
-        btnModificar.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnModificarMouseMoved
-
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnModificarActionPerformed
-
-    private void btnEliminarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseMoved
-        // TODO add your handling code here:
-        btnEliminar.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnEliminarMouseMoved
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void btnBuscarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseMoved
-        // TODO add your handling code here:
-        btnBuscar.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnBuscarMouseMoved
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
         // TODO add your handling code here:
         btnInsertar.setForeground(Color.lightGray);
-        btnBuscar.setForeground(Color.lightGray);
-        btnEliminar.setForeground(Color.lightGray);
-        btnModificar.setForeground(Color.lightGray);
     }//GEN-LAST:event_jPanel1MouseMoved
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -320,16 +276,39 @@ Usuario usuario;
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+        // TODO add your handling code here:
+        int fila = tabla.getSelectedRow();
+        txtIdLibro.setText(tabla.getValueAt(fila, 0).toString());
+    }//GEN-LAST:event_tablaMouseClicked
+
+    public void llenarTabla() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        try {
+            ArrayList<Libro> lista = controladorLibro.listaLibros();
+
+            modelo.setColumnIdentifiers(new Object[]{"ID", "nombre", "autor", "anipPublicacion", "cantidadCopias", "generos"});
+            tabla.setModel(modelo);
+
+            for (int i = 0; i < lista.size(); i++) {
+                Libro libro = lista.get(i);
+                modelo.addRow(new Object[]{
+                    libro.getId(),
+                    libro.getNombre(),
+                    libro.getAutor(),
+                    libro.getAnioPublicacion(),
+                    libro.getCantidadCopias(),
+                    libro.getNombreGenero()
+
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnInsertar;
-    private javax.swing.JButton btnModificar;
     private com.toedter.calendar.JDateChooser fechaVencimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -339,9 +318,11 @@ Usuario usuario;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JTextField txtId;
+    private javax.swing.JTable tabla;
+    private javax.swing.JTextField txtCedula;
     private javax.swing.JTextField txtIdLibro;
     // End of variables declaration//GEN-END:variables
 }
