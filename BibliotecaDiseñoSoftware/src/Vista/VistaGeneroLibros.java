@@ -30,7 +30,7 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
     public VistaGeneroLibros(Usuario usuario) {
         initComponents();
         setLocationRelativeTo(this);
-        TextPrompt pHUsuario = new TextPrompt("Ingrese el ID: ", txtID);
+        TextPrompt pHUsuario = new TextPrompt("Buscar genero por ID: ", txtID);
         TextPrompt pHUsuarioss = new TextPrompt("Ingrese el nombre : ", txtNombre);
         controlador = new ControladorGenero();
         this.usuario = usuario;
@@ -186,6 +186,8 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
             }
         });
 
+        tabla.setBackground(new java.awt.Color(147, 177, 166));
+        tabla.setForeground(new java.awt.Color(0, 0, 0));
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -197,6 +199,7 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabla.setToolTipText("");
         tabla.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablaMouseClicked(evt);
@@ -389,6 +392,12 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
 
     private void txtIDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDKeyTyped
         // TODO add your handling code here:
+         char validar = evt.getKeyChar();
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Ingresar solo numeros");
+        }
 
     }//GEN-LAST:event_txtIDKeyTyped
 
