@@ -417,6 +417,7 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
             try {
                 controlador.editarGenero(id, nombre);
                 JOptionPane.showMessageDialog(null, "genero modificado");
+                  txtID.setEditable(true);
                 llenarTabla();
                 limpiarCampos();
             } catch (SQLException ex) {
@@ -439,6 +440,7 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
             try {
                 controlador.eliminarGenero(id);
                 JOptionPane.showMessageDialog(null, "genero eliminado");
+                  txtID.setEditable(true);
                 llenarTabla();
                 limpiarCampos();
             } catch (SQLException ex) {
@@ -523,7 +525,7 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
-       
+         txtID.setEditable(true);
         lblGenero.setVisible(false);
         lblId.setVisible(false);
         txtID.setText("");

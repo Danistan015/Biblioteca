@@ -4,7 +4,7 @@
  */
 package Vista;
 
-import Conexion.Conexion_db;
+
 import Controlador.ControladorGenero;
 import Controlador.ControladorLibro;
 import Excepciones.AnioSobrepasadoException;
@@ -12,11 +12,12 @@ import Excepciones.CantidadSobrepasadaException;
 import Excepciones.LibroNoEncontradoException;
 import Modelo.Libro;
 import Modelo.Usuario;
+import Singleton.DatabaseSingleton;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
@@ -33,6 +34,7 @@ public class VistaLibro extends javax.swing.JFrame {
     Usuario usuario;
     ControladorLibro controladorLibro;
     Controlador.ControladorGenero controGenero;
+    private Connection con;
 
     /**
      * Creates new form VistaLibro
@@ -50,6 +52,7 @@ public class VistaLibro extends javax.swing.JFrame {
 
         controladorLibro = new ControladorLibro();
         controGenero = new ControladorGenero();
+        con = (Connection) DatabaseSingleton.getInstance().getConnection();
         lblAnioPublicacion.setVisible(false);
         lblAutor.setVisible(false);
         lbNombre.setVisible(false);
@@ -889,8 +892,6 @@ public class VistaLibro extends javax.swing.JFrame {
             PreparedStatement ps = null;
             ResultSet rs = null;
 
-            Conexion_db conn = new Conexion_db();
-            Connection con = (Connection) conn.getConexion();
 
             String sql = "SELECT * FROM generos";
 
@@ -916,9 +917,7 @@ public class VistaLibro extends javax.swing.JFrame {
             PreparedStatement ps = null;
             ResultSet rs = null;
 
-            Conexion_db conn = new Conexion_db();
-            Connection con = (Connection) conn.getConexion();
-
+        
             String sql = "SELECT * FROM generos";
 
             ps = con.prepareStatement(sql);

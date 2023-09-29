@@ -4,8 +4,9 @@
  */
 package Dao;
 
-import Conexion.Conexion_db;
+
 import Modelo.Genero;
+import Singleton.DatabaseSingleton;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,14 +18,17 @@ import java.util.ArrayList;
  * @author val
  */
 public class DaoGeneros {
+private Connection con;
+    public DaoGeneros() {
+          con = DatabaseSingleton.getInstance().getConnection();
+    }
+    
 
     
     public void agregarGenero(Genero genero) throws SQLException {
         try {
             PreparedStatement ps = null;
-            Conexion_db conn = new Conexion_db();
-            Connection con = conn.getConexion();
-
+         
             String sql = "INSERT INTO generos (nombre) VALUES (?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, genero.getNombre());
@@ -40,9 +44,7 @@ public class DaoGeneros {
         Genero generoEncontrado = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Conexion_db conn = new Conexion_db();
-        Connection con = conn.getConexion();
-
+    
         String where = " WHERE id = '" + id + "'";
         String sql = "SELECT * FROM generos" + where;
 
@@ -66,9 +68,7 @@ public class DaoGeneros {
         int id = 0;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Conexion_db conn = new Conexion_db();
-        Connection con = conn.getConexion();
-
+       
         String where = " WHERE nombre = '" + nombre + "'";
         String sql = "SELECT * FROM generos" + where;
 
@@ -87,10 +87,9 @@ public class DaoGeneros {
     
     public void editarGenero(int id, String nombre) throws SQLException {
         PreparedStatement ps = null;
-        Conexion_db obConexion_db = new Conexion_db();
-        Connection conn = obConexion_db.getConexion();
+      
         try {
-            ps = conn.prepareStatement("UPDATE generos SET nombre=? WHERE ID=?");
+            ps = con.prepareStatement("UPDATE generos SET nombre=? WHERE ID=?");
             ps.setString(1, nombre);
             ps.setInt(2, id);
             ps.execute();
@@ -106,9 +105,8 @@ public class DaoGeneros {
 
         try {
 
-            Conexion_db objCon = new Conexion_db();
-            Connection conn = objCon.getConexion();
-            ps = conn.prepareStatement("DELETE FROM generos WHERE id= '" + id + "'");
+     
+            ps = con.prepareStatement("DELETE FROM generos WHERE id= '" + id + "'");
             ps.setInt(1, id);
             ps.execute();
         } catch (SQLException ex) {
@@ -122,8 +120,7 @@ public class DaoGeneros {
         try {
             PreparedStatement ps = null;
             ResultSet rs = null;
-            Conexion_db conn = new Conexion_db();
-            Connection con = conn.getConexion();
+   
             String sql = "SELECT * FROM generos";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();

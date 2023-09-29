@@ -4,10 +4,10 @@
  */
 package Dao;
 
-import Conexion.Conexion_db;
 import Excepciones.AnioSobrepasadoException;
 import Excepciones.CantidadSobrepasadaException;
 import Modelo.Libro;
+import Singleton.DatabaseSingleton;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +19,12 @@ import java.util.ArrayList;
  * @author val
  */
 public class DaoLibros {
+private Connection con;
+    public DaoLibros() {
+          con = DatabaseSingleton.getInstance().getConnection();
+        
+    }
+    
 
     public void agregarLibro(Libro libro) throws SQLException {
         if (libro.getAnioPublicacion() > 2023) {
@@ -26,9 +32,7 @@ public class DaoLibros {
         }
         try {
             PreparedStatement ps = null;
-            Conexion_db conn = new Conexion_db();
-            Connection con = conn.getConexion();
-
+            
             String sql = "INSERT INTO libros (ID, nombre, autor, anioPublicacion, cantidadCopias, ID_Generos) VALUES (?, ?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
             ps.setInt(1, libro.getId());
@@ -48,8 +52,7 @@ public class DaoLibros {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        Conexion_db conn = new Conexion_db();
-        org.mariadb.jdbc.Connection con = conn.getConexion();
+      
 
         String where = " WHERE ID = '" + ID + "'";
         String sql = "SELECT * FROM libros" + where;
@@ -78,11 +81,10 @@ public class DaoLibros {
             throw new AnioSobrepasadoException();
         }
         PreparedStatement ps = null;
-        Conexion_db obConexion_db = new Conexion_db();
-        Connection conn = obConexion_db.getConexion();
+     
         try {
             String sql = "UPDATE libros SET nombre=?, autor=?, anioPublicacion=?, cantidadCopias=?, ID_Generos=? WHERE ID=?";
-            ps = conn.prepareStatement(sql);
+            ps = con.prepareStatement(sql);
             ps.setString(1, nombre);
             ps.setString(2, autor);
             ps.setInt(3, anioPublicacion);
@@ -101,9 +103,7 @@ public class DaoLibros {
 
         try {
 
-            Conexion_db objCon = new Conexion_db();
-            Connection conn = objCon.getConexion();
-            ps = conn.prepareStatement("DELETE FROM libros WHERE ID= '" + id + "'");
+            ps = con.prepareStatement("DELETE FROM libros WHERE ID= '" + id + "'");
             ps.setInt(1, id);
             ps.execute();
         } catch (SQLException ex) {
@@ -116,18 +116,17 @@ public class DaoLibros {
             throw new CantidadSobrepasadaException();
         }
         PreparedStatement ps = null;
-        Conexion_db obConexion_db = new Conexion_db();
-        Connection conn = obConexion_db.getConexion();
+     
         try {
             String sql = "UPDATE libros SET cantidadCopias=? WHERE ID=?";
-            ps = conn.prepareStatement(sql);
+            ps = con.prepareStatement(sql);
 
             int nuevaCantidad = cantidadTotal - cantidadIngresada;
 
             if (nuevaCantidad <= 0) {
                 // Si la nueva cantidad es menor o igual a cero, elimina el libro completamente
                 String eliminarSql = "DELETE FROM libros WHERE ID=?";
-                PreparedStatement eliminarPs = conn.prepareStatement(eliminarSql);
+                PreparedStatement eliminarPs = con.prepareStatement(eliminarSql);
                 eliminarPs.setInt(1, id);
                 eliminarPs.executeUpdate();
             } else {
@@ -149,8 +148,7 @@ public class DaoLibros {
         try {
             PreparedStatement ps = null;
             ResultSet rs = null;
-            Conexion_db conn = new Conexion_db();
-            Connection con = conn.getConexion();
+           
             String sql = "SELECT l.ID, l.nombre, l.autor, l.anioPublicacion, l.cantidadCopias, g.nombre as Nombre_generos "
                     + "FROM libros l "
                     + "INNER JOIN generos as g ON l.ID_Generos = g.ID";

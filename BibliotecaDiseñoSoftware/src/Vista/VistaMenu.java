@@ -163,7 +163,7 @@ public class VistaMenu extends javax.swing.JFrame {
         btnDevoluciones.setBackground(new java.awt.Color(24, 61, 61));
         btnDevoluciones.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
         btnDevoluciones.setForeground(new java.awt.Color(147, 177, 166));
-        btnDevoluciones.setText("Gestionar devovluciones");
+        btnDevoluciones.setText("Gestionar devoluciones");
         btnDevoluciones.setActionCommand("Inicio");
         btnDevoluciones.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
@@ -261,6 +261,7 @@ public class VistaMenu extends javax.swing.JFrame {
          btnHistorial.setForeground(Color.lightGray);
          btnIibro.setForeground(Color.lightGray);
          btnPrestamos.setForeground(Color.lightGray);
+         btnDevoluciones.setForeground(Color.lightGray);
     }//GEN-LAST:event_jPanel1MouseMoved
 
     private void btnUsuariosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuariosMouseMoved
@@ -327,10 +328,13 @@ public class VistaMenu extends javax.swing.JFrame {
 
     private void btnDevolucionesMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDevolucionesMouseMoved
         // TODO add your handling code here:
+        btnDevoluciones.setForeground(Color.WHITE);
     }//GEN-LAST:event_btnDevolucionesMouseMoved
 
     private void btnDevolucionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolucionesActionPerformed
         // TODO add your handling code here:
+        new VistaDevolucion(usuario).setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnDevolucionesActionPerformed
 
 

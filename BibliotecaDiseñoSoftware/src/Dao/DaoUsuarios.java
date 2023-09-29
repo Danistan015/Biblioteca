@@ -4,28 +4,34 @@
  */
 package Dao;
 
-import Conexion.Conexion_db;
-import Controlador.ControladorUsuario;
+
 import Modelo.Usuario;
+import Singleton.DatabaseSingleton;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
  * @author val
  */
 public class DaoUsuarios {
+    
+    private Connection con;
+
+    public DaoUsuarios() {
+        this.con =  DatabaseSingleton.getInstance().getConnection();
+    }
+    
+    
 
     public void agregarUsuario(Usuario usuario) throws SQLException {
         try {
             PreparedStatement ps = null;
-            Conexion_db conn = new Conexion_db();
-            Connection con = conn.getConexion();
+           
 
             String sql = "INSERT INTO usuarios (nombre, cedula, edad, telefono, correo, contrasenia) VALUES (?, ?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
@@ -49,11 +55,7 @@ public class DaoUsuarios {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        // Crea un objeto de conexión a la base de datos usando la clase previamente definida: ConeccionDB
-        Conexion_db conn = new Conexion_db();
-
-        // Obtiene una conexión activa a la base de datos
-        org.mariadb.jdbc.Connection con = conn.getConexion();
+        
 
         // Definir la consulta SQL a ejecutar
         String where = " WHERE correo = '" + correo + "'";
@@ -85,13 +87,7 @@ public class DaoUsuarios {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        // Crea un objeto de conexión a la base de datos usando la clase previamente definida: ConeccionDB
-        Conexion_db conn = new Conexion_db();
-
-        // Obtiene una conexión activa a la base de datos
-        org.mariadb.jdbc.Connection con = conn.getConexion();
-
-        // Definir la consulta SQL a ejecutar
+        
         String where = " WHERE cedula = '" + cedula + "'";
         String sql = "SELECT * FROM usuarios" + where;
 
@@ -118,10 +114,9 @@ public class DaoUsuarios {
 
     public void editarUsuario(String nombre, int cedula, int edad, String telefono, String correo, String contrasenia) throws SQLException {
         PreparedStatement ps = null;
-        Conexion_db obConexion_db = new Conexion_db();
-        Connection conn = obConexion_db.getConexion();
+ 
         try {
-            ps = conn.prepareStatement("UPDATE usuarios SET nombre=?,edad=?,telefono=?, correo=?, contrasenia=? WHERE cedula=?");
+            ps = con.prepareStatement("UPDATE usuarios SET nombre=?,edad=?,telefono=?, correo=?, contrasenia=? WHERE cedula=?");
             ps.setString(1, nombre);
             ps.setInt(2, edad);
             ps.setString(3, telefono);
@@ -141,9 +136,8 @@ public class DaoUsuarios {
 
         try {
 
-            Conexion_db objCon = new Conexion_db();
-            Connection conn = objCon.getConexion();
-            ps = conn.prepareStatement("DELETE FROM usuarios WHERE cedula= '" + cedula + "'");
+            
+            ps = con.prepareStatement("DELETE FROM usuarios WHERE cedula= '" + cedula + "'");
             ps.setInt(1, cedula);
             ps.execute();
         } catch (SQLException ex) {
@@ -157,8 +151,7 @@ public class DaoUsuarios {
         try {
             PreparedStatement ps = null;
             ResultSet rs = null;
-            Conexion_db conn = new Conexion_db();
-            Connection con = conn.getConexion();
+          
             String sql = "SELECT * FROM usuarios";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();

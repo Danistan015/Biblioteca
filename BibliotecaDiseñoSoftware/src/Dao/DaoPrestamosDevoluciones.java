@@ -4,12 +4,11 @@
  */
 package Dao;
 
-import Conexion.Conexion_db;
 import Controlador.ControladorLibro;
-import Modelo.Libro;
 import Modelo.PrestamoDevolucion;
 import static Modelo.PrestamoDevolucion.DEVUELTO;
 import static Modelo.PrestamoDevolucion.PRESTADO;
+import Singleton.DatabaseSingleton;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -22,18 +21,18 @@ import java.util.ArrayList;
  * @author val
  */
 public class DaoPrestamosDevoluciones {
-
+    private Connection con;
     ControladorLibro controlador;
 
     public DaoPrestamosDevoluciones() {
         controlador = new ControladorLibro();
+        con = DatabaseSingleton.getInstance().getConnection();
     }
 
     public void generarPrestamo(PrestamoDevolucion prestamo) throws SQLException {
         try {
             PreparedStatement ps = null;
-            Conexion_db conn = new Conexion_db();
-            Connection con = conn.getConexion();
+           
             prestamo.setEstado(PRESTADO);
             String sql = "INSERT INTO pestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
@@ -52,8 +51,7 @@ public class DaoPrestamosDevoluciones {
     public void devolverLibro(PrestamoDevolucion prestamo) throws SQLException {
         try {
             PreparedStatement ps = null;
-            Conexion_db conn = new Conexion_db();
-            Connection con = conn.getConexion();
+           
             prestamo.setEstado(DEVUELTO);
             String sql = "UPDATE pestamosDevoluciones SET estado=?, fechaEntregado=? WHERE ID=?";
             ps = con.prepareStatement(sql);
@@ -70,8 +68,7 @@ public class DaoPrestamosDevoluciones {
         try {
             PreparedStatement ps = null;
             ResultSet rs = null;
-            Conexion_db conn = new Conexion_db();
-            Connection con = conn.getConexion();
+            
             String sql = "SELECT * FROM generos";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
