@@ -19,16 +19,16 @@ public class PrestamoDevolucion {
     private String estado;
     private int id;
     private int detallesLibro;
-    private Date fechaPrestamo;
-    private Date fechaVencimiento;
-    private Date fechaEntrega;
-    private int cedulaUsuario;
+    private LocalDate fechaPrestamoActual;//Fecha actual
+    private LocalDate fechaVencimiento;//Que dia devuelvo
+    private LocalDate fechaEntrega;
+    private int cedulaUsuario;  
 
-    public PrestamoDevolucion(int id, int detallesLibro, Date fechaPrestamo, Date fechaVencimiento, int idLibro, int cedulaUsuario) {
+    public PrestamoDevolucion(int detallesLibro, LocalDate fechaPrestamoActual, LocalDate fechaVencimiento, int idLibro, int cedulaUsuario) {
         estado = PRESTADO;
-        this.id = id;
+        
         this.detallesLibro = detallesLibro;
-        this.fechaPrestamo = fechaPrestamo;
+        this.fechaPrestamoActual = fechaPrestamoActual;
         this.fechaVencimiento = fechaVencimiento;
         fechaEntrega = null;
         this.cedulaUsuario = cedulaUsuario;
@@ -58,29 +58,31 @@ public class PrestamoDevolucion {
         this.detallesLibro = detallesLibro;
     }
 
-    public Date getFechaPrestamo() {
-        return fechaPrestamo;
+    public LocalDate getFechaPrestamoActual() {
+        return fechaPrestamoActual;
     }
 
-    public void setFechaPrestamo(Date fechaPrestamo) {
-        this.fechaPrestamo = fechaPrestamo;
+    public void setFechaPrestamoActual(LocalDate fechaPrestamoActual) {
+        this.fechaPrestamoActual = fechaPrestamoActual;
     }
 
-    public Date getFechaVencimiento() {
+    public LocalDate getFechaVencimiento() {
         return fechaVencimiento;
     }
 
-    public void setFechaVencimiento(Date fechaVencimiento) {
+    public void setFechaVencimiento(LocalDate fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
 
-    public Date getFechaEntrega() {
+    public LocalDate getFechaEntrega() {
         return fechaEntrega;
     }
 
-    public void setFechaEntrega(Date fechaEntrega) {
+    public void setFechaEntrega(LocalDate fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
     }
+
+   
 
     public int getCedulaUsuario() {
         return cedulaUsuario;

@@ -359,7 +359,7 @@ public class VistaDevolucion extends javax.swing.JFrame {
         btnBuscar.setForeground(Color.lightGray);
         btnEliminar.setForeground(Color.lightGray);
         btnModificar.setForeground(Color.lightGray);
-         btnDevoilver.setForeground(Color.lightGray);
+        btnDevoilver.setForeground(Color.lightGray);
     }//GEN-LAST:event_jPanel1MouseMoved
 
     private void btnDevoilverMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDevoilverMouseMoved
@@ -369,6 +369,9 @@ public class VistaDevolucion extends javax.swing.JFrame {
 
     private void btnDevoilverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevoilverActionPerformed
         // TODO add your handling code here:
+        
+        
+        
     }//GEN-LAST:event_btnDevoilverActionPerformed
 
     /**

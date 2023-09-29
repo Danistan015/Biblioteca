@@ -6,6 +6,7 @@ package Vista;
 
 import Controlador.ControladorLibro;
 import Controlador.ControladorPrestamoDevolucion;
+import Modelo.Genero;
 import Modelo.Libro;
 import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
@@ -13,6 +14,7 @@ import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -23,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
  * @author sotog
  */
 public class VistaPrestramo extends javax.swing.JFrame {
+
     ControladorLibro controladorLibro;
     ControladorPrestamoDevolucion controladorPrestamo;
     Usuario usuario;
@@ -123,6 +126,11 @@ public class VistaPrestramo extends javax.swing.JFrame {
         txtCedula.setForeground(new java.awt.Color(255, 255, 255));
         txtCedula.setBorder(null);
         txtCedula.setFocusable(false);
+        txtCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaActionPerformed(evt);
+            }
+        });
 
         txtIdLibro.setBackground(new java.awt.Color(4, 13, 18));
         txtIdLibro.setForeground(new java.awt.Color(255, 255, 255));
@@ -253,10 +261,32 @@ public class VistaPrestramo extends javax.swing.JFrame {
 
     private void btnPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamoActionPerformed
         // TODO add your handling code here:
-        
-            //Date fechaSeleccionada = fechaVencimiento.getDate();
-            Date fechaActual = new Date();
-            JOptionPane.showMessageDialog(null, fechaActual);
+        if (txtIdLibro.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ingrese todos los campos");
+        } else {
+
+            try {
+                int id = Integer.parseInt(txtIdLibro.getText());
+              Libro libro = controladorLibro.buscarLibro(id);
+              int detalleLibro= libro.getId();
+               Date fechaActuals = new Date();
+               LocalDate fechaActual = fechaActuals.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+               Date fechaPrestamo= fechaVencimiento.getDate();
+               LocalDate fechaVencimiento = fechaPrestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+               int cedula=usuario.getCedula();
+                PrestamoDevolucion prestamo = new PrestamoDevolucion(detalleLibro, fechaActual, fechaVencimiento, id, cedula);
+                controladorPrestamo.generarPrestamo(prestamo);
+                JOptionPane.showMessageDialog(null, "Libro prestado");
+                llenarTabla();
+//                limpiarCampos();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al prestar");
+            }
+        }
+
+      
+
     }//GEN-LAST:event_btnPrestamoActionPerformed
 
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
@@ -281,6 +311,10 @@ public class VistaPrestramo extends javax.swing.JFrame {
         int fila = tabla.getSelectedRow();
         txtIdLibro.setText(tabla.getValueAt(fila, 0).toString());
     }//GEN-LAST:event_tablaMouseClicked
+
+    private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaActionPerformed
 
     public void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();
