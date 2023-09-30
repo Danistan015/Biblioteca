@@ -24,9 +24,8 @@ public class PrestamoDevolucion {
     private LocalDate fechaEntrega;
     private int cedulaUsuario;  
 
-    public PrestamoDevolucion(int detallesLibro, LocalDate fechaPrestamoActual, LocalDate fechaVencimiento, int idLibro, int cedulaUsuario) {
+    public PrestamoDevolucion(int detallesLibro, LocalDate fechaPrestamoActual, LocalDate fechaVencimiento, int cedulaUsuario) {
         estado = PRESTADO;
-        
         this.detallesLibro = detallesLibro;
         this.fechaPrestamoActual = fechaPrestamoActual;
         this.fechaVencimiento = fechaVencimiento;
@@ -81,8 +80,6 @@ public class PrestamoDevolucion {
     public void setFechaEntrega(LocalDate fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
     }
-
-   
 
     public int getCedulaUsuario() {
         return cedulaUsuario;

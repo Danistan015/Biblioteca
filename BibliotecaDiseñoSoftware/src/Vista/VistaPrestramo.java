@@ -266,27 +266,20 @@ public class VistaPrestramo extends javax.swing.JFrame {
         } else {
 
             try {
-                int id = Integer.parseInt(txtIdLibro.getText());
-              Libro libro = controladorLibro.buscarLibro(id);
-              int detalleLibro= libro.getId();
-               Date fechaActuals = new Date();
-               LocalDate fechaActual = fechaActuals.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-               Date fechaPrestamo= fechaVencimiento.getDate();
-               LocalDate fechaVencimiento = fechaPrestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-               int cedula=usuario.getCedula();
-                PrestamoDevolucion prestamo = new PrestamoDevolucion(detalleLibro, fechaActual, fechaVencimiento, id, cedula);
+                int detalleLibro = Integer.parseInt(txtIdLibro.getText());
+                LocalDate fechaActual = LocalDate.now();
+                Date fechaPrestamo = fechaVencimiento.getDate();
+                LocalDate fechaVencimiento = fechaPrestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                int cedula = usuario.getCedula();
+                PrestamoDevolucion prestamo = new PrestamoDevolucion(detalleLibro, fechaActual, fechaVencimiento, cedula);
                 controladorPrestamo.generarPrestamo(prestamo);
                 JOptionPane.showMessageDialog(null, "Libro prestado");
                 llenarTabla();
 //                limpiarCampos();
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Error al prestar");
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             }
         }
-
-      
-
     }//GEN-LAST:event_btnPrestamoActionPerformed
 
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved

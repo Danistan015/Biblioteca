@@ -12,7 +12,7 @@ import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-/**
+/*
  *
  * @author sotog
  */

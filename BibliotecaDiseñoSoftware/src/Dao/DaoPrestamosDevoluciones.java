@@ -31,17 +31,16 @@ public class DaoPrestamosDevoluciones {
 
     public void generarPrestamo(PrestamoDevolucion prestamo) throws SQLException {
         try {
-            PreparedStatement ps = null;
-           
+            PreparedStatement ps = null;           
             prestamo.setEstado(PRESTADO);
-            String sql = "INSERT INTO pestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO prestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
             ps.setString(1, prestamo.getEstado());
             ps.setInt(2, prestamo.getId());
             ps.setInt(3, prestamo.getDetallesLibro());
-            ps.setDate(4, prestamo.getFechaPrestamo());
-            ps.setDate(5, prestamo.getFechaVencimiento());
-            ps.setInt(7, prestamo.getCedulaUsuario());
+            ps.setString(4, String.valueOf(prestamo.getFechaPrestamoActual()));
+            ps.setString(5, String. valueOf(prestamo.getFechaVencimiento()));
+            ps.setInt(6, prestamo.getCedulaUsuario());
             ps.execute();
         } catch (SQLException ex) {
             throw new SQLException();
@@ -56,7 +55,7 @@ public class DaoPrestamosDevoluciones {
             String sql = "UPDATE pestamosDevoluciones SET estado=?, fechaEntregado=? WHERE ID=?";
             ps = con.prepareStatement(sql);
             ps.setString(1, prestamo.getEstado());
-            ps.setDate(2, prestamo.getFechaEntrega());
+            ps.setString(2, String.valueOf(prestamo.getFechaEntrega()));
             ps.execute();
         } catch (SQLException ex) {
             throw new SQLException();
@@ -78,10 +77,12 @@ public class DaoPrestamosDevoluciones {
                 String estado = rs.getString("estado");
                 int idLibro = rs.getInt("idLibro");
                 int idUsuario = rs.getInt("idUsuario");
-                Date fechaPrestamo = rs.getDate("fechaPrestamo");
-                Date fechaVencimiento = rs.getDate("fechaVencimiento");
-                PrestamoDevolucion prestamoDevolucion = new PrestamoDevolucion(id, idLibro, fechaPrestamo, fechaVencimiento, idLibro, idUsuario);
-                lista.add(prestamoDevolucion);
+                String fechaPrestamo = rs.getString("fechaPrestamo");
+                String fechaVencimiento = rs.getString("fechaVencimiento");
+                
+                
+                //PrestamoDevolucion prestamoDevolucion = new PrestamoDevolucion(id, idLibro, fechaPrestamo, fechaVencimiento, idLibro, idUsuario);
+                //lista.add(prestamoDevolucion);
             }
 
         } catch (SQLException ex) {
