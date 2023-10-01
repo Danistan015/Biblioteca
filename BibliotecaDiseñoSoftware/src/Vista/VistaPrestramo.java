@@ -12,6 +12,7 @@ import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
+import static java.awt.Color.red;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -33,7 +34,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
     /**
      * Creates new form VistaPrestamoDevolucion
      */
-    public VistaPrestramo(Usuario usuario) {
+    public VistaPrestramo(Usuario usuario){
         initComponents();
         setLocationRelativeTo(this);
         TextPrompt pHUsuario = new TextPrompt("ID del libro: ", txtIdLibro);
@@ -42,6 +43,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
         controladorPrestamo = new ControladorPrestamoDevolucion();
         txtCedula.setText(String.valueOf(usuario.getCedula()));
         llenarTabla();
+        visibilidadBoton(usuario.getCedula());
     }
 
     /**
@@ -65,6 +67,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
         fechaVencimiento = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -156,6 +159,9 @@ public class VistaPrestramo extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tabla);
 
+        jLabel3.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel3.setText("  ");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -175,20 +181,19 @@ public class VistaPrestramo extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jSeparator4)
                                     .addComponent(txtIdLibro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(83, 83, 83))
+                                .addGap(48, 48, 48))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(22, 22, 22)
-                                .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(231, 231, 231)
-                                .addComponent(btnPrestamo)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)))
+                        .addGap(22, 22, 22)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(231, 231, 231)
+                        .addComponent(btnPrestamo)))
+                .addGap(35, 35, 35)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -209,7 +214,9 @@ public class VistaPrestramo extends javax.swing.JFrame {
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addGap(5, 5, 5)
                 .addComponent(btnPrestamo)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,7 +278,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
                 Date fechaPrestamo = fechaVencimiento.getDate();
                 LocalDate fechaVencimiento = fechaPrestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 int cedula = usuario.getCedula();
-                
+
                 if (fechaVencimiento.isBefore(fechaActual)) {
                     JOptionPane.showMessageDialog(null, "la fecha seleccionada es inválida");
                 } else {
@@ -281,7 +288,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
                     llenarTabla();
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage());
+                JOptionPane.showMessageDialog(null, "error al prestar");
             }
         }
     }//GEN-LAST:event_btnPrestamoActionPerformed
@@ -338,11 +345,29 @@ public class VistaPrestramo extends javax.swing.JFrame {
         }
     }
 
+    public void visibilidadBoton (int cedula){
+        try {
+            ArrayList<PrestamoDevolucion> lista = controladorPrestamo.listaPrestamosDevoluciones(usuario.getCedula());
+            LocalDate fechaActual = LocalDate.now();
+            for (int i = 0; i < lista.size(); i++) {
+                PrestamoDevolucion prestamo = lista.get(i);
+                if (fechaActual.isAfter(prestamo.getFechaVencimiento())) {
+                    btnPrestamo.setVisible(false);
+                    jLabel3.setText("usted tiene el préstamo con id: " + prestamo.getId() + " atrasado, por tal motivo, no podrá generar más préstamos hasta que se ponga al día");
+                    break;
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPrestamo;
     private com.toedter.calendar.JDateChooser fechaVencimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
