@@ -177,7 +177,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
                                     .addComponent(txtIdLibro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(83, 83, 83))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(53, 53, 53)
+                                .addGap(22, 22, 22)
                                 .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -207,9 +207,9 @@ public class VistaPrestramo extends javax.swing.JFrame {
                         .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(19, 19, 19)
+                .addGap(18, 18, 18)
                 .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(27, 27, 27)
                 .addComponent(btnPrestamo)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,11 +271,15 @@ public class VistaPrestramo extends javax.swing.JFrame {
                 Date fechaPrestamo = fechaVencimiento.getDate();
                 LocalDate fechaVencimiento = fechaPrestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 int cedula = usuario.getCedula();
-                PrestamoDevolucion prestamo = new PrestamoDevolucion(detalleLibro, fechaActual, fechaVencimiento, cedula);
-                controladorPrestamo.generarPrestamo(prestamo);
-                JOptionPane.showMessageDialog(null, "Libro prestado");
-                llenarTabla();
-//                limpiarCampos();
+                
+                if (fechaVencimiento.isBefore(fechaActual)) {
+                    JOptionPane.showMessageDialog(null, "la fecha seleccionada es inválida");
+                } else {
+                    PrestamoDevolucion prestamo = new PrestamoDevolucion(detalleLibro, fechaActual, fechaVencimiento, cedula);
+                    controladorPrestamo.generarPrestamo(prestamo);
+                    JOptionPane.showMessageDialog(null, "Libro prestado");
+                    llenarTabla();
+                }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
@@ -330,7 +334,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
                 });
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
 

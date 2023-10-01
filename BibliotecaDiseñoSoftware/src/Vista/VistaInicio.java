@@ -15,7 +15,7 @@ public class VistaInicio extends javax.swing.JFrame {
     /**
      * Creates new form VistaInicio
      */
-    public VistaInicio() { 
+    public VistaInicio() {
         initComponents();
         setLocationRelativeTo(this);
     }
@@ -145,13 +145,13 @@ public class VistaInicio extends javax.swing.JFrame {
 
     private void btnInicioMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInicioMouseMoved
         // TODO add your handling code here:
-         btnInicio.setForeground(Color.WHITE);
+        btnInicio.setForeground(Color.WHITE);
     }//GEN-LAST:event_btnInicioMouseMoved
 
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
         // TODO add your handling code here:
         btnInicio.setForeground(Color.lightGray);
-        
+
     }//GEN-LAST:event_jPanel1MouseMoved
 
     /**
