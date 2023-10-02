@@ -271,7 +271,6 @@ public class VistaPrestramo extends javax.swing.JFrame {
               int detalleLibro= libro.getId();
                Date fechaActuals = new Date();
                LocalDate fechaActual = fechaActuals.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
                Date fechaPrestamo= fechaVencimiento.getDate();
                LocalDate fechaVencimiento = fechaPrestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                int cedula=usuario.getCedula();
@@ -279,7 +278,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
                 controladorPrestamo.generarPrestamo(prestamo);
                 JOptionPane.showMessageDialog(null, "Libro prestado");
                 llenarTabla();
-//                limpiarCampos();
+////                limpiarCampos();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al prestar");
             }

@@ -39,8 +39,8 @@ public class DaoPrestamosDevoluciones {
             ps.setString(1, prestamo.getEstado());
             ps.setInt(2, prestamo.getId());
             ps.setInt(3, prestamo.getDetallesLibro());
-            ps.setDate(4, prestamo.getFechaPrestamo());
-            ps.setDate(5, prestamo.getFechaVencimiento());
+            ps.setLocalDate(4, prestamo.getFechaPrestamoActual());
+            ps.setLocalDate(5, prestamo.getFechaVencimiento());
             ps.setInt(7, prestamo.getCedulaUsuario());
             ps.execute();
         } catch (SQLException ex) {
