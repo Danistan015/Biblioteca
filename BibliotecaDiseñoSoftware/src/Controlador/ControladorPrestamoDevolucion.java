@@ -7,19 +7,33 @@ package Controlador;
 import Dao.DaoPrestamosDevoluciones;
 import Modelo.PrestamoDevolucion;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  *
  * @author val
  */
 public class ControladorPrestamoDevolucion {
+
     DaoPrestamosDevoluciones dao;
 
     public ControladorPrestamoDevolucion() {
         dao = new DaoPrestamosDevoluciones();
     }
-    
-     public void generarPrestamo(PrestamoDevolucion prestamo) throws SQLException{
-         dao.generarPrestamo(prestamo);
-     }
+
+    public void generarPrestamo(PrestamoDevolucion prestamo) throws SQLException {
+        dao.generarPrestamo(prestamo);
+    }
+
+    public PrestamoDevolucion buscarPrestamo(int id) throws SQLException{
+        return dao.buscarPrestamo(id);
+    }
+    public ArrayList<PrestamoDevolucion> listaPrestamosDevoluciones(int cedula) throws SQLException {
+        return dao.listaPrestamosDevoluciones(cedula);
+    }
+
+    public void devolverPrestamo(PrestamoDevolucion prestamo) throws SQLException{
+        dao.devolverLibro(prestamo);
+    }
 }

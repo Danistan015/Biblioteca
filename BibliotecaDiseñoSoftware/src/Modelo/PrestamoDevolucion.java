@@ -21,18 +21,27 @@ public class PrestamoDevolucion {
     private int detallesLibro;
     private LocalDate fechaPrestamoActual;//Fecha actual
     private LocalDate fechaVencimiento;//Que dia devuelvo
-    private LocalDate fechaEntrega;
+    private LocalDate fechaEntrega; //día en el que se devolvió el libro
     private int cedulaUsuario;  
 
-    public PrestamoDevolucion(int detallesLibro, LocalDate fechaPrestamoActual, LocalDate fechaVencimiento, int idLibro, int cedulaUsuario) {
+    public PrestamoDevolucion(int detallesLibro, LocalDate fechaPrestamoActual, LocalDate fechaVencimiento, int cedulaUsuario) {
         estado = PRESTADO;
-        
         this.detallesLibro = detallesLibro;
         this.fechaPrestamoActual = fechaPrestamoActual;
         this.fechaVencimiento = fechaVencimiento;
         fechaEntrega = null;
         this.cedulaUsuario = cedulaUsuario;
     }
+
+    //constructor para cargar los datos de la tabla devolución
+    public PrestamoDevolucion(String estado, int id, int detallesLibro, LocalDate fechaPrestamoActual, LocalDate fechaVencimiento, int cedulaUsuario) {
+        this.estado = estado;
+        this.id = id;
+        this.detallesLibro = detallesLibro;
+        this.fechaPrestamoActual = fechaPrestamoActual;
+        this.fechaVencimiento = fechaVencimiento;
+        this.cedulaUsuario = cedulaUsuario;
+    }    
 
     public String getEstado() {
         return estado;
@@ -81,8 +90,6 @@ public class PrestamoDevolucion {
     public void setFechaEntrega(LocalDate fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
     }
-
-   
 
     public int getCedulaUsuario() {
         return cedulaUsuario;

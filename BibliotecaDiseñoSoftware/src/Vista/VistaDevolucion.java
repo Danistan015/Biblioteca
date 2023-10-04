@@ -4,10 +4,18 @@
  */
 package Vista;
 
+import Controlador.ControladorLibro;
 import Controlador.ControladorPrestamoDevolucion;
+import Excepciones.GeneroNoEncontradoException;
+import Excepciones.PrestamoNoEncontradoException;
+import Modelo.Libro;
+import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
 import java.awt.Color;
-
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,7 +23,8 @@ import java.awt.Color;
  */
 public class VistaDevolucion extends javax.swing.JFrame {
 
-    private ControladorPrestamoDevolucion contro;
+    private ControladorPrestamoDevolucion controlador;
+    ControladorLibro controladorLibro;
     Usuario usuario;
 
     /**
@@ -24,9 +33,10 @@ public class VistaDevolucion extends javax.swing.JFrame {
     public VistaDevolucion(Usuario usuario) {
         initComponents();
         setLocationRelativeTo(this);
-        this.usuario= usuario;
-        contro = new ControladorPrestamoDevolucion();
-
+        this.usuario = usuario;
+        controlador = new ControladorPrestamoDevolucion();
+        controladorLibro = new ControladorLibro();
+        llenarTabla();
     }
 
     /**
@@ -42,18 +52,18 @@ public class VistaDevolucion extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        btnInsertar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         txtId = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
-        btnModificar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
-        fechaVencimiento = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
         btnDevoilver = new javax.swing.JButton();
+        txtFechaPrestado = new javax.swing.JTextField();
+        jSeparator5 = new javax.swing.JSeparator();
+        txtFechaVencimiento = new javax.swing.JTextField();
+        jSeparator6 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -93,22 +103,6 @@ public class VistaDevolucion extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(147, 177, 166));
         jLabel1.setText("Ingresa la informacion del prestamos y devoluciones:");
 
-        btnInsertar.setBackground(new java.awt.Color(24, 61, 61));
-        btnInsertar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnInsertar.setForeground(new java.awt.Color(147, 177, 166));
-        btnInsertar.setText("Insertar");
-        btnInsertar.setActionCommand("Inicio");
-        btnInsertar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnInsertarMouseMoved(evt);
-            }
-        });
-        btnInsertar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInsertarActionPerformed(evt);
-            }
-        });
-
         jSeparator2.setBackground(new java.awt.Color(147, 177, 166));
 
         txtId.setBackground(new java.awt.Color(4, 13, 18));
@@ -120,38 +114,6 @@ public class VistaDevolucion extends javax.swing.JFrame {
         txtNombre.setBorder(null);
 
         jSeparator4.setBackground(new java.awt.Color(147, 177, 166));
-
-        btnModificar.setBackground(new java.awt.Color(24, 61, 61));
-        btnModificar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnModificar.setForeground(new java.awt.Color(147, 177, 166));
-        btnModificar.setText("Modificar");
-        btnModificar.setActionCommand("Inicio");
-        btnModificar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnModificarMouseMoved(evt);
-            }
-        });
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarActionPerformed(evt);
-            }
-        });
-
-        btnEliminar.setBackground(new java.awt.Color(24, 61, 61));
-        btnEliminar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnEliminar.setForeground(new java.awt.Color(147, 177, 166));
-        btnEliminar.setText("Eliminar");
-        btnEliminar.setActionCommand("Inicio");
-        btnEliminar.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnEliminarMouseMoved(evt);
-            }
-        });
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
 
         btnBuscar.setBackground(new java.awt.Color(24, 61, 61));
         btnBuscar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
@@ -180,6 +142,11 @@ public class VistaDevolucion extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabla);
 
         btnDevoilver.setBackground(new java.awt.Color(24, 61, 61));
@@ -198,6 +165,18 @@ public class VistaDevolucion extends javax.swing.JFrame {
             }
         });
 
+        txtFechaPrestado.setBackground(new java.awt.Color(4, 13, 18));
+        txtFechaPrestado.setForeground(new java.awt.Color(255, 255, 255));
+        txtFechaPrestado.setBorder(null);
+
+        jSeparator5.setBackground(new java.awt.Color(147, 177, 166));
+
+        txtFechaVencimiento.setBackground(new java.awt.Color(4, 13, 18));
+        txtFechaVencimiento.setForeground(new java.awt.Color(255, 255, 255));
+        txtFechaVencimiento.setBorder(null);
+
+        jSeparator6.setBackground(new java.awt.Color(147, 177, 166));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -205,42 +184,52 @@ public class VistaDevolucion extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(88, 88, 88)
+                        .addContainerGap(26, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jSeparator5)
+                                        .addComponent(txtFechaPrestado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jSeparator2)
+                                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnBuscar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jSeparator4)
+                                            .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jSeparator6)
+                                            .addComponent(txtFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(64, 64, 64))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jSeparator2)
-                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jSeparator4)
-                                    .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))
-                            .addComponent(jLabel1)
-                            .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(137, 137, 137)
+                                .addComponent(jLabel1))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnDevoilver)
-                                .addGap(50, 50, 50)
-                                .addComponent(btnInsertar)
-                                .addGap(33, 33, 33)
-                                .addComponent(btnModificar)
-                                .addGap(51, 51, 51)
-                                .addComponent(btnEliminar)))
-                        .addGap(64, 64, 64))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(84, 84, 84)))
+                                .addGap(255, 255, 255)
+                                .addComponent(btnDevoilver)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(jLabel1)
                 .addGap(40, 40, 40)
+                .addComponent(jLabel1)
+                .addGap(51, 51, 51)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -252,17 +241,22 @@ public class VistaDevolucion extends javax.swing.JFrame {
                             .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(txtFechaPrestado, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(txtFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addComponent(btnDevoilver)
                 .addGap(18, 18, 18)
-                .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnInsertar)
-                    .addComponent(btnModificar)
-                    .addComponent(btnEliminar)
-                    .addComponent(btnDevoilver))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(125, 125, 125))
+                .addGap(27, 27, 27))
         );
 
         jMenu1.setText("Más");
@@ -305,7 +299,7 @@ public class VistaDevolucion extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        new   VistaMenu(usuario).setVisible(true);
+        new VistaMenu(usuario).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
@@ -315,35 +309,6 @@ public class VistaDevolucion extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void btnInsertarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertarMouseMoved
-        // TODO add your handling code here:
-        btnInsertar.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnInsertarMouseMoved
-
-    private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
-        // TODO add your handling code here:
-
-
-    }//GEN-LAST:event_btnInsertarActionPerformed
-
-    private void btnModificarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseMoved
-        // TODO add your handling code here:
-        btnModificar.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnModificarMouseMoved
-
-    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnModificarActionPerformed
-
-    private void btnEliminarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseMoved
-        // TODO add your handling code here:
-        btnEliminar.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnEliminarMouseMoved
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
     private void btnBuscarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseMoved
         // TODO add your handling code here:
         btnBuscar.setForeground(Color.WHITE);
@@ -351,42 +316,118 @@ public class VistaDevolucion extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
+        if (txtId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "ingrese el id del préstamo que decía buscar");
+        } else {
+            int id = Integer.parseInt(txtId.getText());
+            try {
+                PrestamoDevolucion prestamo = controlador.buscarPrestamo(id);
+
+                if (prestamo == null) {
+                    throw new PrestamoNoEncontradoException();
+                } else {
+
+                    int idLibro = prestamo.getDetallesLibro();
+                    Libro libro = controladorLibro.buscarLibro(idLibro);
+                    txtNombre.setText(libro.getNombre());
+                    txtFechaPrestado.setText(String.valueOf(prestamo.getFechaPrestamoActual()));
+                    txtFechaVencimiento.setText(String.valueOf(prestamo.getFechaVencimiento()));
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "error al buscar");
+            } catch (PrestamoNoEncontradoException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
         // TODO add your handling code here:
-        btnInsertar.setForeground(Color.lightGray);
         btnBuscar.setForeground(Color.lightGray);
-        btnEliminar.setForeground(Color.lightGray);
-        btnModificar.setForeground(Color.lightGray);
         btnDevoilver.setForeground(Color.lightGray);
     }//GEN-LAST:event_jPanel1MouseMoved
 
     private void btnDevoilverMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDevoilverMouseMoved
         // TODO add your handling code here:
-         btnDevoilver.setForeground(Color.WHITE);
+        btnDevoilver.setForeground(Color.WHITE);
     }//GEN-LAST:event_btnDevoilverMouseMoved
 
     private void btnDevoilverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevoilverActionPerformed
         // TODO add your handling code here:
-        
-        
-        
+        if (txtId.getText().isEmpty() || txtNombre.getText().isEmpty() || txtFechaPrestado.getText().isEmpty() || txtFechaVencimiento.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "todos los campos deben estar llenos");
+        } else {
+            int id = Integer.parseInt(txtId.getText());
+            try {
+                PrestamoDevolucion prestamo = controlador.buscarPrestamo(id);
+
+                if (prestamo == null) {
+                    throw new PrestamoNoEncontradoException();
+                } else {
+                    controlador.devolverPrestamo(prestamo);
+                    JOptionPane.showMessageDialog(null, "préstamo devuelto correctamente");
+                    llenarTabla();
+                    limpiarCampos();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "error al devolver");
+            } catch (PrestamoNoEncontradoException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+        }
+
     }//GEN-LAST:event_btnDevoilverActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-   
-    
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+        // TODO add your handling code here:
+        int fila = tabla.getSelectedRow();
+        txtId.setText(tabla.getValueAt(fila, 0).toString());
+        txtNombre.setText(tabla.getValueAt(fila, 3).toString());
+        txtFechaPrestado.setText(tabla.getValueAt(fila, 4).toString());
+        txtFechaVencimiento.setText(tabla.getValueAt(fila, 5).toString());
+    }//GEN-LAST:event_tablaMouseClicked
 
+    public void llenarTabla() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        try {
+            ArrayList<PrestamoDevolucion> lista = controlador.listaPrestamosDevoluciones(usuario.getCedula());
+
+            modelo.setColumnIdentifiers(new Object[]{"ID", "estado", "idLibro", "nombre libro", "fecha prestamo", "fecha vencimiento", "id Usuario"});
+            tabla.setModel(modelo);
+
+            for (int i = 0; i < lista.size(); i++) {
+                PrestamoDevolucion prestamo = lista.get(i);
+                Libro libro = controladorLibro.buscarLibro(prestamo.getDetallesLibro());
+                modelo.addRow(new Object[]{
+                    prestamo.getId(),
+                    prestamo.getEstado(),
+                    prestamo.getDetallesLibro(),
+                    libro.getNombre(),
+                    prestamo.getFechaPrestamoActual(),
+                    prestamo.getFechaVencimiento(),
+                    prestamo.getCedulaUsuario()
+
+                });
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+
+    public void limpiarCampos(){
+        txtId.setText("");
+        txtNombre.setText("");
+        txtFechaPrestado.setText("");
+        txtFechaVencimiento.setText("");
+    }
+
+    public void cambioColor(){
+        
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnDevoilver;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnInsertar;
-    private javax.swing.JButton btnModificar;
-    private com.toedter.calendar.JDateChooser fechaVencimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
@@ -398,7 +439,11 @@ public class VistaDevolucion extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JTable tabla;
+    private javax.swing.JTextField txtFechaPrestado;
+    private javax.swing.JTextField txtFechaVencimiento;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
