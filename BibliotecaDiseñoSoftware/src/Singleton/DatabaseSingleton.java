@@ -16,12 +16,13 @@ import java.util.logging.Logger;
  * @author sotog
  */
 public class DatabaseSingleton {
-     private static DatabaseSingleton instance;
+
+    private static DatabaseSingleton instance;
     private Connection connection;
 
     private static final String DATABASE_URL = "jdbc:mariadb://localhost:3306/";
     private static final String DATABASE_NAME = "db_bibliotecas"; // Replace with your database name
-    private static final String USUARIO = "root";   
+    private static final String USUARIO = "root";
     private final String PASSWORD = "";
 
     private DatabaseSingleton() {
@@ -31,7 +32,7 @@ public class DatabaseSingleton {
 
             // Select the database
             String useDatabaseSQL = "USE " + DATABASE_NAME;
-            try (Statement statement = connection.createStatement()) {
+            try ( Statement statement = connection.createStatement()) {
                 statement.execute(useDatabaseSQL);
             } catch (SQLException e) {
                 e.printStackTrace();
