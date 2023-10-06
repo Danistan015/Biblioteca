@@ -131,6 +131,8 @@ public class VistaDevolucion extends javax.swing.JFrame {
             }
         });
 
+        tabla.setBackground(new java.awt.Color(147, 177, 166));
+        tabla.setForeground(new java.awt.Color(0, 0, 0));
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

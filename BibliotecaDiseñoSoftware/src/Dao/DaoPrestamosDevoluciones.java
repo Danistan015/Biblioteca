@@ -86,8 +86,8 @@ public class DaoPrestamosDevoluciones {
                 ps.setString(5, String.valueOf(prestamo.getFechaVencimiento()));
                 ps.setInt(6, prestamo.getCedulaUsuario());
                 ps.execute();
-        } catch (SQLException | CantidadDisponibleSobrepasadaException ex) {
-            System.err.println(ex.getMessage());
+        } catch (SQLException e) {
+          e.getMessage();
             throw new SQLException();
         }
     }

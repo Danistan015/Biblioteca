@@ -13,6 +13,6 @@ import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
  */
 public class CantidadDisponibleSobrepasadaException extends RuntimeException {
     public CantidadDisponibleSobrepasadaException() {
-        super("No se puede prestar más este libro");
+        JOptionPane.showMessageDialog(null, "No se puede prestar más este libro");
     }
 }
