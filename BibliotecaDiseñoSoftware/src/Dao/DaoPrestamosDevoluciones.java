@@ -10,12 +10,14 @@ import static Modelo.PrestamoDevolucion.DEVUELTO;
 import static Modelo.PrestamoDevolucion.PRESTADO;
 import Singleton.DatabaseSingleton;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import static javax.swing.UIManager.getString;
 
 /**
  *
