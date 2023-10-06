@@ -19,6 +19,7 @@ public class Libro {
     private int idGenero;
     private String nombreGenero;
 
+    //para métodos libro (agregar)
     public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, int idGenero) {
         this.id = id;
         this.nombre = nombre;
@@ -30,6 +31,26 @@ public class Libro {
         this.idGenero = idGenero;
     }
 
+    //para prestamos
+
+    public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, int cantidadDisponible, int cantidadPrestadas, int idGenero) {
+        this.id = id;
+        this.nombre = nombre;
+        this.autor = autor;
+        this.anioPublicacion = anioPublicacion;
+        this.cantidadCopias = cantidadCopias;
+        this.cantidadDisponible = cantidadDisponible;
+        this.cantidadPrestadas = cantidadPrestadas;
+        this.idGenero = idGenero;
+    }
+    
+    
+    @Override
+    public String toString() {
+        return "Libro{" + "id=" + id + ", nombre=" + nombre + ", autor=" + autor + ", anioPublicacion=" + anioPublicacion + ", cantidadCopias=" + cantidadCopias + ", cantidadDisponible=" + cantidadDisponible + ", cantidadPrestadas=" + cantidadPrestadas + ", idGenero=" + idGenero + ", nombreGenero=" + nombreGenero + '}';
+    }
+
+    //para la tabla
     public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, int cantidadDisponible, int cantidadPrestada, String nombreGenero) {
         this.id = id;
         this.nombre = nombre;

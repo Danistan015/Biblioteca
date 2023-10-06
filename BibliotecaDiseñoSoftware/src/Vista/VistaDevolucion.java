@@ -398,6 +398,7 @@ public class VistaDevolucion extends javax.swing.JFrame {
             for (int i = 0; i < lista.size(); i++) {
                 PrestamoDevolucion prestamo = lista.get(i);
                 Libro libro = controladorLibro.buscarLibro(prestamo.getDetallesLibro());
+                if(prestamo.getEstado().equals(PrestamoDevolucion.PRESTADO))
                 modelo.addRow(new Object[]{
                     prestamo.getId(),
                     prestamo.getEstado(),

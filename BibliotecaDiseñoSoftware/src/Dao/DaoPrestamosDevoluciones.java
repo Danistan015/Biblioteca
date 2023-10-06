@@ -65,11 +65,14 @@ public class DaoPrestamosDevoluciones {
         try {
             PreparedStatement ps = null;
             Libro libroEncontrado = buscarLibro(prestamo.getDetallesLibro());
-
+            System.out.println("estoy en generar prestamo " + libroEncontrado.toString());
             if (libroEncontrado != null && libroEncontrado.getCantidadDisponible() > 0) {
-                libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() - 1);
-                libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() + 1);
-
+                int cantidadDisponible = libroEncontrado.getCantidadDisponible() -1;
+                System.out.println(cantidadDisponible);
+                int cantidadPrestada = libroEncontrado.getCantidadPrestadas() + 1;
+                System.out.println(cantidadPrestada);
+                libroEncontrado.setCantidadDisponible(cantidadDisponible);
+                libroEncontrado.setCantidadPrestadas(cantidadPrestada);
                 actualizarCantidadEnBaseDeDatos(libroEncontrado);
                 prestamo.setEstado(PRESTADO);
 
@@ -146,22 +149,7 @@ public class DaoPrestamosDevoluciones {
             System.err.println(ex.getMessage());
             throw new SQLException();
         }
-
         return lista;
-    }
-
-    private void actualizarCantidadEnBaseDeDatos(Libro libro) throws SQLException {
-        try {
-            String sql = "UPDATE libros SET cantidadDisponible=?, cantidadPrestadas=? WHERE id=?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, libro.getCantidadDisponible());
-            ps.setInt(2, libro.getCantidadPrestadas());
-            ps.setInt(3, libro.getId());
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
-            throw new SQLException();
-        }
     }
 
     public Libro buscarLibro(int ID) throws SQLException {
@@ -179,9 +167,11 @@ public class DaoPrestamosDevoluciones {
                 String autor = rs.getString("autor");
                 int anioPublicacion = rs.getInt("anioPublicacion");
                 int cantidadCopias = rs.getInt("cantidadCopias");
+                int cantidadDisponible = rs.getInt("cantidadDisponible");
+                int cantidadPrestada = rs.getInt("cantidadPrestadas");
                 int ID_Genero = rs.getInt("ID_Generos");
 
-                libroEncontrado = new Libro(ID, nombre, autor, anioPublicacion, cantidadCopias, ID_Genero);
+                libroEncontrado = new Libro(ID, nombre, autor, anioPublicacion, cantidadCopias, cantidadDisponible, cantidadPrestada, ID_Genero);
             }
 
         } catch (SQLException ex) {
@@ -189,5 +179,21 @@ public class DaoPrestamosDevoluciones {
         }
         return libroEncontrado;
 
+    }
+       
+    private void actualizarCantidadEnBaseDeDatos(Libro libro) throws SQLException {
+        System.out.println("estoy en el método de actualizar cantidad" + libro.toString());
+        try {
+            String sql = "UPDATE libros SET cantidadDisponible=?, cantidadPrestadas=? WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, libro.getCantidadDisponible());
+            ps.setInt(2, libro.getCantidadPrestadas());
+            ps.setInt(3, libro.getId());
+            System.out.println(ps);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            throw new SQLException();
+        }
     }
 }
