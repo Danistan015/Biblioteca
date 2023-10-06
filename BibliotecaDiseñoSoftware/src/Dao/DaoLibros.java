@@ -118,7 +118,7 @@ private Connection con;
         PreparedStatement ps = null;
      
         try {
-            String sql = "UPDATE libros SET cantidadCopias=? WHERE ID=?";
+            String sql = "UPDATE libros SET cantidadCopias=?, cantidadDisponible=? WHERE ID=?";
             ps = con.prepareStatement(sql);
 
             int nuevaCantidad = cantidadTotal - cantidadIngresada;
@@ -132,6 +132,7 @@ private Connection con;
             } else {
                 // Actualiza la cantidad de copias
                 ps.setInt(1, nuevaCantidad);
+                ps.setInt(2, nuevaCantidad);
                 ps.setInt(2, id);
                 ps.executeUpdate();
             }

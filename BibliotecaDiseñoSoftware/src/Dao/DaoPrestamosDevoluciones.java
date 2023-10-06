@@ -28,10 +28,8 @@ public class DaoPrestamosDevoluciones {
 
     //esa es esa es
     private Connection con;
-    ControladorLibro controlador;
 
     public DaoPrestamosDevoluciones() {
-        controlador = new ControladorLibro();
         con = DatabaseSingleton.getInstance().getConnection();
     }
 
