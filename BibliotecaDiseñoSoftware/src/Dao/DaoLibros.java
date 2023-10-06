@@ -133,7 +133,7 @@ private Connection con;
                 // Actualiza la cantidad de copias
                 ps.setInt(1, nuevaCantidad);
                 ps.setInt(2, nuevaCantidad);
-                ps.setInt(2, id);
+                ps.setInt(3, id);
                 ps.executeUpdate();
             }
         } catch (SQLException ex) {
