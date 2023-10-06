@@ -325,7 +325,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
         try {
             ArrayList<Libro> lista = controladorLibro.listaLibros();
 
-            modelo.setColumnIdentifiers(new Object[]{"ID", "nombre", "autor", "anipPublicacion", "cantidadCopias", "generos"});
+            modelo.setColumnIdentifiers(new Object[]{"ID", "nombre", "autor", "anipPublicacion", "cantidadCopias", "cantidadDisponible", "cantidadPrestada", "generos"});
             tabla.setModel(modelo);
 
             for (int i = 0; i < lista.size(); i++) {
@@ -336,6 +336,8 @@ public class VistaPrestramo extends javax.swing.JFrame {
                     libro.getAutor(),
                     libro.getAnioPublicacion(),
                     libro.getCantidadCopias(),
+                    libro.getCantidadDisponible(),
+                    libro.getCantidadPrestadas(),
                     libro.getNombreGenero()
 
                 });
@@ -351,7 +353,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
             LocalDate fechaActual = LocalDate.now();
             for (int i = 0; i < lista.size(); i++) {
                 PrestamoDevolucion prestamo = lista.get(i);
-                if (fechaActual.isAfter(prestamo.getFechaVencimiento())) {
+                if (fechaActual.isAfter(prestamo.getFechaVencimiento()) && prestamo.getEstado().equals(PrestamoDevolucion.PRESTADO)) {
                     btnPrestamo.setVisible(false);
                     jLabel3.setText("usted tiene el préstamo con id: " + prestamo.getId() + " atrasado, por tal motivo, no podrá generar más préstamos hasta que se ponga al día");
                     break;

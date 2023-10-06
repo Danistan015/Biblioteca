@@ -26,7 +26,7 @@ public class Libro {
         this.anioPublicacion = anioPublicacion;
         this.cantidadCopias = cantidadCopias;
         cantidadDisponible = cantidadCopias;
-        cantidadPrestadas = 0;
+        cantidadPrestadas = cantidadPrestadas;
         this.idGenero = idGenero;
     }
 

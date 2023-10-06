@@ -70,9 +70,7 @@ public class DaoPrestamosDevoluciones {
                 libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() - 1);
                 libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() + 1);
 
-                // Actualiza la cantidad en la base de datos
                 actualizarCantidadEnBaseDeDatos(libroEncontrado);
-
                 prestamo.setEstado(PRESTADO);
 
                 String sql = "INSERT INTO prestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
@@ -108,8 +106,6 @@ public class DaoPrestamosDevoluciones {
                 ps.setString(2, String.valueOf(fechaEntregado));
                 ps.setInt(3, prestamo.getId());
                 ps.execute();
-
-                // Actualiza la cantidad en la base de datos
                 libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() + 1);
                 libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() - 1);
                 actualizarCantidadEnBaseDeDatos(libroEncontrado);
