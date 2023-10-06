@@ -30,24 +30,24 @@ public class Libro {
         this.idGenero = idGenero;
     }
 
-    public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, String nombreGenero) {
+    public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias, int cantidadDisponible, int cantidadPrestada, String nombreGenero) {
         this.id = id;
         this.nombre = nombre;
         this.autor = autor;
         this.anioPublicacion = anioPublicacion;
         this.cantidadCopias = cantidadCopias;
+        this.cantidadDisponible = cantidadDisponible;
+        this.cantidadPrestadas = cantidadPrestada;
         this.nombreGenero = nombreGenero;
     }
 
-    public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias) {
-        this.id = id;
-        this.nombre = nombre;
-        this.autor = autor;
-        this.anioPublicacion = anioPublicacion;
-        this.cantidadCopias = cantidadCopias;
-    }
-    
-    
+//    public Libro(int id, String nombre, String autor, int anioPublicacion, int cantidadCopias) {
+//        this.id = id;
+//        this.nombre = nombre;
+//        this.autor = autor;
+//        this.anioPublicacion = anioPublicacion;
+//        this.cantidadCopias = cantidadCopias;
+//    }   
 
     public int getId() {
         return id;

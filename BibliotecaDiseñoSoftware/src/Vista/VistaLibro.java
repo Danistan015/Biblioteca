@@ -4,7 +4,6 @@
  */
 package Vista;
 
-
 import Controlador.ControladorGenero;
 import Controlador.ControladorLibro;
 import Excepciones.AnioSobrepasadoException;
@@ -837,7 +836,7 @@ public class VistaLibro extends javax.swing.JFrame {
         try {
             ArrayList<Libro> lista = controladorLibro.listaLibros();
 
-            modelo.setColumnIdentifiers(new Object[]{"ID", "nombre", "autor", "anipPublicacion", "cantidadCopias", "generos"});
+            modelo.setColumnIdentifiers(new Object[]{"ID", "nombre", "autor", "anipPublicacion", "cantidadCopias", "cantidadDisponibles", "cantidadPrestada", "generos"});
             tabla.setModel(modelo);
 
             for (int i = 0; i < lista.size(); i++) {
@@ -848,6 +847,8 @@ public class VistaLibro extends javax.swing.JFrame {
                     libro.getAutor(),
                     libro.getAnioPublicacion(),
                     libro.getCantidadCopias(),
+                    libro.getCantidadDisponible(),
+                    libro.getCantidadPrestadas(),
                     libro.getNombreGenero()
 
                 });
@@ -862,7 +863,7 @@ public class VistaLibro extends javax.swing.JFrame {
         try {
             ArrayList<Libro> lista = controladorLibro.listaLibros();
 
-            modelo.setColumnIdentifiers(new Object[]{"ID", "nombre", "autor", "anipPublicacion", "cantidadCopias", "generos"});
+            modelo.setColumnIdentifiers(new Object[]{"ID", "nombre", "autor", "anipPublicacion", "cantidadCopias", "cantidadDisponibles", "cantidadPrestada", "generos"});
             tabla.setModel(modelo);
 
             for (int i = 0; i < lista.size(); i++) {
@@ -876,6 +877,8 @@ public class VistaLibro extends javax.swing.JFrame {
                         libro.getAutor(),
                         libro.getAnioPublicacion(),
                         libro.getCantidadCopias(),
+                        libro.getCantidadDisponible(),
+                        libro.getCantidadPrestadas(),
                         libro.getNombreGenero()
                     });
                 }
@@ -891,7 +894,6 @@ public class VistaLibro extends javax.swing.JFrame {
             comboFiltro.setModel(model);
             PreparedStatement ps = null;
             ResultSet rs = null;
-
 
             String sql = "SELECT * FROM generos";
 
@@ -917,7 +919,6 @@ public class VistaLibro extends javax.swing.JFrame {
             PreparedStatement ps = null;
             ResultSet rs = null;
 
-        
             String sql = "SELECT * FROM generos";
 
             ps = con.prepareStatement(sql);

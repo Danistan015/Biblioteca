@@ -5,6 +5,7 @@
 package Dao;
 
 import Controlador.ControladorLibro;
+import Modelo.Libro;
 import Modelo.PrestamoDevolucion;
 import static Modelo.PrestamoDevolucion.DEVUELTO;
 import static Modelo.PrestamoDevolucion.PRESTADO;
@@ -35,6 +36,9 @@ public class DaoPrestamosDevoluciones {
     public void generarPrestamo(PrestamoDevolucion prestamo) throws SQLException {
         try {
             PreparedStatement ps = null;
+            Libro libroEncontrado = buscarLibro(prestamo.getDetallesLibro());
+            libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() - 1);
+            libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() + 1);
             prestamo.setEstado(PRESTADO);
             String sql = "INSERT INTO prestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
@@ -83,7 +87,9 @@ public class DaoPrestamosDevoluciones {
     public void devolverLibro(PrestamoDevolucion prestamo) throws SQLException {
         try {
             PreparedStatement ps = null;
-
+            Libro libroEncontrado = buscarLibro(prestamo.getDetallesLibro());
+            libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() + 1);
+            libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() - 1);
             prestamo.setEstado(DEVUELTO);
             LocalDate fechaEntregado = LocalDate.now();
             String sql = "UPDATE prestamosDevoluciones SET estado=?, fechaEntrega=? WHERE ID=?";
@@ -117,6 +123,7 @@ public class DaoPrestamosDevoluciones {
                 LocalDate fechaVencimiento = LocalDate.parse(rs.getString("fechaVencimiento"), formato);
 
                 PrestamoDevolucion prestamo = new PrestamoDevolucion(estado, id, idLibro, fechaPrestamo, fechaVencimiento, idUsuario);
+                
                 lista.add(prestamo);
             }
 
@@ -128,4 +135,31 @@ public class DaoPrestamosDevoluciones {
         return lista;
     }
 
+    
+        public Libro buscarLibro(int ID) throws SQLException {
+        Libro libroEncontrado = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+     
+        String where = " WHERE ID = '" + ID + "'";
+        String sql = "SELECT * FROM libros" + where;
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String nombre = rs.getString("nombre");
+                String autor = rs.getString("autor");
+                int anioPublicacion = rs.getInt("anioPublicacion");
+                int cantidadCopias = rs.getInt("cantidadCopias");
+                int ID_Genero = rs.getInt("ID_Generos");
+
+                libroEncontrado = new Libro(ID, nombre, autor, anioPublicacion, cantidadCopias, ID_Genero);
+            }
+
+        } catch (SQLException ex) {
+            throw new SQLException();
+        }
+        return libroEncontrado;
+
+    }
 }
