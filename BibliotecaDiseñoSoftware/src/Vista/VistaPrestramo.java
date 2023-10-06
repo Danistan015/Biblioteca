@@ -34,7 +34,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
     /**
      * Creates new form VistaPrestamoDevolucion
      */
-    public VistaPrestramo(Usuario usuario){
+    public VistaPrestramo(Usuario usuario) {
         initComponents();
         setLocationRelativeTo(this);
         TextPrompt pHUsuario = new TextPrompt("ID del libro: ", txtIdLibro);
@@ -345,7 +345,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
         }
     }
 
-    public void visibilidadBoton (int cedula){
+    public void visibilidadBoton(int cedula) {
         try {
             ArrayList<PrestamoDevolucion> lista = controladorPrestamo.listaPrestamosDevoluciones(usuario.getCedula());
             LocalDate fechaActual = LocalDate.now();
