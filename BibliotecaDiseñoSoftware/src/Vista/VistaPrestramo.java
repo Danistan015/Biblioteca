@@ -34,7 +34,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
     /**
      * Creates new form VistaPrestamoDevolucion
      */
-    public VistaPrestramo(Usuario usuario){
+    public VistaPrestramo(Usuario usuario) {
         initComponents();
         setLocationRelativeTo(this);
         TextPrompt pHUsuario = new TextPrompt("ID del libro: ", txtIdLibro);
@@ -273,21 +273,6 @@ public class VistaPrestramo extends javax.swing.JFrame {
         } else {
 
             try {
-<<<<<<< HEAD
-                int id = Integer.parseInt(txtIdLibro.getText());
-              Libro libro = controladorLibro.buscarLibro(id);
-              int detalleLibro= libro.getId();
-               Date fechaActuals = new Date();
-               LocalDate fechaActual = fechaActuals.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-               Date fechaPrestamo= fechaVencimiento.getDate();
-               LocalDate fechaVencimiento = fechaPrestamo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-               int cedula=usuario.getCedula();
-                PrestamoDevolucion prestamo = new PrestamoDevolucion(detalleLibro, fechaActual, fechaVencimiento, id, cedula);
-                controladorPrestamo.generarPrestamo(prestamo);
-                JOptionPane.showMessageDialog(null, "Libro prestado");
-                llenarTabla();
-////                limpiarCampos();
-=======
                 int detalleLibro = Integer.parseInt(txtIdLibro.getText());
                 LocalDate fechaActual = LocalDate.now();
                 Date fechaPrestamo = fechaVencimiento.getDate();
@@ -302,7 +287,6 @@ public class VistaPrestramo extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Libro prestado");
                     llenarTabla();
                 }
->>>>>>> 68cc4d60e2165379417b16f90b738af574208968
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "error al prestar");
             }
@@ -361,7 +345,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
         }
     }
 
-    public void visibilidadBoton (int cedula){
+    public void visibilidadBoton(int cedula) {
         try {
             ArrayList<PrestamoDevolucion> lista = controladorPrestamo.listaPrestamosDevoluciones(usuario.getCedula());
             LocalDate fechaActual = LocalDate.now();

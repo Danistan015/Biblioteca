@@ -203,9 +203,9 @@ public class VistaLogin extends javax.swing.JFrame {
 
             if (usuario == null) {
                 throw new UsuarioNoEncontradoException();
-            } 
-            
-            if(usuario.getContrasenia().equals(contrasena)){
+            }
+
+            if (usuario.getContrasenia().equals(contrasena)) {
                 VistaMenu vista = new VistaMenu(usuario);
                 vista.setVisible(true);
                 this.dispose();
@@ -224,7 +224,7 @@ public class VistaLogin extends javax.swing.JFrame {
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
         // TODO add your handling code here:
         btnSesion.setForeground(Color.lightGray);
-        
+
     }//GEN-LAST:event_jPanel1MouseMoved
 
     /**

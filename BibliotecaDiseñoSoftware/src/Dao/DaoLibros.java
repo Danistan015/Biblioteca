@@ -33,14 +33,16 @@ private Connection con;
         try {
             PreparedStatement ps = null;
             
-            String sql = "INSERT INTO libros (ID, nombre, autor, anioPublicacion, cantidadCopias, ID_Generos) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO libros (ID, nombre, autor, anioPublicacion, cantidadCopias, cantidadDisponible, cantidadPrestadas, ID_Generos) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
             ps.setInt(1, libro.getId());
             ps.setString(2, libro.getNombre());
             ps.setString(3, libro.getAutor());
             ps.setInt(4, libro.getAnioPublicacion());
             ps.setInt(5, libro.getCantidadCopias());
-            ps.setInt(6, libro.getIdGenero());
+            ps.setInt(6, libro.getCantidadDisponible());
+            ps.setInt(7, libro.getCantidadPrestadas());
+            ps.setInt(8, libro.getIdGenero());
             ps.execute();
         } catch (SQLException ex) {
             throw new SQLException();
@@ -51,9 +53,7 @@ private Connection con;
         Libro libroEncontrado = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-
-      
-
+     
         String where = " WHERE ID = '" + ID + "'";
         String sql = "SELECT * FROM libros" + where;
         try {
@@ -149,7 +149,7 @@ private Connection con;
             PreparedStatement ps = null;
             ResultSet rs = null;
            
-            String sql = "SELECT l.ID, l.nombre, l.autor, l.anioPublicacion, l.cantidadCopias, g.nombre as Nombre_generos "
+            String sql = "SELECT l.ID, l.nombre, l.autor, l.anioPublicacion, l.cantidadCopias, l.cantidadDisponible, l.cantidadPrestadas, g.nombre as Nombre_generos "
                     + "FROM libros l "
                     + "INNER JOIN generos as g ON l.ID_Generos = g.ID";
             ps = con.prepareStatement(sql);
@@ -160,9 +160,11 @@ private Connection con;
                 String autor = rs.getString("autor");
                 int anioPublicacion = rs.getInt("anioPublicacion");
                 int cantidadCopias = rs.getInt("cantidadCopias");
+                int cantidadDisponible = rs.getInt("cantidadDisponible");
+                int cantidadPrestada = rs.getInt("cantidadPrestadas");
                 String nombreGenero = rs.getString("Nombre_generos");
 
-                Libro libro = new Libro(id, nombre, autor, anioPublicacion, cantidadCopias, nombreGenero);
+                Libro libro = new Libro(id, nombre, autor, anioPublicacion, cantidadCopias, cantidadDisponible, cantidadPrestada, nombreGenero);
                 libros.add(libro);
             }
 
