@@ -6,6 +6,7 @@ package Vista;
 
 import Controlador.ControladorLibro;
 import Controlador.ControladorPrestamoDevolucion;
+import Excepciones.CantidadDisponibleSobrepasadaException;
 import Modelo.Genero;
 import Modelo.Libro;
 import Modelo.PrestamoDevolucion;
@@ -287,9 +288,11 @@ public class VistaPrestramo extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Libro prestado");
                     llenarTabla();
                 }
+            } catch (CantidadDisponibleSobrepasadaException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "error al prestar");
-            }
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            } 
         }
     }//GEN-LAST:event_btnPrestamoActionPerformed
 

@@ -5,6 +5,7 @@
 package Dao;
 
 import Controlador.ControladorLibro;
+import Excepciones.CantidadDisponibleSobrepasadaException;
 import Modelo.Libro;
 import Modelo.PrestamoDevolucion;
 import static Modelo.PrestamoDevolucion.DEVUELTO;
@@ -65,12 +66,12 @@ public class DaoPrestamosDevoluciones {
         try {
             PreparedStatement ps = null;
             Libro libroEncontrado = buscarLibro(prestamo.getDetallesLibro());
-            System.out.println("estoy en generar prestamo " + libroEncontrado.toString());
-            if (libroEncontrado != null && libroEncontrado.getCantidadDisponible() > 0) {
-                int cantidadDisponible = libroEncontrado.getCantidadDisponible() -1;
-                System.out.println(cantidadDisponible);
+                    
+                if(libroEncontrado.getCantidadDisponible()  == 0){
+                    throw new CantidadDisponibleSobrepasadaException();
+                }
+                int cantidadDisponible = libroEncontrado.getCantidadDisponible() - 1;
                 int cantidadPrestada = libroEncontrado.getCantidadPrestadas() + 1;
-                System.out.println(cantidadPrestada);
                 libroEncontrado.setCantidadDisponible(cantidadDisponible);
                 libroEncontrado.setCantidadPrestadas(cantidadPrestada);
                 actualizarCantidadEnBaseDeDatos(libroEncontrado);
@@ -85,10 +86,7 @@ public class DaoPrestamosDevoluciones {
                 ps.setString(5, String.valueOf(prestamo.getFechaVencimiento()));
                 ps.setInt(6, prestamo.getCedulaUsuario());
                 ps.execute();
-            } else {
-                JOptionPane.showMessageDialog(null, "No hay copias disponibles de este libro para prestar.");
-            }
-        } catch (SQLException ex) {
+        } catch (SQLException | CantidadDisponibleSobrepasadaException ex) {
             System.err.println(ex.getMessage());
             throw new SQLException();
         }
@@ -112,8 +110,6 @@ public class DaoPrestamosDevoluciones {
                 libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() + 1);
                 libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() - 1);
                 actualizarCantidadEnBaseDeDatos(libroEncontrado);
-            } else {
-                JOptionPane.showMessageDialog(null, "El libro no se encontró en los préstamos.");
             }
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -180,16 +176,14 @@ public class DaoPrestamosDevoluciones {
         return libroEncontrado;
 
     }
-       
+
     private void actualizarCantidadEnBaseDeDatos(Libro libro) throws SQLException {
-        System.out.println("estoy en el método de actualizar cantidad" + libro.toString());
         try {
             String sql = "UPDATE libros SET cantidadDisponible=?, cantidadPrestadas=? WHERE id=?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, libro.getCantidadDisponible());
             ps.setInt(2, libro.getCantidadPrestadas());
             ps.setInt(3, libro.getId());
-            System.out.println(ps);
             ps.executeUpdate();
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());

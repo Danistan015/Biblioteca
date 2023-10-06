@@ -123,14 +123,12 @@ private Connection con;
 
             int nuevaCantidad = cantidadTotal - cantidadIngresada;
 
-            if (nuevaCantidad <= 0) {
-                // Si la nueva cantidad es menor o igual a cero, elimina el libro completamente
+            if (nuevaCantidad == 0) {
                 String eliminarSql = "DELETE FROM libros WHERE ID=?";
                 PreparedStatement eliminarPs = con.prepareStatement(eliminarSql);
                 eliminarPs.setInt(1, id);
                 eliminarPs.executeUpdate();
             } else {
-                // Actualiza la cantidad de copias
                 ps.setInt(1, nuevaCantidad);
                 ps.setInt(2, nuevaCantidad);
                 ps.setInt(3, id);
