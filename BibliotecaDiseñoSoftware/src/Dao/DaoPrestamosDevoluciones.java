@@ -32,7 +32,6 @@ public class DaoPrestamosDevoluciones {
         con = DatabaseSingleton.getInstance().getConnection();
     }
 
-   
     public PrestamoDevolucion buscarPrestamo(int id) throws SQLException {
         PrestamoDevolucion prestamo = null;
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -63,63 +62,66 @@ public class DaoPrestamosDevoluciones {
     }
 
     public void generarPrestamo(PrestamoDevolucion prestamo) throws SQLException {
-    try {
-        PreparedStatement ps = null;
-        Libro libroEncontrado = buscarLibro(prestamo.getDetallesLibro());
+        try {
+            PreparedStatement ps = null;
+            Libro libroEncontrado = buscarLibro(prestamo.getDetallesLibro());
 
-        if (libroEncontrado != null && libroEncontrado.getCantidadDisponible() > 0) {
-            libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() - 1);
-            libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() + 1);
+            if (libroEncontrado != null && libroEncontrado.getCantidadDisponible() > 0) {
+                libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() - 1);
+                libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() + 1);
 
+                // Actualiza la cantidad en la base de datos
+                actualizarCantidadEnBaseDeDatos(libroEncontrado);
 
-            prestamo.setEstado(PRESTADO);
+                prestamo.setEstado(PRESTADO);
 
-            String sql = "INSERT INTO prestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, prestamo.getEstado());
-            ps.setInt(2, prestamo.getId());
-            ps.setInt(3, prestamo.getDetallesLibro());
-            ps.setString(4, String.valueOf(prestamo.getFechaPrestamoActual()));
-            ps.setString(5, String.valueOf(prestamo.getFechaVencimiento()));
-            ps.setInt(6, prestamo.getCedulaUsuario());
-            ps.execute();
-        } else {
-            JOptionPane.showMessageDialog(null, "No hay copias disponibles de este libro para prestar.");
+                String sql = "INSERT INTO prestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, prestamo.getEstado());
+                ps.setInt(2, prestamo.getId());
+                ps.setInt(3, prestamo.getDetallesLibro());
+                ps.setString(4, String.valueOf(prestamo.getFechaPrestamoActual()));
+                ps.setString(5, String.valueOf(prestamo.getFechaVencimiento()));
+                ps.setInt(6, prestamo.getCedulaUsuario());
+                ps.execute();
+            } else {
+                JOptionPane.showMessageDialog(null, "No hay copias disponibles de este libro para prestar.");
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            throw new SQLException();
         }
-    } catch (SQLException ex) {
-        System.err.println(ex.getMessage());
-        throw new SQLException();
     }
-}
 
-public void devolverLibro(PrestamoDevolucion prestamo) throws SQLException {
-    try {
-        PreparedStatement ps = null;
-        Libro libroEncontrado = buscarLibro(prestamo.getDetallesLibro());
+    public void devolverLibro(PrestamoDevolucion prestamo) throws SQLException {
+        try {
+            PreparedStatement ps = null;
+            Libro libroEncontrado = buscarLibro(prestamo.getDetallesLibro());
 
-        if (libroEncontrado != null) {
-            prestamo.setEstado(DEVUELTO);
-            LocalDate fechaEntregado = LocalDate.now();
+            if (libroEncontrado != null) {
+                prestamo.setEstado(DEVUELTO);
+                LocalDate fechaEntregado = LocalDate.now();
 
-            String sql = "UPDATE prestamosDevoluciones SET estado=?, fechaEntrega=? WHERE ID=?";
-            ps = con.prepareStatement(sql);
-            ps.setString(1, prestamo.getEstado());
-            ps.setString(2, String.valueOf(fechaEntregado));
-            ps.setInt(3, prestamo.getId());
-            ps.execute();
+                String sql = "UPDATE prestamosDevoluciones SET estado=?, fechaEntrega=? WHERE ID=?";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, prestamo.getEstado());
+                ps.setString(2, String.valueOf(fechaEntregado));
+                ps.setInt(3, prestamo.getId());
+                ps.execute();
 
-            // Actualiza la cantidad en la base de datos
-            libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() + 1);
-            libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() - 1);
-            
-        } else {
-            JOptionPane.showMessageDialog(null, "El libro no se encontró en los préstamos.");
+                // Actualiza la cantidad en la base de datos
+                libroEncontrado.setCantidadDisponible(libroEncontrado.getCantidadDisponible() + 1);
+                libroEncontrado.setCantidadPrestadas(libroEncontrado.getCantidadPrestadas() - 1);
+                actualizarCantidadEnBaseDeDatos(libroEncontrado);
+            } else {
+                JOptionPane.showMessageDialog(null, "El libro no se encontró en los préstamos.");
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            throw new SQLException();
         }
-    } catch (SQLException ex) {
-        System.err.println(ex.getMessage());
-        throw new SQLException();
+
     }
-}
 
     public ArrayList<PrestamoDevolucion> listaPrestamosDevoluciones(int cedula) throws SQLException {
         ArrayList<PrestamoDevolucion> lista = new ArrayList<>();
@@ -150,6 +152,20 @@ public void devolverLibro(PrestamoDevolucion prestamo) throws SQLException {
         }
 
         return lista;
+    }
+
+    private void actualizarCantidadEnBaseDeDatos(Libro libro) throws SQLException {
+        try {
+            String sql = "UPDATE libros SET cantidadDisponible=?, cantidadPrestadas=? WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, libro.getCantidadDisponible());
+            ps.setInt(2, libro.getCantidadPrestadas());
+            ps.setInt(3, libro.getId());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            throw new SQLException();
+        }
     }
 
     public Libro buscarLibro(int ID) throws SQLException {
