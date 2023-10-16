@@ -44,10 +44,10 @@ public class ControladorPrestamoDevolucion {
 
     //para los reportes
     public ArrayList<PrestamoDevolucion> listaPrestamosDevolucionesGenerales(String estado) throws SQLException {
-        return dao.listaPrestamosGenerales(estado);
+        return dao.listaPrestamosDevolucionesGenerales(estado);
     }
 
-    public ArrayList<PrestamoDevolucion> listaPrestamosPorUsuario(int cedula, String estado) throws SQLException {
-        return dao.listaPrestamosPorUsuario(cedula, estado);
+    public ArrayList<PrestamoDevolucion> listaPrestamosDevolucionesPorUsuario(int cedula, String estado) throws SQLException {
+        return dao.listaPrestamosDevolucionesPorUsuario(cedula, estado);
     }
 }

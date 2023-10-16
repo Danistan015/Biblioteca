@@ -210,8 +210,7 @@ public class DaoPrestamosDevoluciones {
     }
 
     //listas para los reportes
-    //prestamos generales
-    public ArrayList<PrestamoDevolucion> listaPrestamosGenerales(String estado) throws SQLException {
+    public ArrayList<PrestamoDevolucion> listaPrestamosDevolucionesGenerales(String estado) throws SQLException {
         ArrayList<PrestamoDevolucion> lista = new ArrayList<>();
         try {
             PreparedStatement ps = null;
@@ -241,7 +240,7 @@ public class DaoPrestamosDevoluciones {
     }
 
     //prestamos por usuario
-    public ArrayList<PrestamoDevolucion> listaPrestamosPorUsuario(int cedula, String estado) throws SQLException {
+    public ArrayList<PrestamoDevolucion> listaPrestamosDevolucionesPorUsuario(int cedula, String estado) throws SQLException {
         ArrayList<PrestamoDevolucion> lista = new ArrayList<>();
         try {
             PreparedStatement ps = null;

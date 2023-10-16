@@ -232,7 +232,7 @@ public class VistaReporDevoluciones extends javax.swing.JFrame {
     private void btnReporteUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteUsuarioActionPerformed
         // TODO add your handling code here:
         try {
-            lista = controlador.listaPrestamosPorUsuario(usuario.getCedula(), PrestamoDevolucion.DEVUELTO);
+            lista = controlador.listaPrestamosDevolucionesPorUsuario(usuario.getCedula(), PrestamoDevolucion.DEVUELTO);
             pdf.pdfPrestamoDevolucionIndividual(lista, "Devolucion", usuario.getCedula());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "error al generar el reporte");

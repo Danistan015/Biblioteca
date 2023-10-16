@@ -32,7 +32,7 @@ public class Pdf {
     ControladorUsuario controladorUsuario;
     ControladorLibro controladorLibro;
     ControladorPrestamoDevolucion controladorPrestamoDevolucion;
-     ControladorGenero controladorGenero;
+    ControladorGenero controladorGenero;
 
     public Pdf() {
         controladorUsuario = new ControladorUsuario();
@@ -53,6 +53,7 @@ public class Pdf {
             tabla.addCell("Nombre Usuario");
             tabla.addCell("Cedula Usuario");
             tabla.addCell("Nombre libro");
+            //cambia de columna en caso de que sea un prestamo o una devolución
             if (tipo.equals("Prestamo")) {
                 tabla.addCell("Fecha Prestamo");
             } else {
@@ -65,7 +66,7 @@ public class Pdf {
                 int cedulaUsuario = lista.get(i).getCedulaUsuario();
                 int idLibro = lista.get(i).getDetallesLibro();
                 int idPrestamoDevolucion = lista.get(i).getId();
-                
+
                 Usuario usuario = controladorUsuario.buscarUsuarioCedula(cedulaUsuario);
                 Libro libro = controladorLibro.buscarLibro(idLibro);
                 Genero genero = controladorGenero.buscarGenero(libro.getIdGenero());
@@ -99,8 +100,7 @@ public class Pdf {
         }
     }
 
-    
-        public void pdfPrestamoDevolucionIndividual(ArrayList<PrestamoDevolucion> lista, String tipo, int cedula) {
+    public void pdfPrestamoDevolucionIndividual(ArrayList<PrestamoDevolucion> lista, String tipo, int cedula) {
         Document documento = new Document();
         try {
             String ruta = System.getProperty("user.home");
@@ -123,7 +123,7 @@ public class Pdf {
                 int cedulaUsuario = lista.get(i).getCedulaUsuario();
                 int idLibro = lista.get(i).getDetallesLibro();
                 int idPrestamoDevolucion = lista.get(i).getId();
-                
+
                 Usuario usuario = controladorUsuario.buscarUsuarioCedula(cedulaUsuario);
                 Libro libro = controladorLibro.buscarLibro(idLibro);
                 Genero genero = controladorGenero.buscarGenero(libro.getIdGenero());
