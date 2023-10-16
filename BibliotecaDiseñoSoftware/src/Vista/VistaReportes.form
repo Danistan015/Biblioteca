@@ -11,7 +11,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cerrar sesi&#xf3;n"/>
+                <Property name="text" type="java.lang.String" value="Volver"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem2ActionPerformed"/>
@@ -101,9 +101,9 @@
                   <Component id="btnIibro" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                   <Component id="btnHistorial" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                   <Component id="btnPrestamos" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="48" pref="131" max="32767" attributes="0"/>
+                  <EmptySpace min="48" pref="137" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

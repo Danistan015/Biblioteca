@@ -4,22 +4,35 @@
  */
 package Vista;
 
+import Controlador.ControladorPrestamoDevolucion;
+import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
 import java.awt.Color;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import util.Pdf;
 
 /**
  *
  * @author sotog
  */
 public class VistaReporDevoluciones extends javax.swing.JFrame {
-Usuario usuario;
+
+    Usuario usuario;
+    ControladorPrestamoDevolucion controlador;
+    Pdf pdf;
+    ArrayList<PrestamoDevolucion> lista;
+
     /**
      * Creates new form VistaReporDevoluciones
      */
     public VistaReporDevoluciones(Usuario usuario) {
         initComponents();
-           setLocationRelativeTo(this);
-        this.usuario=usuario;
+        setLocationRelativeTo(this);
+        this.usuario = usuario;
+        controlador = new ControladorPrestamoDevolucion();
+        pdf = new Pdf();
     }
 
     /**
@@ -35,7 +48,9 @@ Usuario usuario;
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        btnIibro = new javax.swing.JButton();
+        btnReporteGeneral = new javax.swing.JButton();
+        btnReporteUsuario = new javax.swing.JButton();
+        btnReporteFechas = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -74,19 +89,51 @@ Usuario usuario;
         jLabel1.setForeground(new java.awt.Color(147, 177, 166));
         jLabel1.setText("Reportes de las devoluciones:");
 
-        btnIibro.setBackground(new java.awt.Color(24, 61, 61));
-        btnIibro.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btnIibro.setForeground(new java.awt.Color(147, 177, 166));
-        btnIibro.setText("Generar reporte");
-        btnIibro.setActionCommand("Inicio");
-        btnIibro.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+        btnReporteGeneral.setBackground(new java.awt.Color(24, 61, 61));
+        btnReporteGeneral.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnReporteGeneral.setForeground(new java.awt.Color(147, 177, 166));
+        btnReporteGeneral.setText("Generar reporte general");
+        btnReporteGeneral.setActionCommand("Inicio");
+        btnReporteGeneral.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
-                btnIibroMouseMoved(evt);
+                btnReporteGeneralMouseMoved(evt);
             }
         });
-        btnIibro.addActionListener(new java.awt.event.ActionListener() {
+        btnReporteGeneral.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIibroActionPerformed(evt);
+                btnReporteGeneralActionPerformed(evt);
+            }
+        });
+
+        btnReporteUsuario.setBackground(new java.awt.Color(24, 61, 61));
+        btnReporteUsuario.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnReporteUsuario.setForeground(new java.awt.Color(147, 177, 166));
+        btnReporteUsuario.setText("Generar reporte del usuario");
+        btnReporteUsuario.setActionCommand("Inicio");
+        btnReporteUsuario.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnReporteUsuarioMouseMoved(evt);
+            }
+        });
+        btnReporteUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteUsuarioActionPerformed(evt);
+            }
+        });
+
+        btnReporteFechas.setBackground(new java.awt.Color(24, 61, 61));
+        btnReporteFechas.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnReporteFechas.setForeground(new java.awt.Color(147, 177, 166));
+        btnReporteFechas.setText("Generar reporte entre un rango de fechas");
+        btnReporteFechas.setActionCommand("Inicio");
+        btnReporteFechas.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnReporteFechasMouseMoved(evt);
+            }
+        });
+        btnReporteFechas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteFechasActionPerformed(evt);
             }
         });
 
@@ -95,22 +142,32 @@ Usuario usuario;
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(151, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnIibro, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(96, 96, 96)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(118, 118, 118)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnReporteUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnReporteGeneral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnReporteFechas))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 391, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(80, 80, 80)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel1)
-                .addGap(98, 98, 98)
-                .addComponent(btnIibro)
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnReporteGeneral)
+                .addGap(18, 18, 18)
+                .addComponent(btnReporteUsuario)
+                .addGap(18, 18, 18)
+                .addComponent(btnReporteFechas)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Más");
@@ -143,22 +200,8 @@ Usuario usuario;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnIibroMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIibroMouseMoved
-        // TODO add your handling code here:
-
-        btnIibro.setForeground(Color.WHITE);
-    }//GEN-LAST:event_btnIibroMouseMoved
-
-    private void btnIibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIibroActionPerformed
-        // TODO add your handling code here:
-         new VistaFechas(usuario).setVisible(true);
-        this.dispose();
-
-    }//GEN-LAST:event_btnIibroActionPerformed
-
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
 
-        btnIibro.setForeground(Color.lightGray);
 
     }//GEN-LAST:event_jPanel1MouseMoved
 
@@ -168,13 +211,50 @@ Usuario usuario;
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void btnReporteGeneralMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReporteGeneralMouseMoved
+        // TODO add your handling code here:
+        btnReporteGeneral.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnReporteGeneralMouseMoved
+
+    private void btnReporteGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteGeneralActionPerformed
+        try {
+            lista = controlador.listaPrestamosDevolucionesGenerales(PrestamoDevolucion.DEVUELTO);
+            pdf.pdfPrestamoDevolucionGeneral(lista, "Devolucion");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "error al generar el reporte");
+        }
+    }//GEN-LAST:event_btnReporteGeneralActionPerformed
+
+    private void btnReporteUsuarioMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReporteUsuarioMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReporteUsuarioMouseMoved
+
+    private void btnReporteUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteUsuarioActionPerformed
+        // TODO add your handling code here:
+        try {
+            lista = controlador.listaPrestamosPorUsuario(usuario.getCedula(), PrestamoDevolucion.DEVUELTO);
+            pdf.pdfPrestamoDevolucionIndividual(lista, "Devolucion", usuario.getCedula());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "error al generar el reporte");
+        }
+    }//GEN-LAST:event_btnReporteUsuarioActionPerformed
+
+    private void btnReporteFechasMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReporteFechasMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReporteFechasMouseMoved
+
+    private void btnReporteFechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteFechasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReporteFechasActionPerformed
+
     /**
      * @param args the command line arguments
      */
- 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnIibro;
+    private javax.swing.JButton btnReporteFechas;
+    private javax.swing.JButton btnReporteGeneral;
+    private javax.swing.JButton btnReporteUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
