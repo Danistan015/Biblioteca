@@ -190,4 +190,39 @@ public class DaoPrestamosDevoluciones {
             throw new SQLException();
         }
     }
+    
+    
+    //listas para los reportes
+    
+    //prestamos generales
+    
+    public ArrayList<PrestamoDevolucion> listaPrestamosGenerales() throws SQLException {
+        ArrayList<PrestamoDevolucion> lista = new ArrayList<>();
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String sql = "SELECT * FROM prestamosDevoluciones WHERE estado = " + PrestamoDevolucion.PRESTADO;
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("ID");
+                String estado = rs.getString("estado");
+                int idLibro = rs.getInt("idLibro");
+                int idUsuario = rs.getInt("idUsuario");
+                LocalDate fechaPrestamo = LocalDate.parse(rs.getString("fechaPrestamo"), formato);
+                LocalDate fechaVencimiento = LocalDate.parse(rs.getString("fechaVencimiento"), formato);
+
+                PrestamoDevolucion prestamo = new PrestamoDevolucion(estado, id, idLibro, fechaPrestamo, fechaVencimiento, idUsuario);
+
+                lista.add(prestamo);
+            }
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            throw new SQLException();
+        }
+        return lista;
+    }
 }
