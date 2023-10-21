@@ -12,14 +12,16 @@ import java.awt.Color;
  * @author sotog
  */
 public class VistaReportes extends javax.swing.JFrame {
-Usuario usuario;
+
+    Usuario usuario;
+
     /**
      * Creates new form VistaReportes
      */
     public VistaReportes(Usuario usuario) {
         initComponents();
-           setLocationRelativeTo(this);
-        this.usuario=usuario;
+        setLocationRelativeTo(this);
+        this.usuario = usuario;
     }
 
     /**
@@ -152,14 +154,14 @@ Usuario usuario;
                 .addComponent(btnIibro)
                 .addGap(34, 34, 34)
                 .addComponent(btnHistorial)
-                .addGap(41, 41, 41)
+                .addGap(35, 35, 35)
                 .addComponent(btnPrestamos)
-                .addGap(48, 131, Short.MAX_VALUE))
+                .addGap(48, 137, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Más");
 
-        jMenuItem2.setText("Cerrar sesión");
+        jMenuItem2.setText("Volver");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -210,7 +212,8 @@ Usuario usuario;
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
         // TODO add your handling code here:
-        new Historial(usuario).setVisible(true);
+        VistaReporDevoluciones ventana = new VistaReporDevoluciones(usuario);
+        ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnHistorialActionPerformed
 
@@ -222,29 +225,29 @@ Usuario usuario;
 
     private void btnPrestamosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamosActionPerformed
         // TODO add your handling code here:
-        new VistaPrestramo(usuario).setVisible(true);
+        VistaReporPrestamo ventana = new VistaReporPrestamo(usuario);
+        ventana.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnPrestamosActionPerformed
 
     private void jPanel1MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseMoved
         // TODO add your handling code here:
-     
+
         btnHistorial.setForeground(Color.lightGray);
         btnIibro.setForeground(Color.lightGray);
         btnPrestamos.setForeground(Color.lightGray);
-      
+
     }//GEN-LAST:event_jPanel1MouseMoved
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
-        new VistaLogin().setVisible(true);
+        new VistaMenu(usuario).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHistorial;

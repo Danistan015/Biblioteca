@@ -66,28 +66,28 @@ public class DaoPrestamosDevoluciones {
         try {
             PreparedStatement ps = null;
             Libro libroEncontrado = buscarLibro(prestamo.getDetallesLibro());
-                    
-                if(libroEncontrado.getCantidadDisponible()  == 0){
-                    throw new CantidadDisponibleSobrepasadaException();
-                }
-                int cantidadDisponible = libroEncontrado.getCantidadDisponible() - 1;
-                int cantidadPrestada = libroEncontrado.getCantidadPrestadas() + 1;
-                libroEncontrado.setCantidadDisponible(cantidadDisponible);
-                libroEncontrado.setCantidadPrestadas(cantidadPrestada);
-                actualizarCantidadEnBaseDeDatos(libroEncontrado);
-                prestamo.setEstado(PRESTADO);
 
-                String sql = "INSERT INTO prestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
-                ps = con.prepareStatement(sql);
-                ps.setString(1, prestamo.getEstado());
-                ps.setInt(2, prestamo.getId());
-                ps.setInt(3, prestamo.getDetallesLibro());
-                ps.setString(4, String.valueOf(prestamo.getFechaPrestamoActual()));
-                ps.setString(5, String.valueOf(prestamo.getFechaVencimiento()));
-                ps.setInt(6, prestamo.getCedulaUsuario());
-                ps.execute();
+            if (libroEncontrado.getCantidadDisponible() == 0) {
+                throw new CantidadDisponibleSobrepasadaException();
+            }
+            int cantidadDisponible = libroEncontrado.getCantidadDisponible() - 1;
+            int cantidadPrestada = libroEncontrado.getCantidadPrestadas() + 1;
+            libroEncontrado.setCantidadDisponible(cantidadDisponible);
+            libroEncontrado.setCantidadPrestadas(cantidadPrestada);
+            actualizarCantidadEnBaseDeDatos(libroEncontrado);
+            prestamo.setEstado(PRESTADO);
+
+            String sql = "INSERT INTO prestamosDevoluciones (estado, ID, idLibro, fechaPrestamo, fechaVencimiento, idUsuario) VALUES (?, ?, ?, ?, ?, ?)";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, prestamo.getEstado());
+            ps.setInt(2, prestamo.getId());
+            ps.setInt(3, prestamo.getDetallesLibro());
+            ps.setString(4, String.valueOf(prestamo.getFechaPrestamoActual()));
+            ps.setString(5, String.valueOf(prestamo.getFechaVencimiento()));
+            ps.setInt(6, prestamo.getCedulaUsuario());
+            ps.execute();
         } catch (SQLException e) {
-          e.getMessage();
+            e.getMessage();
             throw new SQLException();
         }
     }
@@ -190,25 +190,68 @@ public class DaoPrestamosDevoluciones {
             throw new SQLException();
         }
     }
-    
-    
+
+    public String buscarFechaDevuelto(int id) throws SQLException {
+        String fechaEncontrada = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT fechaEntrega FROM prestamosDevoluciones WHERE ID = " + id;
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while(rs.next()){
+             fechaEncontrada = rs.getString("fechaEntrega");
+            }
+            return fechaEncontrada;
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            throw new SQLException();
+        }
+    }
+
     //listas para los reportes
-    
-    //prestamos generales
-    
-    public ArrayList<PrestamoDevolucion> listaPrestamosGenerales() throws SQLException {
+    public ArrayList<PrestamoDevolucion> listaPrestamosDevolucionesGenerales(String estado) throws SQLException {
         ArrayList<PrestamoDevolucion> lista = new ArrayList<>();
         try {
             PreparedStatement ps = null;
             ResultSet rs = null;
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String sql = "SELECT * FROM prestamosDevoluciones WHERE estado = " + PrestamoDevolucion.PRESTADO;
+            String sql = "SELECT * FROM prestamosDevoluciones WHERE estado = '" + estado + "'";
+
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("ID");
-                String estado = rs.getString("estado");
+                int idLibro = rs.getInt("idLibro");
+                int idUsuario = rs.getInt("idUsuario");
+                LocalDate fechaPrestamo = LocalDate.parse(rs.getString("fechaPrestamo"), formato);
+                LocalDate fechaVencimiento = LocalDate.parse(rs.getString("fechaVencimiento"), formato);
+                PrestamoDevolucion prestamo = new PrestamoDevolucion(estado, id, idLibro, fechaPrestamo, fechaVencimiento, idUsuario);
+
+                lista.add(prestamo);
+            }
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            throw new SQLException();
+        }
+        return lista;
+    }
+
+    //prestamos por usuario
+    public ArrayList<PrestamoDevolucion> listaPrestamosDevolucionesPorUsuario(int cedula, String estado) throws SQLException {
+        ArrayList<PrestamoDevolucion> lista = new ArrayList<>();
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String sql = "SELECT * FROM prestamosDevoluciones WHERE idUsuario = '" + cedula + "' AND estado = '" + estado + "'";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("ID");
                 int idLibro = rs.getInt("idLibro");
                 int idUsuario = rs.getInt("idUsuario");
                 LocalDate fechaPrestamo = LocalDate.parse(rs.getString("fechaPrestamo"), formato);

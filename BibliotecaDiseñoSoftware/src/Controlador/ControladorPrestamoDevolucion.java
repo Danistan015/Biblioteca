@@ -26,14 +26,28 @@ public class ControladorPrestamoDevolucion {
         dao.generarPrestamo(prestamo);
     }
 
-    public PrestamoDevolucion buscarPrestamo(int id) throws SQLException{
+    public PrestamoDevolucion buscarPrestamo(int id) throws SQLException {
         return dao.buscarPrestamo(id);
     }
+
+    public void devolverPrestamo(PrestamoDevolucion prestamo) throws SQLException {
+        dao.devolverLibro(prestamo);
+    }
+    
+    public String buscarFechaDevuelto(int id) throws SQLException {
+        return dao.buscarFechaDevuelto(id);
+    }
+
     public ArrayList<PrestamoDevolucion> listaPrestamosDevoluciones(int cedula) throws SQLException {
         return dao.listaPrestamosDevoluciones(cedula);
     }
 
-    public void devolverPrestamo(PrestamoDevolucion prestamo) throws SQLException{
-        dao.devolverLibro(prestamo);
+    //para los reportes
+    public ArrayList<PrestamoDevolucion> listaPrestamosDevolucionesGenerales(String estado) throws SQLException {
+        return dao.listaPrestamosDevolucionesGenerales(estado);
+    }
+
+    public ArrayList<PrestamoDevolucion> listaPrestamosDevolucionesPorUsuario(int cedula, String estado) throws SQLException {
+        return dao.listaPrestamosDevolucionesPorUsuario(cedula, estado);
     }
 }
