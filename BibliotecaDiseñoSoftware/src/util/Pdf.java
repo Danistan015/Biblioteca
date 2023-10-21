@@ -91,7 +91,7 @@ public class Pdf {
             documento.close();
 
             // Mostrar un mensaje emergente de notificación
-            JOptionPane.showMessageDialog(null, "Reporte creado.");
+            JOptionPane.showMessageDialog(null, "Reporte creado en el Escritorio con el nombre: pdf" + tipo + "General.pdf");
 
         } catch (DocumentException | HeadlessException | FileNotFoundException e) {
 
@@ -148,7 +148,7 @@ public class Pdf {
             documento.close();
 
             // Mostrar un mensaje emergente de notificación
-            JOptionPane.showMessageDialog(null, "Reporte creado.");
+            JOptionPane.showMessageDialog(null, "Reporte creado con el nombre: pdf" + tipo + "Individual" + cedula + ".pdf");
 
         } catch (DocumentException | HeadlessException | FileNotFoundException e) {
 
@@ -156,4 +156,6 @@ public class Pdf {
             System.out.println(e.getMessage());
         }
     }
+    
+    
 }

@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 
 /*
  *
- * @author sotog
+ * @author val
  */
 public class VistaLogin extends javax.swing.JFrame {
 
