@@ -4,12 +4,16 @@
  */
 package Vista;
 
+import Controlador.ControladorHistorial;
 import Controlador.ControladorUsuario;
 import Excepciones.UsuarioNoEncontradoException;
+import Modelo.Historiales;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +26,7 @@ public class VistaUsuario extends javax.swing.JFrame {
 
     Usuario usuario;
     ControladorUsuario controlador;
+    ControladorHistorial controH;
     DefaultTableModel modelo = new DefaultTableModel();
 
     /**
@@ -37,6 +42,7 @@ public class VistaUsuario extends javax.swing.JFrame {
         TextPrompt pHUsuariossssss = new TextPrompt("Ingrese el telefono: ", txtTelefono);
         setLocationRelativeTo(this);
         controlador = new ControladorUsuario();
+        controH = new ControladorHistorial();
         this.usuario = usuario;
         llenarTabla();
         lblContrasenia.setVisible(false);
@@ -490,7 +496,7 @@ public class VistaUsuario extends javax.swing.JFrame {
         btnBuscar.setForeground(Color.lightGray);
         btnEliminar.setForeground(Color.lightGray);
         btnModificar.setForeground(Color.lightGray);
-         btnLimpiar.setForeground(Color.lightGray);
+        btnLimpiar.setForeground(Color.lightGray);
     }//GEN-LAST:event_jPanel1MouseMoved
 
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
@@ -563,7 +569,16 @@ public class VistaUsuario extends javax.swing.JFrame {
         try {
             int cedula = Integer.parseInt(txtCedula.getText());
             controlador.eliminarUsuario(cedula);
-            JOptionPane.showMessageDialog(null, "Usuario Eliminado");
+
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+            int usuarioss = id_usuar.getCedula();
+            int fila = tabla.getSelectedRow();
+
+            String accion = "Se elimino una persona con cedula: " + tabla.getValueAt(fila, 0).toString();
+            Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+            controH.agregarRegistroHistorial(historial);
             if (cedula == usuario.getCedula()) {
                 this.dispose();
             }
@@ -574,6 +589,8 @@ public class VistaUsuario extends javax.swing.JFrame {
             lblNombre.setVisible(false);
             lblTelefono.setVisible(false);
             txtCedula.setEditable(true);
+            JOptionPane.showMessageDialog(null, "Usuario Eliminado");
+
             llenarTabla();
             limpiarCampos();
         } catch (SQLException ex) {
@@ -605,6 +622,15 @@ public class VistaUsuario extends javax.swing.JFrame {
             try {
                 controlador.editarUsuario(nombre, cedula, edad, telefono, correo, contrasenia);
                 JOptionPane.showMessageDialog(null, "usuario modificado");
+                LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+                int fila = tabla.getSelectedRow();
+
+                String accion = "Se modifico una persona con cedula: " + tabla.getValueAt(fila, 0).toString();
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
                 llenarTabla();
                 limpiarCampos();
                 lblContrasenia.setVisible(false);
@@ -637,10 +663,19 @@ public class VistaUsuario extends javax.swing.JFrame {
             String correo = txtCorreo.getText();
             String contrasenia = txtContrasenia.getText();
 
-            Usuario usuario = new Usuario(nombre, cedula, edad, telefono, correo, contrasenia);
+            Usuario usuarios = new Usuario(nombre, cedula, edad, telefono, correo, contrasenia);
             try {
-                controlador.agregarUsuario(usuario);
+                controlador.agregarUsuario(usuarios);
                 JOptionPane.showMessageDialog(null, "Usuario guardado");
+                LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+                
+
+                String accion = "Se registro una persona con cedula: " + txtCedula.getText();
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
                 llenarTabla();
                 limpiarCampos();
             } catch (SQLException ex) {
@@ -706,7 +741,7 @@ public class VistaUsuario extends javax.swing.JFrame {
 
     private void btnLimpiarMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseMoved
         // TODO add your handling code here:
-         btnLimpiar.setForeground(Color.WHITE);
+        btnLimpiar.setForeground(Color.WHITE);
     }//GEN-LAST:event_btnLimpiarMouseMoved
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed

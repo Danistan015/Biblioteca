@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,10 +21,8 @@ public class DaoUsuarios {
 
     private Connection con;
 
-
     public DaoUsuarios() {
         this.con = DatabaseSingleton.getInstance().getConnection();
-   
 
     }
 
@@ -40,7 +39,6 @@ public class DaoUsuarios {
             ps.setString(5, usuario.getCorreo());
             ps.setString(6, usuario.getContrasenia());
             ps.execute();
-         
 
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -54,11 +52,9 @@ public class DaoUsuarios {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-     
         String where = " WHERE correo = '" + correo + "'";
         String sql = "SELECT * FROM usuarios" + where;
 
-        
         try {
             ps = con.prepareStatement(sql);
             // Ejecuta la consulta y guarda el resultado en la variable rs
@@ -89,7 +85,7 @@ public class DaoUsuarios {
 
         try {
             ps = con.prepareStatement(sql);
-    
+
             rs = ps.executeQuery();
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
@@ -126,40 +122,62 @@ public class DaoUsuarios {
         }
     }
 
-    public void eliminarUsuario(int cedula) throws SQLException {
-        PreparedStatement ps = null;
-
-        try {
-
-            ps = con.prepareStatement("DELETE FROM usuarios WHERE cedula= '" + cedula + "'");
-            ps.setInt(1, cedula);
-            ps.execute();
-           
-        } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
-            throw new SQLException();
-        }
-    }
-
-    public String obtenerNombreUsuario(int cedula) throws SQLException {
-    String nombre = "";
+   public void eliminarUsuario(int cedula) throws SQLException {
+    PreparedStatement ps = null;
     try {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        // Desactivar las restricciones de clave foránea
+        con.prepareStatement("SET FOREIGN_KEY_CHECKS=0").execute();
 
-        String where = " WHERE cedula = '" + cedula + "'";
-        String sql = "SELECT nombre FROM usuarios" + where;
-
-        ps = con.prepareStatement(sql);
-        rs = ps.executeQuery();
-        while (rs.next()) {
-            nombre = rs.getString("nombre");
+        // Verificar si existen préstamos en estado "PRESTADO" para el usuario
+        ps = con.prepareStatement("SELECT COUNT(*) AS count FROM prestamosdevoluciones WHERE idUsuario = ? AND estado = 'PRESTADO'");
+        ps.setInt(1, cedula);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next() && rs.getInt("count") > 0) {
+            JOptionPane.showMessageDialog(null, "El usuario tiene préstamos pendientes. No se puede eliminar hasta que devuelva todos los préstamos.");
+            con.prepareStatement("SET FOREIGN_KEY_CHECKS=1").execute(); // Restaurar restricciones de clave foránea
+            return;
         }
+
+        // Eliminar registros relacionados en la tabla prestamosdevoluciones
+        ps = con.prepareStatement("DELETE FROM prestamosdevoluciones WHERE idUsuario = ?");
+        ps.setInt(1, cedula);
+        ps.executeUpdate();
+
+        // Eliminar al usuario
+        ps = con.prepareStatement("DELETE FROM usuarios WHERE cedula = ?");
+        ps.setInt(1, cedula);
+        ps.execute();
+
+        // Volver a activar las restricciones de clave foránea
+        con.prepareStatement("SET FOREIGN_KEY_CHECKS=1").execute();
+
+        JOptionPane.showMessageDialog(null, "Usuario Eliminado");
     } catch (SQLException ex) {
+        System.err.println(ex.getMessage());
         throw new SQLException();
     }
-    return nombre;
 }
+
+
+    public String obtenerNombreUsuario(int cedula) throws SQLException {
+        String nombre = "";
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            String where = " WHERE cedula = '" + cedula + "'";
+            String sql = "SELECT nombre FROM usuarios" + where;
+
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                nombre = rs.getString("nombre");
+            }
+        } catch (SQLException ex) {
+            throw new SQLException();
+        }
+        return nombre;
+    }
 
     public ArrayList<Usuario> listaUsuarios() throws SQLException {
         ArrayList<Usuario> usuarios = new ArrayList<>();
@@ -190,5 +208,5 @@ public class DaoUsuarios {
 
         return usuarios;
     }
-    
+
 }
