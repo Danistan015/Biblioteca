@@ -349,6 +349,11 @@ public class VistaLibro extends javax.swing.JFrame {
         comboFiltro.setBackground(new java.awt.Color(4, 13, 18));
         comboFiltro.setForeground(new java.awt.Color(255, 255, 255));
         comboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboFiltroActionPerformed(evt);
+            }
+        });
 
         btnFiltrar.setBackground(new java.awt.Color(24, 61, 61));
         btnFiltrar.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
@@ -831,6 +836,10 @@ public class VistaLibro extends javax.swing.JFrame {
             llenarTablaFiltro(genero);
         }
     }//GEN-LAST:event_btnFiltrarActionPerformed
+
+    private void comboFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFiltroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboFiltroActionPerformed
     public void llenarTabla() {
         DefaultTableModel modelo = new DefaultTableModel();
         try {

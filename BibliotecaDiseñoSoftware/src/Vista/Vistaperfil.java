@@ -272,7 +272,7 @@ Usuario usuario;
 
     private void btnSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSesionActionPerformed
         // TODO add your handling code here:
-        new HistorialPeticiones(usuario).setVisible(true);
+        new Historial(usuario).setVisible(true);
         this.dispose();
 
     }//GEN-LAST:event_btnSesionActionPerformed

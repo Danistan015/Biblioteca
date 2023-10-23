@@ -112,7 +112,7 @@ public class DaoPrestamosDevoluciones {
                 actualizarCantidadEnBaseDeDatos(libroEncontrado);
             }
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
+        
             throw new SQLException();
         }
 
@@ -186,7 +186,7 @@ public class DaoPrestamosDevoluciones {
             ps.setInt(3, libro.getId());
             ps.executeUpdate();
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
+        
             throw new SQLException();
         }
     }
@@ -204,7 +204,6 @@ public class DaoPrestamosDevoluciones {
             }
             return fechaEncontrada;
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
             throw new SQLException();
         }
     }
@@ -233,7 +232,6 @@ public class DaoPrestamosDevoluciones {
             }
 
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
             throw new SQLException();
         }
         return lista;
@@ -263,7 +261,6 @@ public class DaoPrestamosDevoluciones {
             }
 
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
             throw new SQLException();
         }
         return lista;

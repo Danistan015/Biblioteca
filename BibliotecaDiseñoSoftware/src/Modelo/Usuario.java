@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author val
  */
 public class Usuario {
-    ArrayList<Historial> listaHistoriales;
+    ArrayList<Historiales> listaHistoriales;
     
     private String nombre;
     private int cedula;
@@ -78,11 +78,11 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
-    public ArrayList<Historial> getListaHistoriales() {
+    public ArrayList<Historiales> getListaHistoriales() {
         return listaHistoriales;
     }
 
-    public void setListaHistoriales(ArrayList<Historial> listaHistoriales) {
+    public void setListaHistoriales(ArrayList<Historiales> listaHistoriales) {
         this.listaHistoriales = listaHistoriales;
     }        
 }

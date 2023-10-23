@@ -4,15 +4,18 @@
  */
 package Vista;
 
+import Controlador.ControladorHistorial;
 import Controlador.ControladorLibro;
 import Controlador.ControladorPrestamoDevolucion;
-import Excepciones.GeneroNoEncontradoException;
 import Excepciones.PrestamoNoEncontradoException;
+import Modelo.Historiales;
 import Modelo.Libro;
 import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -25,6 +28,7 @@ public class VistaDevolucion extends javax.swing.JFrame {
 
     private ControladorPrestamoDevolucion controlador;
     ControladorLibro controladorLibro;
+    ControladorHistorial controH;
     Usuario usuario;
 
     /**
@@ -36,6 +40,7 @@ public class VistaDevolucion extends javax.swing.JFrame {
         this.usuario = usuario;
         controlador = new ControladorPrestamoDevolucion();
         controladorLibro = new ControladorLibro();
+        controH = new ControladorHistorial();
         llenarTabla();
     }
 
@@ -214,12 +219,13 @@ public class VistaDevolucion extends javax.swing.JFrame {
                                 .addGap(137, 137, 137)
                                 .addComponent(jLabel1))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(255, 255, 255)
-                                .addComponent(btnDevoilver))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(20, 20, 20)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 765, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDevoilver)
+                        .addGap(328, 328, 328)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(334, 334, 334))
         );
@@ -252,9 +258,9 @@ public class VistaDevolucion extends javax.swing.JFrame {
                         .addComponent(txtFechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addComponent(btnDevoilver)
-                .addGap(18, 18, 18)
+                .addGap(32, 32, 32)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );
@@ -368,6 +374,13 @@ public class VistaDevolucion extends javax.swing.JFrame {
                 } else {
                     controlador.devolverPrestamo(prestamo);
                     JOptionPane.showMessageDialog(null, "préstamo devuelto correctamente");
+                    String accion = "Se generó una devolucion para el libro: " + prestamo.getDetallesLibro();
+                     LocalDate fechaActual = LocalDate.now();
+                     LocalTime horaActual = LocalTime.now();
+                    Usuario id_usuar= controH.buscarUsuarioPorCedula(usuario.getCedula());
+                    int usuario= id_usuar.getCedula();
+                    Historiales historial= new Historiales(0, fechaActual, horaActual, accion, accion, usuario);
+                     controH.agregarRegistroHistorial(historial);
                     llenarTabla();
                     limpiarCampos();
                 }
@@ -400,34 +413,35 @@ public class VistaDevolucion extends javax.swing.JFrame {
             for (int i = 0; i < lista.size(); i++) {
                 PrestamoDevolucion prestamo = lista.get(i);
                 Libro libro = controladorLibro.buscarLibro(prestamo.getDetallesLibro());
-                if(prestamo.getEstado().equals(PrestamoDevolucion.PRESTADO))
-                modelo.addRow(new Object[]{
-                    prestamo.getId(),
-                    prestamo.getEstado(),
-                    prestamo.getDetallesLibro(),
-                    libro.getNombre(),
-                    prestamo.getFechaPrestamoActual(),
-                    prestamo.getFechaVencimiento(),
-                    prestamo.getCedulaUsuario()
+                if (prestamo.getEstado().equals(PrestamoDevolucion.PRESTADO)) {
+                    modelo.addRow(new Object[]{
+                        prestamo.getId(),
+                        prestamo.getEstado(),
+                        prestamo.getDetallesLibro(),
+                        libro.getNombre(),
+                        prestamo.getFechaPrestamoActual(),
+                        prestamo.getFechaVencimiento(),
+                        prestamo.getCedulaUsuario()
 
-                });
+                    });
+                }
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
 
-    public void limpiarCampos(){
+    public void limpiarCampos() {
         txtId.setText("");
         txtNombre.setText("");
         txtFechaPrestado.setText("");
         txtFechaVencimiento.setText("");
     }
 
-    public void cambioColor(){
-        
+    public void cambioColor() {
+
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnDevoilver;

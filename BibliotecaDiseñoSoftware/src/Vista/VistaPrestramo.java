@@ -4,18 +4,19 @@
  */
 package Vista;
 
+import Controlador.ControladorHistorial;
 import Controlador.ControladorLibro;
 import Controlador.ControladorPrestamoDevolucion;
 import Excepciones.CantidadDisponibleSobrepasadaException;
-import Modelo.Genero;
+import Modelo.Historiales;
 import Modelo.Libro;
 import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
-import static java.awt.Color.red;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
 
     ControladorLibro controladorLibro;
     ControladorPrestamoDevolucion controladorPrestamo;
+    ControladorHistorial controH;
     Usuario usuario;
 
     /**
@@ -42,6 +44,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
         this.usuario = usuario;
         controladorLibro = new ControladorLibro();
         controladorPrestamo = new ControladorPrestamoDevolucion();
+        controH = new ControladorHistorial();
         txtCedula.setText(String.valueOf(usuario.getCedula()));
         llenarTabla();
         visibilidadBoton(usuario.getCedula());
@@ -69,6 +72,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -165,6 +169,10 @@ public class VistaPrestramo extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 0, 0));
         jLabel3.setText("  ");
 
+        jLabel4.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(147, 177, 166));
+        jLabel4.setText("Hasta:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -174,9 +182,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(22, 22, 22)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -187,7 +193,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
                                 .addGap(22, 22, 22)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1122, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(229, 229, 229)
+                                .addGap(195, 195, 195)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -200,7 +206,10 @@ public class VistaPrestramo extends javax.swing.JFrame {
                                             .addComponent(txtIdLibro, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(444, 444, 444)
-                                .addComponent(btnPrestamo)))
+                                .addComponent(btnPrestamo))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(200, 200, 200)
+                                .addComponent(jLabel4)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -220,7 +229,9 @@ public class VistaPrestramo extends javax.swing.JFrame {
                         .addComponent(txtIdLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addGap(3, 3, 3)
                 .addComponent(fechaVencimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
@@ -293,13 +304,19 @@ public class VistaPrestramo extends javax.swing.JFrame {
                     PrestamoDevolucion prestamo = new PrestamoDevolucion(detalleLibro, fechaActual, fechaVencimiento, cedula);
                     controladorPrestamo.generarPrestamo(prestamo);
                     JOptionPane.showMessageDialog(null, "Libro prestado");
+                    String accion = "Se generó un préstamo para el libro con ID " + prestamo.getDetallesLibro();
+                    LocalTime horaActual = LocalTime.now();
+                    Usuario id_usuar= controH.buscarUsuarioPorCedula(cedula);
+                    int usuarioss= id_usuar.getCedula();
+                    Historiales historial= new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                    controH.agregarRegistroHistorial(historial);
                     llenarTabla();
                 }
             } catch (CantidadDisponibleSobrepasadaException e) {
                 e.getMessage();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
-            } 
+            }
         }
     }//GEN-LAST:event_btnPrestamoActionPerformed
 
@@ -380,6 +397,7 @@ public class VistaPrestramo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;

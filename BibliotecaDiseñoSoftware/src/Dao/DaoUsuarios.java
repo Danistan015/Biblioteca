@@ -4,7 +4,6 @@
  */
 package Dao;
 
-
 import Modelo.Usuario;
 import Singleton.DatabaseSingleton;
 import java.sql.Connection;
@@ -13,25 +12,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 /**
  *
  * @author val
  */
 public class DaoUsuarios {
-    
+
     private Connection con;
 
+
     public DaoUsuarios() {
-        this.con =  DatabaseSingleton.getInstance().getConnection();
+        this.con = DatabaseSingleton.getInstance().getConnection();
+   
+
     }
-    
-    
 
     public void agregarUsuario(Usuario usuario) throws SQLException {
         try {
             PreparedStatement ps = null;
-           
 
             String sql = "INSERT INTO usuarios (nombre, cedula, edad, telefono, correo, contrasenia) VALUES (?, ?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
@@ -42,6 +40,7 @@ public class DaoUsuarios {
             ps.setString(5, usuario.getCorreo());
             ps.setString(6, usuario.getContrasenia());
             ps.execute();
+         
 
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -50,18 +49,16 @@ public class DaoUsuarios {
     }
 
     public Usuario buscarUsuarioCorreo(String correo) throws SQLException {
-        // Declara las variables para preparar y ejecutar la consulta SQL
+
         Usuario usuarioEncontrado = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        
-
-        // Definir la consulta SQL a ejecutar
+     
         String where = " WHERE correo = '" + correo + "'";
         String sql = "SELECT * FROM usuarios" + where;
 
-        // Preparar la consulta SQL para su ejecución, esto ayuda a prevenir la inyección SQL
+        
         try {
             ps = con.prepareStatement(sql);
             // Ejecuta la consulta y guarda el resultado en la variable rs
@@ -87,14 +84,12 @@ public class DaoUsuarios {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        
         String where = " WHERE cedula = '" + cedula + "'";
         String sql = "SELECT * FROM usuarios" + where;
 
-        // Preparar la consulta SQL para su ejecución, esto ayuda a prevenir la inyección SQL
         try {
             ps = con.prepareStatement(sql);
-            // Ejecuta la consulta y guarda el resultado en la variable rs
+    
             rs = ps.executeQuery();
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
@@ -114,7 +109,7 @@ public class DaoUsuarios {
 
     public void editarUsuario(String nombre, int cedula, int edad, String telefono, String correo, String contrasenia) throws SQLException {
         PreparedStatement ps = null;
- 
+
         try {
             ps = con.prepareStatement("UPDATE usuarios SET nombre=?,edad=?,telefono=?, correo=?, contrasenia=? WHERE cedula=?");
             ps.setString(1, nombre);
@@ -136,27 +131,47 @@ public class DaoUsuarios {
 
         try {
 
-            
             ps = con.prepareStatement("DELETE FROM usuarios WHERE cedula= '" + cedula + "'");
             ps.setInt(1, cedula);
             ps.execute();
+           
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
             throw new SQLException();
         }
     }
 
+    public String obtenerNombreUsuario(int cedula) throws SQLException {
+    String nombre = "";
+    try {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String where = " WHERE cedula = '" + cedula + "'";
+        String sql = "SELECT nombre FROM usuarios" + where;
+
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            nombre = rs.getString("nombre");
+        }
+    } catch (SQLException ex) {
+        throw new SQLException();
+    }
+    return nombre;
+}
+
     public ArrayList<Usuario> listaUsuarios() throws SQLException {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         try {
             PreparedStatement ps = null;
             ResultSet rs = null;
-          
+
             String sql = "SELECT * FROM usuarios";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
                 String nombre = rs.getString("nombre");
                 int cedula = rs.getInt("cedula");
                 int edad = rs.getInt("edad");
@@ -167,12 +182,13 @@ public class DaoUsuarios {
                 Usuario usuario = new Usuario(nombre, cedula, edad, telefono, correo, contrasenia);
                 usuarios.add(usuario);
             }
-            
+
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
             throw new SQLException();
         }
-        
+
         return usuarios;
     }
+    
 }
