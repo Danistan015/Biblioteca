@@ -151,7 +151,7 @@ public class DaoUsuarios {
         // Volver a activar las restricciones de clave foránea
         con.prepareStatement("SET FOREIGN_KEY_CHECKS=1").execute();
 
-        JOptionPane.showMessageDialog(null, "Usuario Eliminado");
+       
     } catch (SQLException ex) {
         System.err.println(ex.getMessage());
         throw new SQLException();

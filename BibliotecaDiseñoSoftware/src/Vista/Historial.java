@@ -253,54 +253,71 @@ public void cargarComboUsuarios() {
     }
 }
 
-    public void llenarTablaHistorial() {
-        DefaultTableModel modelo = new DefaultTableModel();
-        try {
-            ArrayList<Historiales> lista = controH.listaH();
+   public void llenarTablaHistorial() {
+    DefaultTableModel modelo = new DefaultTableModel();
+    try {
+        ArrayList<Historiales> lista = controH.listaH();
 
-            modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
-            tabla.setModel(modelo);
+        modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
+        tabla.setModel(modelo);
 
-            for (int i = 0; i < lista.size(); i++) {
-                Historiales historial = lista.get(i);
+        for (int i = 0; i < lista.size(); i++) {
+            Historiales historial = lista.get(i);
+            modelo.addRow(new Object[]{
+                historial.getId(),
+                historial.getFecha(),
+                historial.getHora(),
+                historial.getNombreUsuario(),
+                historial.getAccion(),
+            });
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, ex);
+    }
+}
+
+
+    public void llenarTablaFiltroPorUsuario(String nombreUsuarioSeleccionado) {
+    DefaultTableModel modelo = new DefaultTableModel();
+    try {
+        ArrayList<Historiales> lista = controH.listaH();
+
+        modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
+        tabla.setModel(modelo);
+
+        for (int i = 0; i < lista.size(); i++) {
+            Historiales historial = lista.get(i);
+
+            if (historial.getNombreUsuario().equals(nombreUsuarioSeleccionado) || usuarioEliminado(historial.getNombreUsuario())) {
                 modelo.addRow(new Object[]{
                     historial.getId(),
                     historial.getFecha(),
                     historial.getHora(),
                     historial.getNombreUsuario(),
                     historial.getAccion(),
-                  });
+                });
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
         }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, ex);
     }
+}
 
-    public void llenarTablaFiltroPorUsuario(String nombreUsuarioSeleccionado) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        try {
-            ArrayList<Historiales> lista = controH.listaH();
-
-            modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
-            tabla.setModel(modelo);
-
-            for (int i = 0; i < lista.size(); i++) {
-                Historiales historial = lista.get(i);
-
-                if (historial.getNombreUsuario().equals(nombreUsuarioSeleccionado)) {
-                    modelo.addRow(new Object[]{
-                        historial.getId(),
-                        historial.getFecha(),
-                        historial.getHora(),
-                        historial.getNombreUsuario(),
-                        historial.getAccion(),
-                        });
-                }
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+// Método para verificar si el usuario está eliminado
+private boolean usuarioEliminado(String nombreUsuario) {
+    try {
+        PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS count FROM usuarios WHERE nombre = ?");
+        ps.setString(1, nombreUsuario);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next() && rs.getInt("count") == 0) {
+            return true; // Usuario eliminado
         }
+    } catch (SQLException ex) {
+        System.err.println(ex.getMessage());
     }
+    return false; // Usuario no eliminado
+}
+
     /**
      * @param args the command line arguments
      */

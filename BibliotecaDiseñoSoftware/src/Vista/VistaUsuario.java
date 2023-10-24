@@ -569,7 +569,7 @@ public class VistaUsuario extends javax.swing.JFrame {
         try {
             int cedula = Integer.parseInt(txtCedula.getText());
             controlador.eliminarUsuario(cedula);
-
+            JOptionPane.showMessageDialog(null, "Usuario Eliminado");
             LocalDate fechaActual = LocalDate.now();
             LocalTime horaActual = LocalTime.now();
             Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
@@ -589,7 +589,7 @@ public class VistaUsuario extends javax.swing.JFrame {
             lblNombre.setVisible(false);
             lblTelefono.setVisible(false);
             txtCedula.setEditable(true);
-            JOptionPane.showMessageDialog(null, "Usuario Eliminado");
+           
 
             llenarTabla();
             limpiarCampos();
