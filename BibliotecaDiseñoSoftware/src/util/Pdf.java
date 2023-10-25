@@ -101,7 +101,25 @@ public class Pdf {
     }
 
     public void pdfPrestamoDevolucionIndividual(ArrayList<PrestamoDevolucion> lista, String tipo, int cedula) {
+
+        boolean tienePrestamo = false;
+
+        for (PrestamoDevolucion pd : lista) {
+            if (tipo.equals("Prestamo") && pd.getEstado().equals(PrestamoDevolucion.PRESTADO)) {
+                tienePrestamo = true;
+                break;
+            } else if (tipo.equals("Devolucion") && pd.getEstado().equals(PrestamoDevolucion.DEVUELTO)) {
+                tienePrestamo = true;
+                break;
+            }
+        }
+
+        if (!tienePrestamo) {
+            JOptionPane.showMessageDialog(null, "No se puede generar PDF ya que el usuario no cuenta con préstamo o devolución.");
+            return; // Salir de la función si no hay préstamo
+        } 
         Document documento = new Document();
+
         try {
             String ruta = System.getProperty("user.home");
             PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/pdf" + tipo + "Individual" + cedula + ".pdf"));
@@ -156,6 +174,5 @@ public class Pdf {
             System.out.println(e.getMessage());
         }
     }
-    
-    
+
 }
