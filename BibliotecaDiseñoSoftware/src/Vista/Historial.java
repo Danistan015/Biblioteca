@@ -126,26 +126,20 @@ public class Historial extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(572, 572, 572)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(402, 402, 402)
-                                .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(42, 42, 42)
-                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(531, 531, 531)
-                                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 598, Short.MAX_VALUE))
+                        .addGap(572, 572, 572)
+                        .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1)))
-                .addContainerGap())
+                        .addGap(402, 402, 402)
+                        .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(531, 531, 531)
+                        .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1427, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,54 +253,71 @@ public void cargarComboUsuarios() {
     }
 }
 
-    public void llenarTablaHistorial() {
-        DefaultTableModel modelo = new DefaultTableModel();
-        try {
-            ArrayList<Historiales> lista = controH.listaH();
+   public void llenarTablaHistorial() {
+    DefaultTableModel modelo = new DefaultTableModel();
+    try {
+        ArrayList<Historiales> lista = controH.listaH();
 
-            modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
-            tabla.setModel(modelo);
+        modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
+        tabla.setModel(modelo);
 
-            for (int i = 0; i < lista.size(); i++) {
-                Historiales historial = lista.get(i);
+        for (int i = 0; i < lista.size(); i++) {
+            Historiales historial = lista.get(i);
+            modelo.addRow(new Object[]{
+                historial.getId(),
+                historial.getFecha(),
+                historial.getHora(),
+                historial.getNombreUsuario(),
+                historial.getAccion(),
+            });
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, ex);
+    }
+}
+
+
+    public void llenarTablaFiltroPorUsuario(String nombreUsuarioSeleccionado) {
+    DefaultTableModel modelo = new DefaultTableModel();
+    try {
+        ArrayList<Historiales> lista = controH.listaH();
+
+        modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
+        tabla.setModel(modelo);
+
+        for (int i = 0; i < lista.size(); i++) {
+            Historiales historial = lista.get(i);
+
+            if (historial.getNombreUsuario().equals(nombreUsuarioSeleccionado) || usuarioEliminado(historial.getNombreUsuario())) {
                 modelo.addRow(new Object[]{
                     historial.getId(),
                     historial.getFecha(),
                     historial.getHora(),
                     historial.getNombreUsuario(),
                     historial.getAccion(),
-                  });
+                });
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
         }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, ex);
     }
+}
 
-    public void llenarTablaFiltroPorUsuario(String nombreUsuarioSeleccionado) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        try {
-            ArrayList<Historiales> lista = controH.listaH();
-
-            modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
-            tabla.setModel(modelo);
-
-            for (int i = 0; i < lista.size(); i++) {
-                Historiales historial = lista.get(i);
-
-                if (historial.getNombreUsuario().equals(nombreUsuarioSeleccionado)) {
-                    modelo.addRow(new Object[]{
-                        historial.getId(),
-                        historial.getFecha(),
-                        historial.getHora(),
-                        historial.getNombreUsuario(),
-                        historial.getAccion(),
-                        });
-                }
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+// Método para verificar si el usuario está eliminado
+private boolean usuarioEliminado(String nombreUsuario) {
+    try {
+        PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS count FROM usuarios WHERE nombre = ?");
+        ps.setString(1, nombreUsuario);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next() && rs.getInt("count") == 0) {
+            return true; // Usuario eliminado
         }
+    } catch (SQLException ex) {
+        System.err.println(ex.getMessage());
     }
+    return false; // Usuario no eliminado
+}
+
     /**
      * @param args the command line arguments
      */
