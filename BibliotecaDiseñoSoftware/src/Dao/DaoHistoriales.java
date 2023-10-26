@@ -11,6 +11,7 @@ package Dao;
 import Modelo.Historiales;
 import Modelo.Usuario;
 import Singleton.DatabaseSingleton;
+import interfaces.interfazHistorial;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
  *
  * @author sotog
  */
-public class DaoHistoriales {
+public class DaoHistoriales implements interfazHistorial {
 
     private Connection con;
 
