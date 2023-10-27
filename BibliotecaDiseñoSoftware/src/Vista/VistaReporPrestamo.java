@@ -4,11 +4,15 @@
  */
 package Vista;
 
+import Controlador.ControladorHistorial;
 import Controlador.ControladorPrestamoDevolucion;
+import Modelo.Historiales;
 import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +27,7 @@ public class VistaReporPrestamo extends javax.swing.JFrame {
 
     Usuario usuario;
     ControladorPrestamoDevolucion controlador;
+    ControladorHistorial controH;
     Pdf pdf;
     ArrayList<PrestamoDevolucion> lista;
 
@@ -34,6 +39,7 @@ public class VistaReporPrestamo extends javax.swing.JFrame {
         setLocationRelativeTo(this);
         this.usuario = usuario;
         controlador = new ControladorPrestamoDevolucion();
+        controH = new ControladorHistorial();
         pdf = new Pdf();
     }
 
@@ -211,6 +217,15 @@ public class VistaReporPrestamo extends javax.swing.JFrame {
         try {
             lista = controlador.listaPrestamosDevolucionesGenerales(PrestamoDevolucion.PRESTADO);
             pdf.pdfPrestamoDevolucionGeneral(lista, "Prestamo");
+            LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+               
+
+                String accion = "Se genero un reporte general de prestamos " ;
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "error al generar el reporte");
         }
@@ -236,6 +251,15 @@ public class VistaReporPrestamo extends javax.swing.JFrame {
         try {
             lista = controlador.listaPrestamosDevolucionesPorUsuario(usuario.getCedula(), PrestamoDevolucion.PRESTADO);
             pdf.pdfPrestamoDevolucionIndividual(lista, "Prestamo",usuario.getCedula());
+            LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+               
+
+                String accion = "Se genero un reporte de prestamos a:"+usuario.getCedula() ;
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "error al generar el reporte");
         }

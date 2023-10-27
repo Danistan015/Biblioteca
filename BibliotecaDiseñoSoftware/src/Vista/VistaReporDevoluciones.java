@@ -4,11 +4,15 @@
  */
 package Vista;
 
+import Controlador.ControladorHistorial;
 import Controlador.ControladorPrestamoDevolucion;
+import Modelo.Historiales;
 import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import util.Pdf;
@@ -21,6 +25,7 @@ public class VistaReporDevoluciones extends javax.swing.JFrame {
 
     Usuario usuario;
     ControladorPrestamoDevolucion controlador;
+    ControladorHistorial controH;
     Pdf pdf;
     ArrayList<PrestamoDevolucion> lista;
 
@@ -32,6 +37,7 @@ public class VistaReporDevoluciones extends javax.swing.JFrame {
         setLocationRelativeTo(this);
         this.usuario = usuario;
         controlador = new ControladorPrestamoDevolucion();
+        controH= new ControladorHistorial();
         pdf = new Pdf();
     }
 
@@ -220,6 +226,15 @@ public class VistaReporDevoluciones extends javax.swing.JFrame {
         try {
             lista = controlador.listaPrestamosDevolucionesGenerales(PrestamoDevolucion.DEVUELTO);
             pdf.pdfPrestamoDevolucionGeneral(lista, "Devolucion");
+            LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+               
+
+                String accion = "Se genero un reporte general de las devoluciones " ;
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "error al generar el reporte");
         }
@@ -234,6 +249,15 @@ public class VistaReporDevoluciones extends javax.swing.JFrame {
         try {
             lista = controlador.listaPrestamosDevolucionesPorUsuario(usuario.getCedula(), PrestamoDevolucion.DEVUELTO);
             pdf.pdfPrestamoDevolucionIndividual(lista, "Devolucion", usuario.getCedula());
+            LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+             
+
+                String accion = "Se genero un reporte de devoluciones a:"+usuario.getCedula() ;
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "error al generar el reporte");
         }

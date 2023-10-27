@@ -5,12 +5,16 @@
 package Vista;
 
 import Controlador.ControladorGenero;
+import Controlador.ControladorHistorial;
 import Excepciones.GeneroNoEncontradoException;
 import Modelo.Genero;
+import Modelo.Historiales;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 public class VistaGeneroLibros extends javax.swing.JFrame {
 
     ControladorGenero controlador;
+    ControladorHistorial controH;
     Usuario usuario;
 
     /**
@@ -33,6 +38,7 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
         TextPrompt pHUsuario = new TextPrompt("Buscar genero por ID: ", txtID);
         TextPrompt pHUsuarioss = new TextPrompt("Ingrese el nombre : ", txtNombre);
         controlador = new ControladorGenero();
+        controH = new ControladorHistorial();
         this.usuario = usuario;
         llenarTabla();
         lblGenero.setVisible(false);
@@ -382,6 +388,15 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
             try {
                 controlador.agregarGenero(genero);
                 JOptionPane.showMessageDialog(null, "Genero guardado");
+                LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+                int fila = tabla.getSelectedRow();
+
+                String accion = "Se guardo un genero con id: " + genero.getId();
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
                 llenarTabla();
                 limpiarCampos();
             } catch (SQLException ex) {
@@ -392,7 +407,7 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
 
     private void txtIDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDKeyTyped
         // TODO add your handling code here:
-         char validar = evt.getKeyChar();
+        char validar = evt.getKeyChar();
         if (Character.isLetter(validar)) {
             getToolkit().beep();
             evt.consume();
@@ -417,7 +432,16 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
             try {
                 controlador.editarGenero(id, nombre);
                 JOptionPane.showMessageDialog(null, "genero modificado");
-                  txtID.setEditable(true);
+                LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+                int fila = tabla.getSelectedRow();
+
+                String accion = "Se modifico un genero con id: " + tabla.getValueAt(fila, 0).toString();
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
+                txtID.setEditable(true);
                 llenarTabla();
                 limpiarCampos();
             } catch (SQLException ex) {
@@ -440,7 +464,16 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
             try {
                 controlador.eliminarGenero(id);
                 JOptionPane.showMessageDialog(null, "genero eliminado");
-                  txtID.setEditable(true);
+                LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+                int fila = tabla.getSelectedRow();
+
+                String accion = "Se elimino un genero con id: " + tabla.getValueAt(fila, 0).toString();
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
+                txtID.setEditable(true);
                 llenarTabla();
                 limpiarCampos();
             } catch (SQLException ex) {
@@ -525,7 +558,7 @@ public class VistaGeneroLibros extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
-         txtID.setEditable(true);
+        txtID.setEditable(true);
         lblGenero.setVisible(false);
         lblId.setVisible(false);
         txtID.setText("");

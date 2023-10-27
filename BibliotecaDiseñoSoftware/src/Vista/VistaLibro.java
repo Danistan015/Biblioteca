@@ -5,10 +5,12 @@
 package Vista;
 
 import Controlador.ControladorGenero;
+import Controlador.ControladorHistorial;
 import Controlador.ControladorLibro;
 import Excepciones.AnioSobrepasadoException;
 import Excepciones.CantidadSobrepasadaException;
 import Excepciones.LibroNoEncontradoException;
+import Modelo.Historiales;
 import Modelo.Libro;
 import Modelo.Usuario;
 import Singleton.DatabaseSingleton;
@@ -18,6 +20,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -33,6 +37,7 @@ public class VistaLibro extends javax.swing.JFrame {
     Usuario usuario;
     ControladorLibro controladorLibro;
     Controlador.ControladorGenero controGenero;
+    ControladorHistorial controH;
     private Connection con;
 
     /**
@@ -51,6 +56,7 @@ public class VistaLibro extends javax.swing.JFrame {
 
         controladorLibro = new ControladorLibro();
         controGenero = new ControladorGenero();
+        controH = new ControladorHistorial();
         con = (Connection) DatabaseSingleton.getInstance().getConnection();
         lblAnioPublicacion.setVisible(false);
         lblAutor.setVisible(false);
@@ -557,6 +563,14 @@ public class VistaLibro extends javax.swing.JFrame {
 
                 controladorLibro.agregarLibro(libro);
                 JOptionPane.showMessageDialog(null, "Libro guardado");
+
+                String accion = "Se guardo un libro con id: " + libro.getId();
+                LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuario = id_usuar.getCedula();
+                Historiales historial = new Historiales(0, fechaActual, horaActual, accion, accion, usuario);
+                controH.agregarRegistroHistorial(historial);
                 llenarTabla();
                 limpiarCampo();
             } catch (SQLException ex) {
@@ -589,6 +603,15 @@ public class VistaLibro extends javax.swing.JFrame {
 
                 controladorLibro.editarLibro(id, nombre, Autor, anioPublicacion, cantidadCopias, id_genero);
                 JOptionPane.showMessageDialog(null, "Libro modificado");
+                LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+                int fila = tabla.getSelectedRow();
+
+                String accion = "Se modifico un libro con id: " + tabla.getValueAt(fila, 0).toString();
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
                 lblAnioPublicacion.setVisible(false);
                 lblAutor.setVisible(false);
                 lbNombre.setVisible(false);
@@ -619,6 +642,15 @@ public class VistaLibro extends javax.swing.JFrame {
             int id = Integer.parseInt(txtId.getText());
             controladorLibro.eliminarLibro(id);
             JOptionPane.showMessageDialog(null, "Libro Eliminado");
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+            int usuarioss = id_usuar.getCedula();
+            int fila = tabla.getSelectedRow();
+
+            String accion = "Se elimino un libro con id: " + tabla.getValueAt(fila, 0).toString();
+            Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+            controH.agregarRegistroHistorial(historial);
             txtId.setEditable(true);
             lblAnioPublicacion.setVisible(false);
             lblAutor.setVisible(false);
