@@ -8,6 +8,7 @@ import Excepciones.AnioSobrepasadoException;
 import Excepciones.CantidadSobrepasadaException;
 import Modelo.Libro;
 import Singleton.DatabaseSingleton;
+import interfaces.interfazLibro;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,13 +19,14 @@ import java.util.ArrayList;
  *
  * @author val
  */
-public class DaoLibros {
-private Connection con;
+public class DaoLibros implements interfazLibro {
+
+    private Connection con;
+
     public DaoLibros() {
-          con = DatabaseSingleton.getInstance().getConnection();
-        
+        con = DatabaseSingleton.getInstance().getConnection();
+
     }
-    
 
     public void agregarLibro(Libro libro) throws SQLException {
         if (libro.getAnioPublicacion() > 2023) {
@@ -32,7 +34,7 @@ private Connection con;
         }
         try {
             PreparedStatement ps = null;
-            
+
             String sql = "INSERT INTO libros (ID, nombre, autor, anioPublicacion, cantidadCopias, cantidadDisponible, cantidadPrestadas, ID_Generos) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             ps = con.prepareStatement(sql);
             ps.setInt(1, libro.getId());
@@ -53,7 +55,7 @@ private Connection con;
         Libro libroEncontrado = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-     
+
         String where = " WHERE ID = '" + ID + "'";
         String sql = "SELECT * FROM libros" + where;
         try {
@@ -81,7 +83,7 @@ private Connection con;
             throw new AnioSobrepasadoException();
         }
         PreparedStatement ps = null;
-     
+
         try {
             String sql = "UPDATE libros SET nombre=?, autor=?, anioPublicacion=?, cantidadCopias=?, ID_Generos=? WHERE ID=?";
             ps = con.prepareStatement(sql);
@@ -116,7 +118,7 @@ private Connection con;
             throw new CantidadSobrepasadaException();
         }
         PreparedStatement ps = null;
-     
+
         try {
             String sql = "UPDATE libros SET cantidadCopias=?, cantidadDisponible=? WHERE ID=?";
             ps = con.prepareStatement(sql);
@@ -147,7 +149,7 @@ private Connection con;
         try {
             PreparedStatement ps = null;
             ResultSet rs = null;
-           
+
             String sql = "SELECT l.ID, l.nombre, l.autor, l.anioPublicacion, l.cantidadCopias, l.cantidadDisponible, l.cantidadPrestadas, g.nombre as Nombre_generos "
                     + "FROM libros l "
                     + "INNER JOIN generos as g ON l.ID_Generos = g.ID";

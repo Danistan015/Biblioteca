@@ -7,6 +7,7 @@ package Dao;
 
 import Modelo.Genero;
 import Singleton.DatabaseSingleton;
+import interfaces.interfazGenero;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  *
  * @author val
  */
-public class DaoGeneros {
+public class DaoGeneros implements interfazGenero{
 private Connection con;
     public DaoGeneros() {
           con = DatabaseSingleton.getInstance().getConnection();
