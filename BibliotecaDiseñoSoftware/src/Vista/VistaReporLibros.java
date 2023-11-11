@@ -37,6 +37,9 @@ Usuario usuario;
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         btnIibro = new javax.swing.JButton();
+        btnLibrosCreados = new javax.swing.JButton();
+        btnLibrosModificados = new javax.swing.JButton();
+        btnLibrosEliminados = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -91,30 +94,90 @@ Usuario usuario;
             }
         });
 
+        btnLibrosCreados.setBackground(new java.awt.Color(24, 61, 61));
+        btnLibrosCreados.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnLibrosCreados.setForeground(new java.awt.Color(147, 177, 166));
+        btnLibrosCreados.setText("Generar reporte libros creados");
+        btnLibrosCreados.setActionCommand("Inicio");
+        btnLibrosCreados.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnLibrosCreadosMouseMoved(evt);
+            }
+        });
+        btnLibrosCreados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLibrosCreadosActionPerformed(evt);
+            }
+        });
+
+        btnLibrosModificados.setBackground(new java.awt.Color(24, 61, 61));
+        btnLibrosModificados.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnLibrosModificados.setForeground(new java.awt.Color(147, 177, 166));
+        btnLibrosModificados.setText("Generar reporte libros modificados");
+        btnLibrosModificados.setActionCommand("Inicio");
+        btnLibrosModificados.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnLibrosModificadosMouseMoved(evt);
+            }
+        });
+        btnLibrosModificados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLibrosModificadosActionPerformed(evt);
+            }
+        });
+
+        btnLibrosEliminados.setBackground(new java.awt.Color(24, 61, 61));
+        btnLibrosEliminados.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnLibrosEliminados.setForeground(new java.awt.Color(147, 177, 166));
+        btnLibrosEliminados.setText("Generar reporte libros eliminados");
+        btnLibrosEliminados.setActionCommand("Inicio");
+        btnLibrosEliminados.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnLibrosEliminadosMouseMoved(evt);
+            }
+        });
+        btnLibrosEliminados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLibrosEliminadosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(135, Short.MAX_VALUE)
+                .addContainerGap(117, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnIibro, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(109, 109, 109))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(136, 136, 136)))
+                        .addGap(155, 155, 155))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnLibrosModificados, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnLibrosCreados, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnLibrosEliminados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(97, 97, 97))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnIibro, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(109, 109, 109)))
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(70, 70, 70)
+                .addGap(66, 66, 66)
                 .addComponent(jLabel1)
-                .addGap(108, 108, 108)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnLibrosCreados)
+                .addGap(18, 18, 18)
+                .addComponent(btnLibrosModificados)
+                .addGap(18, 18, 18)
+                .addComponent(btnLibrosEliminados)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnIibro)
-                .addContainerGap(169, Short.MAX_VALUE))
+                .addGap(41, 41, 41))
         );
 
         jMenu1.setText("Más");
@@ -173,6 +236,30 @@ Usuario usuario;
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void btnLibrosCreadosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLibrosCreadosMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLibrosCreadosMouseMoved
+
+    private void btnLibrosCreadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosCreadosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLibrosCreadosActionPerformed
+
+    private void btnLibrosModificadosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLibrosModificadosMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLibrosModificadosMouseMoved
+
+    private void btnLibrosModificadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosModificadosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLibrosModificadosActionPerformed
+
+    private void btnLibrosEliminadosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLibrosEliminadosMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLibrosEliminadosMouseMoved
+
+    private void btnLibrosEliminadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosEliminadosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLibrosEliminadosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -180,6 +267,9 @@ Usuario usuario;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIibro;
+    private javax.swing.JButton btnLibrosCreados;
+    private javax.swing.JButton btnLibrosEliminados;
+    private javax.swing.JButton btnLibrosModificados;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
