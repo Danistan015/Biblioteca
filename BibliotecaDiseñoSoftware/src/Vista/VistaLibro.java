@@ -608,7 +608,8 @@ public class VistaLibro extends javax.swing.JFrame {
                 Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
                 int usuarioss = id_usuar.getCedula();
                 int fila = tabla.getSelectedRow();
-
+                llenarTabla();
+                
                 String accion = "Se modifico un libro con id: " + tabla.getValueAt(fila, 0).toString();
                 Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
                 controH.agregarRegistroHistorial(historial);

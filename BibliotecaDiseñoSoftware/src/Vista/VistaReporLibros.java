@@ -4,8 +4,16 @@
  */
 package Vista;
 
+import Controlador.ControladorHistorial;
+import Modelo.Historiales;
 import Modelo.Usuario;
 import java.awt.Color;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import util.Pdf;
 
 /**
  *
@@ -13,13 +21,18 @@ import java.awt.Color;
  */
 public class VistaReporLibros extends javax.swing.JFrame {
 Usuario usuario;
+ControladorHistorial controH;
+    Pdf pdf;
+    ArrayList<Historiales> lista;
     /**
      * Creates new form VistaReporLibros
      */
     public VistaReporLibros(Usuario usuario) {
         initComponents();
            setLocationRelativeTo(this);
-        this.usuario=usuario;
+        this.usuario = usuario;
+        controH= new ControladorHistorial();
+        pdf = new Pdf();
                 
     }
 
@@ -242,6 +255,21 @@ Usuario usuario;
 
     private void btnLibrosCreadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosCreadosActionPerformed
         // TODO add your handling code here:
+        try {
+            lista = controH.listaLibrosRegistrados();
+            pdf.pdfLibrosAgregados(lista);
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+            int usuarioss = id_usuar.getCedula();
+               
+
+                String accion = "Se genero un reporte de los libros agregados " ;
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "error al generar el reporte");
+        }
     }//GEN-LAST:event_btnLibrosCreadosActionPerformed
 
     private void btnLibrosModificadosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLibrosModificadosMouseMoved
@@ -250,6 +278,21 @@ Usuario usuario;
 
     private void btnLibrosModificadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosModificadosActionPerformed
         // TODO add your handling code here:
+        try {
+            lista = controH.listaLibrosModificados();
+            pdf.pdfLibrosModificados(lista);
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+            int usuarioss = id_usuar.getCedula();
+               
+
+                String accion = "Se genero un reporte de los libros modificados " ;
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "error al generar el reporte");
+        }
     }//GEN-LAST:event_btnLibrosModificadosActionPerformed
 
     private void btnLibrosEliminadosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLibrosEliminadosMouseMoved
@@ -258,6 +301,21 @@ Usuario usuario;
 
     private void btnLibrosEliminadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLibrosEliminadosActionPerformed
         // TODO add your handling code here:
+        try {
+            lista = controH.listaLibrosEliminados();
+            pdf.pdfLibrosEliminados(lista);
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+            int usuarioss = id_usuar.getCedula();
+               
+
+                String accion = "Se genero un reporte de los libros eliminados " ;
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "error al generar el reporte");
+        }
     }//GEN-LAST:event_btnLibrosEliminadosActionPerformed
 
     /**

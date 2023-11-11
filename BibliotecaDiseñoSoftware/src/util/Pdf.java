@@ -337,5 +337,132 @@ public class Pdf {
         } catch (DocumentException | HeadlessException | FileNotFoundException e) {
 
         }
+    }
+    
+    //pdfs de los libros
+    
+    public void pdfLibrosAgregados (ArrayList<Historiales> lista) throws SQLException {
+        Document documento = new Document();
+        try {
+            String ruta = System.getProperty("user.home");
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/pdfLibrosAgregados.pdf"));
+            documento.open();
+            PdfPTable tabla = new PdfPTable(5);
+
+            tabla.addCell("Nombre usuario que lo agregó");
+            tabla.addCell("Cedula Usuario que lo agregó");
+            tabla.addCell("id libro agregado");
+            tabla.addCell("Fecha elminado");
+            tabla.addCell("Hora eliminado");
+
+            for (int i = 0; i < lista.size(); i++) {
+                String nombreUsuarioCreo = lista.get(i).getNombreUsuario();
+                int cedulaUsuarioCreo = lista.get(i).getId_usuario();
+                LocalDate fechaCreado = lista.get(i).getFecha();
+                LocalTime horaCreado = lista.get(i).getHora();
+                
+                //para el usuario que se creó
+                String[] separacion = lista.get(i).getAccion().split(": ");
+                int idLibro = Integer.parseInt(separacion[1]);
+                
+                tabla.addCell(nombreUsuarioCreo);
+                tabla.addCell(String.valueOf(cedulaUsuarioCreo));
+                tabla.addCell(String.valueOf(idLibro));
+                tabla.addCell(String.valueOf(fechaCreado));
+                tabla.addCell(String.valueOf(horaCreado));
+            }
+            documento.add(tabla);
+            documento.close();
+
+            // Mostrar un mensaje emergente de notificación
+            JOptionPane.showMessageDialog(null, "Reporte creado en el Escritorio con el nombre: pdfLibrosAgregados.pdf");
+
+        } catch (DocumentException | HeadlessException | FileNotFoundException e) {
+
+        }
+    }
+    
+    public void pdfLibrosModificados (ArrayList<Historiales> lista) throws SQLException {
+        Document documento = new Document();
+        try {
+            String ruta = System.getProperty("user.home");
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/pdfLibrosModificados.pdf"));
+            documento.open();
+            PdfPTable tabla = new PdfPTable(5);
+
+            tabla.addCell("Nombre usuario que lo modificó");
+            tabla.addCell("Cedula Usuario que lo modificó");
+            tabla.addCell("id libro modificado");
+            tabla.addCell("Fecha modificado");
+            tabla.addCell("Hora modificado");
+
+            for (int i = 0; i < lista.size(); i++) {
+                String nombreUsuarioCreo = lista.get(i).getNombreUsuario();
+                int cedulaUsuarioCreo = lista.get(i).getId_usuario();
+                LocalDate fechaCreado = lista.get(i).getFecha();
+                LocalTime horaCreado = lista.get(i).getHora();
+                
+                //para el usuario que se creó
+                String[] separacion = lista.get(i).getAccion().split(": ");
+                int idLibro = Integer.parseInt(separacion[1]);
+                
+                tabla.addCell(nombreUsuarioCreo);
+                tabla.addCell(String.valueOf(cedulaUsuarioCreo));
+                tabla.addCell(String.valueOf(idLibro));
+                tabla.addCell(String.valueOf(fechaCreado));
+                tabla.addCell(String.valueOf(horaCreado));
+            }
+            documento.add(tabla);
+            documento.close();
+
+            // Mostrar un mensaje emergente de notificación
+            JOptionPane.showMessageDialog(null, "Reporte creado en el Escritorio con el nombre: pdfLibrosModificados.pdf");
+
+        } catch (DocumentException | HeadlessException | FileNotFoundException e) {
+
+        }
+    }
+    
+    public void pdfLibrosEliminados (ArrayList<Historiales> lista) throws SQLException {
+        Document documento = new Document();
+        try {
+            String ruta = System.getProperty("user.home");
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/pdfLibrosEliminados.pdf"));
+            documento.open();
+            PdfPTable tabla = new PdfPTable(5);
+
+            tabla.addCell("Nombre usuario que lo eliminó");
+            tabla.addCell("Cedula Usuario que lo eliminó");
+            tabla.addCell("id libro eliminado");
+            tabla.addCell("Fecha eliminado");
+            tabla.addCell("Hora eliminado");
+
+            for (int i = 0; i < lista.size(); i++) {
+                String nombreUsuarioCreo = lista.get(i).getNombreUsuario();
+                int cedulaUsuarioCreo = lista.get(i).getId_usuario();
+                LocalDate fechaCreado = lista.get(i).getFecha();
+                LocalTime horaCreado = lista.get(i).getHora();
+                
+                //para el usuario que se creó
+                String[] separacion = lista.get(i).getAccion().split(": ");
+                int idLibro = Integer.parseInt(separacion[1]);
+                
+                tabla.addCell(nombreUsuarioCreo);
+                tabla.addCell(String.valueOf(cedulaUsuarioCreo));
+                tabla.addCell(String.valueOf(idLibro));
+                tabla.addCell(String.valueOf(fechaCreado));
+                tabla.addCell(String.valueOf(horaCreado));
+            }
+            documento.add(tabla);
+            documento.close();
+
+            // Mostrar un mensaje emergente de notificación
+            JOptionPane.showMessageDialog(null, "Reporte creado en el Escritorio con el nombre: pdfLibrosEliminados.pdf");
+
+        } catch (DocumentException | HeadlessException | FileNotFoundException e) {
+
+        }
+    }
 }
-}
+
+

@@ -56,4 +56,16 @@ public class ControladorHistorial {
     public ArrayList<Historiales> listaUsuariosLogueados() throws SQLException {
         return daoHistorial.listaUsuariosLogueados();
     }
+    
+    public ArrayList<Historiales> listaLibrosRegistrados() throws SQLException {
+        return daoHistorial.listaLibrosRegistrados();
+    }
+    
+    public ArrayList<Historiales> listaLibrosModificados() throws SQLException {
+        return daoHistorial.listaLibrosModificados();
+    }
+    
+    public ArrayList<Historiales> listaLibrosEliminados() throws SQLException {
+        return daoHistorial.listaLibrosEliminados();
+    }
 }
