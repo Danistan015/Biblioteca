@@ -222,7 +222,6 @@ public class VistaReporPrestamo extends javax.swing.JFrame {
                 Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
                 int usuarioss = id_usuar.getCedula();
                
-
                 String accion = "Se genero un reporte general de prestamos " ;
                 Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
                 controH.agregarRegistroHistorial(historial);
