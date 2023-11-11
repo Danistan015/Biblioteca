@@ -41,4 +41,7 @@ public class ControladorHistorial {
         return daoHistorial.buscarUsuarioPorCedula(cedula);
     }
 
+    public ArrayList<Historiales> listaUsuariosCreados() throws SQLException {
+        return daoHistorial.listaUsuariosCreados();
+    }
 }

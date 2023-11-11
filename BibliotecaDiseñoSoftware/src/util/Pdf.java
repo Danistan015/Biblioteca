@@ -9,9 +9,11 @@ import Controlador.ControladorLibro;
 import Controlador.ControladorPrestamoDevolucion;
 import Controlador.ControladorUsuario;
 import Modelo.Genero;
+import Modelo.Historiales;
 import Modelo.Libro;
 import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
+import Vista.Historial;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -20,6 +22,8 @@ import java.awt.HeadlessException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 /**
@@ -174,4 +178,43 @@ public class Pdf {
         }
     }
 
+    
+    //pdfs usuarios
+    
+    public void pdfUsuariosCreados (ArrayList<Historiales> lista) {
+        Document documento = new Document();
+        try {
+            String ruta = System.getProperty("user.home");
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Desktop/pdfUsuariosCreados.pdf"));
+            documento.open();
+            PdfPTable tabla = new PdfPTable(5);
+
+            tabla.addCell("Nombre Usuario");
+            tabla.addCell("Cedula Usuario");
+            tabla.addCell("Fecha creado");
+            tabla.addCell("Hora creado");
+
+            for (int i = 0; i < lista.size(); i++) {
+                //id para buscar
+                String nombreUsuario = lista.get(i).getNombreUsuario();
+                int cedulaUsuario = lista.get(i).getId_usuario();
+                LocalDate fechaCreado = lista.get(i).getFecha();
+                LocalTime horaCreado = lista.get(i).getHora();
+             
+
+                tabla.addCell(nombreUsuario);
+                tabla.addCell(String.valueOf(cedulaUsuario));
+                tabla.addCell(String.valueOf(fechaCreado));
+                tabla.addCell(String.valueOf(horaCreado));
+            }
+            documento.add(tabla);
+            documento.close();
+
+            // Mostrar un mensaje emergente de notificación
+            JOptionPane.showMessageDialog(null, "Reporte creado en el Escritorio con el nombre: pdfUsuariosCreados.pdf");
+
+        } catch (DocumentException | HeadlessException | FileNotFoundException e) {
+
+        } 
+    }   
 }

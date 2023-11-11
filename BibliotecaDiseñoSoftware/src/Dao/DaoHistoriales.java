@@ -131,4 +131,41 @@ public class DaoHistoriales implements interfazHistorial {
         return registros;
     }
 
+    
+    //listas para pdfs
+
+    public ArrayList<Historiales> listaUsuariosCreados() throws SQLException {
+        ArrayList<Historiales> registros = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+        String sql = "SELECT h.id_historial, h.id_usuario, h.accion, h.fecha, h.hora, u.nombre "
+                + "FROM historiales h "
+                + "INNER JOIN usuarios u ON h.id_usuario = u.cedula "
+                + "WHERE h.accion LIKE '%Se registro una persona con cedula%'";
+
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id_historial");
+                int idUsuario = rs.getInt("id_usuario");
+                String accion = rs.getString("accion");
+                LocalDate fecha = rs.getDate("fecha").toLocalDate();
+                LocalTime hora = LocalTime.parse(rs.getTime("hora").toString());
+                String nombreUsuario = rs.getString("nombre");
+
+                Historiales registro = new Historiales(id, fecha, hora, nombreUsuario, accion, idUsuario);
+                registros.add(registro);
+            }
+
+        } catch (SQLException ex) {
+            throw new SQLException();
+        }
+
+        return registros;
+    }
 }
+//           
+
