@@ -6,6 +6,7 @@ package Vista;
 
 import Controlador.ControladorHistorial;
 import Modelo.Historiales;
+import Modelo.PrestamoDevolucion;
 import Modelo.Usuario;
 import Singleton.DatabaseSingleton;
 import Vista.TextPromt.TextPrompt;
@@ -14,6 +15,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -41,7 +44,6 @@ public class Historial extends javax.swing.JFrame {
         con = DatabaseSingleton.getInstance().getConnection();
         llenarTablaHistorial();
         cargarComboUsuarios();
-                
 
     }
 
@@ -201,6 +203,19 @@ public class Historial extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
+        try {
+
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+            int usuarioss = id_usuar.getCedula();
+
+            String accion = "Cerró sesión una persona con cedula: " + usuario.getCedula();
+            Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+            controH.agregarRegistroHistorial(historial);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "error al generar acción");
+        }
         new VistaLogin().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -229,99 +244,95 @@ public class Historial extends javax.swing.JFrame {
     private void comboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboActionPerformed
-public void cargarComboUsuarios() {
-    try {
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-        combo.setModel(model);
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+    public void cargarComboUsuarios() {
+        try {
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+            combo.setModel(model);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
 
-        String sql = "SELECT nombre FROM usuarios";
+            String sql = "SELECT nombre FROM usuarios";
 
-        ps = con.prepareStatement(sql);
-        rs = ps.executeQuery();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
 
-        model.addElement("Seleccione un usuario"); 
+            model.addElement("Seleccione un usuario");
 
-        while (rs.next()) {
-            String userName = rs.getString("nombre");
-            model.addElement(userName);
+            while (rs.next()) {
+                String userName = rs.getString("nombre");
+                model.addElement(userName);
+            }
+
+        } catch (SQLException ex) {
+            System.err.print(ex.toString());
         }
-
-    } catch (SQLException ex) {
-        System.err.print(ex.toString());
     }
-}
 
-   public void llenarTablaHistorial() {
-    DefaultTableModel modelo = new DefaultTableModel();
-    try {
-        ArrayList<Historiales> lista = controH.listaH();
+    public void llenarTablaHistorial() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        try {
+            ArrayList<Historiales> lista = controH.listaH();
 
-        modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
-        tabla.setModel(modelo);
+            modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
+            tabla.setModel(modelo);
 
-        for (int i = 0; i < lista.size(); i++) {
-            Historiales historial = lista.get(i);
-            modelo.addRow(new Object[]{
-                historial.getId(),
-                historial.getFecha(),
-                historial.getHora(),
-                historial.getNombreUsuario(),
-                historial.getAccion(),
-            });
-        }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(null, ex);
-    }
-}
-
-
-    public void llenarTablaFiltroPorUsuario(String nombreUsuarioSeleccionado) {
-    DefaultTableModel modelo = new DefaultTableModel();
-    try {
-        ArrayList<Historiales> lista = controH.listaH();
-
-        modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
-        tabla.setModel(modelo);
-
-        for (int i = 0; i < lista.size(); i++) {
-            Historiales historial = lista.get(i);
-
-            if (historial.getNombreUsuario().equals(nombreUsuarioSeleccionado) || usuarioEliminado(historial.getNombreUsuario())) {
+            for (int i = 0; i < lista.size(); i++) {
+                Historiales historial = lista.get(i);
                 modelo.addRow(new Object[]{
                     historial.getId(),
                     historial.getFecha(),
                     historial.getHora(),
                     historial.getNombreUsuario(),
-                    historial.getAccion(),
-                });
+                    historial.getAccion(),});
             }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
         }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(null, ex);
     }
-}
+
+    public void llenarTablaFiltroPorUsuario(String nombreUsuarioSeleccionado) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        try {
+            ArrayList<Historiales> lista = controH.listaH();
+
+            modelo.setColumnIdentifiers(new Object[]{"ID", "fecha", "hora", "nombreUsuario", "accion"});
+            tabla.setModel(modelo);
+
+            for (int i = 0; i < lista.size(); i++) {
+                Historiales historial = lista.get(i);
+
+                if (historial.getNombreUsuario().equals(nombreUsuarioSeleccionado) || usuarioEliminado(historial.getNombreUsuario())) {
+                    modelo.addRow(new Object[]{
+                        historial.getId(),
+                        historial.getFecha(),
+                        historial.getHora(),
+                        historial.getNombreUsuario(),
+                        historial.getAccion(),});
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
 
 // Método para verificar si el usuario está eliminado
-private boolean usuarioEliminado(String nombreUsuario) {
-    try {
-        PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS count FROM usuarios WHERE nombre = ?");
-        ps.setString(1, nombreUsuario);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next() && rs.getInt("count") == 0) {
-            return true; // Usuario eliminado
+    private boolean usuarioEliminado(String nombreUsuario) {
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS count FROM usuarios WHERE nombre = ?");
+            ps.setString(1, nombreUsuario);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next() && rs.getInt("count") == 0) {
+                return true; // Usuario eliminado
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
         }
-    } catch (SQLException ex) {
-        System.err.println(ex.getMessage());
+        return false; // Usuario no eliminado
     }
-    return false; // Usuario no eliminado
-}
 
     /**
      * @param args the command line arguments
      */
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

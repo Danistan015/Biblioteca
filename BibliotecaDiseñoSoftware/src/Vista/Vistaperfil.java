@@ -4,8 +4,14 @@
  */
 package Vista;
 
+import Controlador.ControladorHistorial;
+import Modelo.Historiales;
 import Modelo.Usuario;
 import java.awt.Color;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,6 +19,7 @@ import java.awt.Color;
  */
 public class VistaPerfil extends javax.swing.JFrame {
 Usuario usuario;
+Controlador.ControladorHistorial controH;
     /**
      * Creates new form Vistaperfil
      */
@@ -20,6 +27,7 @@ Usuario usuario;
         initComponents();
         setLocationRelativeTo(this);
         this.usuario= usuario;
+        controH= new ControladorHistorial();
     }
 
     /**
@@ -285,6 +293,19 @@ Usuario usuario;
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
+         try {
+
+            LocalDate fechaActual = LocalDate.now();
+            LocalTime horaActual = LocalTime.now();
+            Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+            int usuarioss = id_usuar.getCedula();
+
+            String accion = "Cerró sesión una persona con cedula: " + usuario.getCedula();
+            Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+            controH.agregarRegistroHistorial(historial);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "error al generar acción");
+        }
         new VistaLogin().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed

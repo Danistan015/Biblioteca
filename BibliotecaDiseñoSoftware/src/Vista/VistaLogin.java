@@ -4,12 +4,16 @@
  */
 package Vista;
 
+import Controlador.ControladorHistorial;
 import Controlador.ControladorUsuario;
 import Excepciones.UsuarioNoEncontradoException;
+import Modelo.Historiales;
 import Modelo.Usuario;
 import Vista.TextPromt.TextPrompt;
 import java.awt.Color;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import javax.swing.JOptionPane;
 
 /*
@@ -19,6 +23,7 @@ import javax.swing.JOptionPane;
 public class VistaLogin extends javax.swing.JFrame {
 
     ControladorUsuario controlador;
+    ControladorHistorial controH;
 
     /**
      * Creates new form VistaLogin
@@ -30,6 +35,7 @@ public class VistaLogin extends javax.swing.JFrame {
         controlador = new ControladorUsuario();
         TextPrompt pHUsuario = new TextPrompt("Escribe el correo: ", txtCorreo);
         TextPrompt pHUsuarios = new TextPrompt("Escribe la contraseña: ", txtContrasena);
+        controH= new ControladorHistorial();
 
     }
 
@@ -206,6 +212,14 @@ public class VistaLogin extends javax.swing.JFrame {
             }
 
             if (usuario.getContrasenia().equals(contrasena)) {
+                LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+                Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
+                int usuarioss = id_usuar.getCedula();
+               
+                String accion = "Ingresó una persona con cedula "+ usuario.getCedula() ;
+                Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
+                controH.agregarRegistroHistorial(historial);
                 VistaMenu vista = new VistaMenu(usuario);
                 vista.setVisible(true);
                 this.dispose();
