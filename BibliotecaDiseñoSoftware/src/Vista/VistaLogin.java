@@ -217,7 +217,7 @@ public class VistaLogin extends javax.swing.JFrame {
                 Usuario id_usuar = controH.buscarUsuarioPorCedula(usuario.getCedula());
                 int usuarioss = id_usuar.getCedula();
                
-                String accion = "Ingresó una persona con cedula "+ usuario.getCedula() ;
+                String accion = "Ingresó una persona con cedula:"+ usuario.getCedula() ;
                 Historiales historial = new Historiales(0, fechaActual, horaActual, usuario.getNombre(), accion, usuarioss);
                 controH.agregarRegistroHistorial(historial);
                 VistaMenu vista = new VistaMenu(usuario);
