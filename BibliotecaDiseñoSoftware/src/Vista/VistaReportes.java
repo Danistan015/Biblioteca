@@ -40,6 +40,7 @@ public class VistaReportes extends javax.swing.JFrame {
         btnIibro = new javax.swing.JButton();
         btnHistorial = new javax.swing.JButton();
         btnPrestamos = new javax.swing.JButton();
+        btnUsuarios = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -97,7 +98,7 @@ public class VistaReportes extends javax.swing.JFrame {
         btnHistorial.setBackground(new java.awt.Color(24, 61, 61));
         btnHistorial.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
         btnHistorial.setForeground(new java.awt.Color(147, 177, 166));
-        btnHistorial.setText("Dvoluciones");
+        btnHistorial.setText("Devoluciones");
         btnHistorial.setActionCommand("Inicio");
         btnHistorial.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
@@ -126,6 +127,22 @@ public class VistaReportes extends javax.swing.JFrame {
             }
         });
 
+        btnUsuarios.setBackground(new java.awt.Color(24, 61, 61));
+        btnUsuarios.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        btnUsuarios.setForeground(new java.awt.Color(147, 177, 166));
+        btnUsuarios.setText("Usuarios");
+        btnUsuarios.setActionCommand("Inicio");
+        btnUsuarios.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                btnUsuariosMouseMoved(evt);
+            }
+        });
+        btnUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuariosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -137,7 +154,8 @@ public class VistaReportes extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnHistorial, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                             .addComponent(btnIibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnPrestamos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnPrestamos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnUsuarios, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(105, 105, 105))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -152,11 +170,13 @@ public class VistaReportes extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(65, 65, 65)
                 .addComponent(btnIibro)
-                .addGap(34, 34, 34)
+                .addGap(18, 18, 18)
                 .addComponent(btnHistorial)
-                .addGap(35, 35, 35)
+                .addGap(18, 18, 18)
                 .addComponent(btnPrestamos)
-                .addGap(48, 137, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnUsuarios)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Más");
@@ -245,6 +265,17 @@ public class VistaReportes extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void btnUsuariosMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsuariosMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUsuariosMouseMoved
+
+    private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
+        // TODO add your handling code here:
+        VistaReporUsuarios ventana = new VistaReporUsuarios(usuario);
+        ventana.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnUsuariosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -253,6 +284,7 @@ public class VistaReportes extends javax.swing.JFrame {
     private javax.swing.JButton btnHistorial;
     private javax.swing.JButton btnIibro;
     private javax.swing.JButton btnPrestamos;
+    private javax.swing.JButton btnUsuarios;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
